@@ -23,6 +23,7 @@ function resetLocation()
 	window.location.href = "reset_password.php";
 }
 
+
 //reset account for employee
 let idReset = document.getElementById('id_reset');
 let nameReset = document.getElementById('name_reset');

@@ -395,6 +395,7 @@
 							<label class="custom-file-label" for="customFile">Ảnh đại diện</label>
 						</div>
 					</div>
+				</div>
 				<div class="modal-footer">
 					<input type="hidden" name="update_avatar" id="update_avatar">
 					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>

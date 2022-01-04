@@ -1,8 +1,8 @@
 <?php 
 	session_start();
 	require_once('../db.php');
-	$tasks = get_all_tasks()['data'];
-
+	$submission = get_all_submissions()['data'];
+	//print_r(get_task($submission[0]['idtask'])['data'][0]['name']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -213,25 +213,20 @@
 		<div style="overflow-x:auto;">
 			<table cellpadding="10" cellspacing="10" border="0" style=" margin: auto">
 				<tr class="header">
-					<td>
-						<a href="#" style="color: black">
-							<span><i class="fas fa-plus-circle"></i></span>	
-						</a>
-						<span> Add Task</span>
-					</td>
+					<td>Task name</td>
 					<td>Assignee</td>
-					<td>Due Date</td>
+					<td>Attach</td>
 				</tr>
 				<?php 
-					foreach($tasks as $task) {
-						$name = $task['name'];
-						$assignee = search_employee($task['idnv'])['data'][0]['name'];
-						$status = $task['status'];
+					foreach($submission as $submit) {
+						$name_task = get_task($submit['idtask'])['data'][0]['name'];
+						$assignee = search_employee($submit['idnv'])['data'][0]['name'];
+						$attach = $submit['attach'];
 				?>
 					<tr class="item" data-toggle="modal" data-target="#view-task">
-						<td><?=$name?></td>
+						<td><?=$name_task?></td>
 						<td><?=$assignee?></td>
-						<td><?=$status?></td>
+						<td><?=$attach?></td>
 					</tr>
 				<?php 
 					}
@@ -239,48 +234,40 @@
 			</table>
 		</div>
      </div>   
-<!--view task-->		
+<!--Add dayoff-->		
 <div id="view-task" class="modal fade" role="dialog"> 
 	<div class="modal-dialog">
 		<!-- Modal content-->
 		<form action="" method="POST" enctype="multipart/form-data">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h3 class="modal-title">View task</h3>
+					<h3 class="modal-title">View submit</h3>
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="id">ID task</label>
-						<input value="" name="id" required class="form-control" type="text" placeholder="" id="id">
+						<label for="idtask">ID task</label>
+						<input value="" name="idtask" required class="form-control" type="text" placeholder="" id="idtask">
 					</div>
 					<div class="form-group">
-						<label for="task-name">Task name</label>
-						<input value="" name="task-name" required class="form-control" type="text" placeholder="" id="task-name">
+						<label for="idnv">ID employee</label>
+						<input value="" name="idnv" required class="form-control" type="text" placeholder="" id="idnv">
 					</div>
 					<div class="form-group">
-						<label for="status">Status</label>
-						<input value="" name="status" required class="form-control" type="text" placeholder="" id="status">
+						<label for="attach">Attach</label>
+						<input value="" name="attach" required class="form-control" type="text" placeholder="" id="attach">
 					</div>
 					<div class="form-group">
 						<label for="description">Description</label>
 						<input value="" name="description" required class="form-control" type="text" placeholder="" id="description">
-					</div>
-					<div class="form-group">
-						<label for="assignee">Assignee</label>
-						<input value="" name="assignee" required class="form-control" type="text" placeholder="" id="assignee">
-					</div>
-					<div class="form-group">
-						<label for="due-to">Due to</label>
-						<input value="" name="due-to" required class="form-control" type="text" placeholder="" id="due-to">
-					</div>
-					
+					</div>					
 				</div>
 
 				<div class="modal-footer">
 					<input type = hidden name="upfile" id="upfile">
 					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-danger">Cancel</button>
+					<button type="submit" class="btn btn-danger">Reject</button>
+					<button type="submit" class="btn btn-info">Complete</button>
 				</div>
 			</div>
 		</form>

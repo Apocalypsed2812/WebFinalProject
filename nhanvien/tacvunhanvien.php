@@ -10,10 +10,12 @@
 	$result = get_employee_by_tentk($tentk);
 	$data = $result['data'];
 	foreach ($data as $item){
+		$idnv = $item['idnv'];
 		$name = $item['name'];
 		$id_department = $item['id_department'];
 		$image = $item['image'];
 	}
+	$tasks = get_all_tasks_employee($idnv)['data'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -279,58 +281,120 @@
 					<tbody>
 						<tr class="header">
 							<td>Task name</td>
-							<td>Status</td>
-							<td>Tag</td>
-							<td>Description</td>
 							<td>Assignee</td>
-							<td>Due to</td>
+							<td>Status</td>
+							<td>Due Date</td>
+							<td></td>
 						</tr>
-						
-						<tr class="item">
-							<td>bài tập cuối kỳ web</td>
-							<td><i class="fa fa-circle" style="font-size:12px;color:rgb(16, 92, 235)"></i>  In progess</td>
-							<td><div style="background-color: orange; border-radius: 12px;">Web</div></td>
-							<td>làm bài tập nhóm</td>
-							<td>Nguyễn Hưng</td>
-							<td style="color:red">Yesterday</td>
-						</tr>
-						<tr class="item">
-							<td>bài tập cuối kỳ web</td>
-							<td><i class="fa fa-circle" style="font-size:12px;color:rgb(16, 92, 235)"></i>  In progess</td>
-							<td><div style="background-color: orange; border-radius: 12px;">Web</div></td>
-							<td>làm bài tập nhóm</td>
-							<td>Nguyễn Hưng</td>
-							<td>2/1/2022</td>
-						</tr>
-						<tr class="item">
-							<td>bài tập cuối kỳ web</td>
-							<td><i class="fa fa-circle" style="font-size:12px;color:rgb(16, 92, 235)"></i>  In progess</td>
-							<td><div style="background-color: orange; border-radius: 12px;">Web</div></td>
-							<td>làm bài tập nhóm</td>
-							<td>Nguyễn Hưng</td>
-							<td>2/1/2022</td>
-						</tr>
-						<tr class="item">
-							<td>bài tập cuối kỳ web</td>
-							<td><i class="fa fa-circle" style="font-size:12px;color:rgb(16, 92, 235)"></i>  In progess</td>
-							<td><div style="background-color: orange; border-radius: 12px;">Web</div></td>
-							<td>làm bài tập nhóm</td>
-							<td>Nguyễn Hưng</td>
-							<td>2/1/2022</td>
-						</tr>
-						<tr class="item">
-							<td>bài tập cuối kỳ web</td>
-							<td><i class="fa fa-circle" style="font-size:12px;color:rgb(16, 92, 235)"></i>  In progess</td>
-							<td><div style="background-color: orange; border-radius: 12px;">Web</div></td>
-							<td>làm bài tập nhóm</td>
-							<td>Nguyễn Hưng</td>
-							<td>2/1/2022</td>
-						</tr>
+						<?php 
+							foreach($tasks as $task) {
+								$name = $task['name'];
+								$assignee = search_employee($task['idnv'])['data'][0]['name'];
+								$status = $task['status'];
+								$due_to = $task['due to'];
+						?>
+							<tr class="item" data-toggle="modal" data-target="#view-task">
+								<td><?=$name?></td>
+								<td><?=$assignee?></td>
+								<td><?=$status?></td>
+								<td><?=$due_to?></td>
+								<td><a href="#" data-toggle="modal" data-target="#submit-task">submit</a></td>
+							</tr>
+						<?php 
+							}
+						?>
 					</tbody>
 				</table>
 			</div>
 		</div>
     <p class="footer-text">Copyright @ Your Website 2017</p>
 
+<!--submit-->		
+<div id="submit-task" class="modal fade" role="dialog"> 
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<form action="" method="POST" enctype="multipart/form-data">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title">Submit</h3>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="description">Nhập nội dung</label>
+						<input value="" name="description" class="form-control" type="text" id="description"></input>
+					</div>
+
+					<div class="form-group">
+						<div class="custom-file">
+							<input value="" name="attach" type="file" class="custom-file-input" id="customFile">
+							<label class="custom-file-label" for="customFile">choose file</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<input type = hidden name="upfile" id="upfile">
+					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-info">Submit</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<!--view-->		
+<div id="view-task" class="modal fade" role="dialog"> 
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<form action="" method="POST" enctype="multipart/form-data">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title">View Task</h3>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="id">ID task</label>
+						<input value="" name="id" required class="form-control" type="text" placeholder="" id="id">
+					</div>
+					<div class="form-group">
+						<label for="task-name">Task name</label>
+						<input value="" name="task-name" required class="form-control" type="text" placeholder="" id="task-name">
+					</div>
+					<div class="form-group">
+						<label for="status">Status</label>
+						<input value="" name="status" required class="form-control" type="text" placeholder="" id="status">
+					</div>
+					<div class="form-group">
+						<label for="description">Description</label>
+						<input value="" name="description" required class="form-control" type="text" placeholder="" id="description">
+					</div>
+					<div class="form-group">
+						<label for="assignee">Assignee</label>
+						<input value="" name="assignee" required class="form-control" type="text" placeholder="" id="assignee">
+					</div>
+					<div class="form-group">
+						<label for="due-to">Due to</label>
+						<input value="" name="due-to" required class="form-control" type="text" placeholder="" id="due-to">
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<input type = hidden name="upfile" id="upfile">
+					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-info">Start</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+    // Add the following code if you want the name of the file appear on select
+    $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+</script>
 </body>
 </html>

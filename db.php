@@ -908,5 +908,88 @@
         }
         return array('code' => 0, 'message'=>'thành công');
     }
-	
+	//get all tasks (manager) 
+    function get_all_tasks(){
+        $conn = open_database();
+		
+		$sql = "SELECT * FROM task";
+		$result = $conn->query($sql);
+
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        return array('code' => 0, 'message' =>'thành công', 'data' => $data);
+    }
+    
+    //get all submission (manager)
+    function get_all_submissions(){
+        $conn = open_database();
+		
+		$sql = "SELECT * FROM submission";
+		$result = $conn->query($sql);
+
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        return array('code' => 0, 'message' =>'thành công', 'data' => $data);
+    }
+    //get task name
+    function get_task($idtask){
+        $conn = open_database();
+		$sql = "SELECT * FROM task WHERE idtask = ?";
+		$stm = $conn->prepare($sql);
+        $stm->bind_param('s', $idtask);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); // return array(code, message)
+        }
+		$result = $stm->get_result();
+		
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        return array('code'=>0,'message'=>'sussess', 'data'=>$data);
+    }
+    // get_all_tasks_employee
+    function get_all_tasks_employee($idnv){
+        $conn = open_database();
+		$sql = "SELECT * FROM task WHERE idnv = ?";
+		$stm = $conn->prepare($sql);
+        $stm->bind_param('s', $idnv);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); // return array(code, message)
+        }
+		$result = $stm->get_result();
+		
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        return array('code'=>0,'message'=>'sussess', 'data'=>$data);
+    }
+    //get all submission (employee)
+    function get_submission($idnv){
+        $sql = "SELECT * FROM submission where idnv=?";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $idnv);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        $result = $stm->get_result();
+		
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        
+        return array('code' => 0, 'message'=>'thành công','data'=>$data);
+    }
 ?>
