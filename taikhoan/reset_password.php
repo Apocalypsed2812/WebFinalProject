@@ -27,22 +27,18 @@
 	if(isset($_POST['reset'])){
 		$id = $_POST['reset'];
 	}
-	if (isset($_POST['email']) && isset($_POST['user']) && isset($_POST['id_reset'])) 
+	if (isset($_POST['user']) && isset($_POST['id_reset'])) 
 	{
-		$email = $_POST['email'];
+		//$email = $_POST['email'];
 		$user = $_POST['user'];
 		$id_reset = $_POST['id_reset'];
 		
-		if (empty($email)) {
-			$error = 'Vui lòng nhập Email';
-		} else if (filter_var($email, FILTER_VALIDATE_EMAIL) == false) {
-			$error = 'Đây không phải là một địa chỉ email hợp lệ';
-		} else if (empty($user)) {
+		if (empty($user)) {
 			$error = 'Vui lòng nhập Username';
 		}
 		else {
 			// reset pass
-			$result = reset_password($email, $user);
+			$result = reset_password($user);
 			$result1 = update_token($id_reset);
 			if ($result['code'] == 0 && $result1['code'] == 0) {
 				// thành công
@@ -63,10 +59,6 @@
         <div class="col-md-6 col-lg-5">
             <h3 class="text-center text-secondary mt-5 mb-3">Reset Account</h3>
 			<form novalidate method="post" action="" class="border rounded w-100 mb-5 mx-auto px-3 pt-3 bg-light">
-				<div class="form-group">
-					<label for="email">Email</label>
-					<input value="" name="email" id="email" type="text" class="form-control" placeholder="Email address">
-				</div>
 				<div class="form-group">
 					<label for="user">Username</label>
 					<input  value="" name="user" required class="form-control" type="text" placeholder="Username" id="user">

@@ -3,6 +3,13 @@
     define('USER', 'root');
     define('PASSWORD', '');
     define('DB', 'ck');
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
+
+    //Load Composer's autoloader
+    require 'vendor/autoload.php';
 	
 	//connect to database
     function open_database() {
@@ -75,6 +82,24 @@
             return false; 
         } else return true; 
     }
+
+    //check mail director
+    function is_email_exists_admin($email){
+        $sql = "SELECT username FROM director WHERE email=?";
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $email);
+        if (!$stm->execute()){
+            die($stm->error);
+        } 
+
+        $result = $stm->get_result();
+        if ($result->num_rows==0){
+            return false; 
+        } else return true; 
+    }
+	
 	
 	//check username exists
 	function is_username_exists($user){
@@ -92,6 +117,24 @@
             return false; 
         } else return true; 
     }
+
+    //check username exists admin
+	function is_username_exists_admin($user){
+        $sql = "SELECT * FROM director WHERE username=?";
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $user);
+        if (!$stm->execute()){
+            die($stm->error);
+        } 
+
+        $result = $stm->get_result();
+        if ($result->num_rows==0){
+            return false; 
+        } else return true; 
+    }
+	
 	
 	//register
 	function register($user, $role, $email, $first_name, $last_name, $department){
@@ -244,6 +287,48 @@
         }
         return array('code' =>0, 'message' =>'thành công');
     }
+
+    //send email reset password admin
+    function send_reset_email($email, $token){
+
+        //Create an instance; passing `true` enables exceptions
+        $mail = new PHPMailer(true);
+        
+        try {
+            //Server settings
+            //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->Username   = 'phamhuynhanhtien.12a20.2019@gmail.com';                     //SMTP username
+            $mail->Password   = 'anhtien2812';                               //SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            //Enable implicit TLS encryption
+            $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+            //Recipients
+            $mail->setFrom('phamhuynhanhtien.12a20.2019@gmail.com', 'Admin company');
+            $mail->addAddress($email, 'Người nhận');     //Add a recipient
+            //$mail->addAddress('ellen@example.com');               //Name is optional
+            //$mail->addReplyTo('info@example.com', 'Information');
+            //$mail->addCC('cc@example.com');
+            //$mail->addBCC('bcc@example.com');
+
+            //Attachments
+            //$mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = 'Reset your password';
+            $mail->Body    = "Click <a href='http://localhost:8080/taikhoan/reset_password_admin.php?email=$email&token=$token'>vào đây</a> để khôi phục tài khoản của bạn";
+            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 	
 	//reset password
 	function reset_password($user){
@@ -261,11 +346,40 @@
         return array('code' => 0 , 'message' => 'success');
     }
 
+    function send_email($email){
+        if (!is_email_exists_admin($email)){
+            return array('code'=>7, 'message' =>'Email không tồn tại');
+        }
+        $token = md5($email.'+'.random_int(1000,2000));
+        $sql = "UPDATE reset_token SET token=? where email=?";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ss', $token, $email);
+        if (!$stm->execute()){
+            return array('code' =>5, 'message' =>'không thể thực thi câu lệnh sql');
+        }
+
+        if ($stm->affected_rows == 0){
+            $exp = time() + 3600*24;
+            $sql = "INSERT INTO reset_token values(?,?,?)";
+            $conn = open_database();
+            $stm = $conn->prepare($sql);
+            $stm->bind_param('ssi', $email, $token, $exp);
+            if (!$stm->execute()){
+                return array('code' =>5, 'message' =>'không thể thực thi câu lệnh sql');
+            }
+            // thành công
+        }
+        $result = send_reset_email($email, $token);
+        return array('code' =>0, 'message' =>'thành công', 'result' =>$result);
+    }
+
     //reset password admin
-	function reset_password_admin($user){
-		if (!is_username_exists($user)){
+	function reset_password_admin($user, $email){
+		if (!is_username_exists_admin($user)){
             return array('code' => 3, 'message' => 'Username không tồn tại'); // return array(code, message)
         }
+        //$token = md5($email.'+'.random_int(1000,2000));
 		$hash = password_hash($user, PASSWORD_BCRYPT);
 		$conn = open_database();
         $sql = "UPDATE director SET password=?, role = 'admin' WHERE username = ?";
@@ -273,6 +387,14 @@
         $stm->bind_param('ss',$hash,$user);
         if (!$stm->execute()){
             return array('code'=> 1, 'message'=>'không thể thực thi câu lệnh sql');
+        }
+        //delete token
+        $sql = 'DELETE FROM reset_token WHERE email=?';
+        $stm = $conn->prepare($sql);
+        $exp = time();
+        $stm->bind_param('s', $email);
+        if (!$stm->execute()){
+            return array('code'=> 9, 'message'=>'không thể xóa token');
         }
         return array('code' => 0 , 'message' => 'success');
     }
@@ -592,14 +714,47 @@
         }
         return array('code'=>0, 'data'=>$data);
     }
-	
+
+    //check id and name department exiat
+    function is_id_name_department_exists($id, $name){
+        $sql = "SELECT * FROM department WHERE id = ? and name=?";
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ss',$id, $name);
+        if (!$stm->execute()){
+            die($stm->error);
+        } 
+
+        $result = $stm->get_result();
+        if ($result->num_rows==0){
+            return false; 
+        } else return true; 
+    }
+
 	//add employee
-    function add_employee($id, $name, $tentk, $position, $department) {
-        $sql = "INSERT INTO employee (idnv, name, username, position, department) VALUES (?,?,?,?,?)";
+    function add_employee($id, $name, $user, $position, $department, $id_department, $email, $phone, $indentity, $gender, $image, $role) {
+        $hash = password_hash($user, PASSWORD_BCRYPT);
+        /*$rand = random_int(0,1000);
+        $token = md5($user.'+'.$rand);*/
+
+        if (is_email_exists($email)){
+            return array('code' => 2, 'message' => 'Email đã tồn tại'); // return array(code, message)
+        }
+		
+		if (is_username_exists($user)){
+            return array('code' => 3, 'message' => 'Username đã tồn tại'); // return array(code, message)
+        }
+
+        if (!is_id_name_department_exists($id, $user)){
+            return array('code' => 4, 'message' => 'Không tồn tại phòng ban với id và name được chọn'); // return array(code, message)
+        }
+
+        $sql = "INSERT INTO employee (idnv, name, username, position, department, id_department, email, phone, indentity, gender, image, password, role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $conn = open_database();
 		
         $stm = $conn->prepare($sql);
-        $stm->bind_param('sssss', $id, $name, $tentk, $position, $department);
+        $stm->bind_param('sssssssssssss', $id, $name, $user, $position, $department, $id_department, $email, $phone, $indentity, $gender, $image, $hash, $role);
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }
@@ -619,12 +774,12 @@
     }
 	
 	//update emoloyee
-	function update_employee($id, $name, $tentk, $position, $idold) {
-        $sql = "UPDATE employee SET idnv = ?, name = ?, username = ?, position = ? WHERE idnv = ?";
+	function update_employee($id, $name, $user, $position, $email, $phone, $indentity, $gender, $idold) {
+        $sql = "UPDATE employee SET idnv = ?, name = ?, username = ?, position = ?, email = ?, phone = ?, indentity = ?, gender = ? WHERE idnv = ?";
         $conn = open_database();
 		
         $stm = $conn->prepare($sql);
-        $stm->bind_param('sssss', $id, $name, $tentk, $position, $idold);
+        $stm->bind_param('sssssssss', $id, $name, $user, $position, $email, $phone, $indentity, $gender, $idold);
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }
@@ -687,10 +842,11 @@
     }
 	
 	//display dayoff of manager
-	function get_dayoff(){
+	function get_dayoff_manager(){
         $conn = open_database();
-		$sql = "SELECT * FROM dayoff WHERE token = 1";
-		$result = $conn->query($sql);
+		$sql = "SELECT * FROM dayoff WHERE token = 1 and role = 'manager'";
+		
+        $result = $conn->query($sql);
 
         $data = array();
         while (($row = $result->fetch_assoc())){
@@ -698,6 +854,22 @@
         }
         return array('code'=>0, 'data'=>$data);
     }
+
+    //display dayoff of employee
+	function get_dayoff_employee(){
+        $conn = open_database();
+		$sql = "SELECT * FROM dayoff WHERE token = 1 and role = 'employee'";
+		
+        $result = $conn->query($sql);
+
+        $data = array();
+        while (($row = $result->fetch_assoc())){
+            $data[] = $row;
+        }
+        return array('code'=>0, 'data'=>$data);
+    }
+
+    
 	
 	//display employee by tentk
 	function get_employee_by_tentk($tentk){
@@ -757,9 +929,9 @@
     }
 	
 	//add dayoff employee
-	function add_dayoff_employee($numoff, $reason, $attach, $tentk) {
+	function add_dayoff_employee($numoff, $reason, $attach, $tentk, $role) {
 		$day_request = date("Y/m/d");
-        $sql = "INSERT INTO dayoff (numberoff, reason, attach, status, tentk, day_request, token) VALUES (?,?,?,'waiting',?,?, 0)";
+        $sql = "INSERT INTO dayoff (numberoff, reason, attach, status, tentk, day_request, token, role) VALUES (?,?,?,'waiting',?,?, 0,?)";
         $conn = open_database();
 		
 		if(is_dayoff_exists($tentk))
@@ -773,7 +945,7 @@
 		}
 		
         $stm = $conn->prepare($sql);
-        $stm->bind_param('issss', $numoff, $reason, $attach, $tentk, $day_request);
+        $stm->bind_param('isssss', $numoff, $reason, $attach, $tentk, $day_request, $role);
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }
@@ -908,12 +1080,37 @@
         }
         return array('code' => 0, 'message'=>'thành công');
     }
+	
 	//get all tasks (manager) 
-    function get_all_tasks(){
+    function get_all_tasks($id_department){
         $conn = open_database();
 		
-		$sql = "SELECT * FROM task";
-		$result = $conn->query($sql);
+		$sql = "SELECT * FROM task WHERE id_department = ?";
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id_department);
+		if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); // return array(code, message)
+        }
+		$result = $stm->get_result();
+
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        return array('code' => 0, 'message' =>'thành công', 'data' => $data);
+    }
+
+    function get_employee_by_id_task($id_department){
+        $conn = open_database();
+		
+		$sql = "SELECT * FROM employee WHERE id_department = ?";
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id_department);
+		if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); // return array(code, message)
+        }
+		$result = $stm->get_result();
 
         $data = array();
         while($row = $result->fetch_assoc())
@@ -927,7 +1124,7 @@
     function get_all_submissions(){
         $conn = open_database();
 		
-		$sql = "SELECT * FROM submission";
+		$sql = "SELECT * FROM submission WHERE token = 1";
 		$result = $conn->query($sql);
 
         $data = array();
@@ -958,7 +1155,7 @@
     // get_all_tasks_employee
     function get_all_tasks_employee($idnv){
         $conn = open_database();
-		$sql = "SELECT * FROM task WHERE idnv = ?";
+		$sql = "SELECT * FROM task WHERE idnv = ? and token = 1";
 		$stm = $conn->prepare($sql);
         $stm->bind_param('s', $idnv);
         if (!$stm->execute()){
@@ -992,4 +1189,282 @@
         
         return array('code' => 0, 'message'=>'thành công','data'=>$data);
     }
+
+    //create task by manager
+	function add_task($id, $name, $desc, $nv, $due, $id_department) {
+        //$due = $due("Y/m/d");
+        $sql = "INSERT INTO task (idtask, name, status, description, idnv, dueto, id_department, token) VALUES (?,?,'New',?,?,?,?,1)";
+        $conn = open_database();
+		
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ssssss', $id, $name, $desc, $nv, $due, $id_department);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+
+    //display id employee 
+	function get_employee_by_id(){
+        $sql = "SELECT idnv FROM employee";
+        $conn = open_database();
+
+        $result = $conn->query($sql);
+		
+        $data = array();
+        while (($row = $result->fetch_assoc())){
+            $data[] = $row;
+        }
+        return array('code'=>0, 'data'=>$data);
+    }
+	
+    //update task status 'In progress'
+	function update_task_inprogress($id) {
+        $sql = "UPDATE task SET status = 'In progress' WHERE idtask = ?";
+        $conn = open_database();
+		
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+
+    //update task status 'canceled'
+	function update_task_canceled($id) {
+        $sql = "UPDATE task SET status = 'Canceled', token = 0 WHERE idtask = ?";
+        $conn = open_database();
+		
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+
+    //update task status 'Waiting'
+	function update_task_waiting($id) {
+        $sql = "UPDATE task SET status = 'Waiting' WHERE idtask = ?";
+        $conn = open_database();
+		
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+	
+	//update task status 'Rejected'
+	function update_task_rejected($id) {
+        $sql = "UPDATE task SET status = 'Rejected' WHERE idtask = ?";
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id);
+       
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+
+    //update task status 'Rejected'
+	function update_token_rc($id) {
+        $sql = "UPDATE submission SET token = 0 WHERE idsm = ?";
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+	
+	//update task status 'Completed'
+	function update_task_completed($id) {
+        $sql = "UPDATE task SET status = 'Completed' WHERE idtask = ?";
+        $conn = open_database();
+		
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id);
+        
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+
+    //add evaluate
+	function add_evaluate($evaluate, $idtask) {
+        $sql = "UPDATE task SET evaluate = ? WHERE idtask = ?";
+        $conn = open_database();
+		
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ss', $evaluate, $idtask);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+
+    //add submission
+	function add_submission($idnv, $idtask, $attach, $desc, $deadline, $status) {
+        $day = date("Y-m-d");
+        $sql = "INSERT INTO submission (idnv, idtask, attach, description, day_submit, deadline, turnin) VALUES (?,?,?,?,?,?,?)";
+        $conn = open_database();
+		
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('sssssss', $idnv, $idtask, $attach, $desc, $day, $deadline, $status);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+	
+	//update deadline for status rejected task
+	function update_deadline_reject($deadline, $id) {
+        $sql = "UPDATE task SET dueto = ? WHERE idtask = ?";
+        $conn = open_database();
+		
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ss', $deadline, $id);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+
+    //check deadline for task
+	function check_deadline_task($idtask, $idsm){
+        $sql = "SELECT * FROM task WHERE idtask = ?";
+        $sql1 = "SELECT * FROM submission WHERE idsm = ?";
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $idtask);
+        if (!$stm->execute()){
+            die($stm->error);
+        } 
+
+        $result = $stm->get_result();
+		$row = $result->fetch_assoc();
+
+        $stm1 = $conn->prepare($sql1);
+        $stm1->bind_param('s', $idsm);
+        if (!$stm1->execute()){
+            die($stm1->error);
+        } 
+
+        $result1 = $stm1->get_result();
+		$row1 = $result1->fetch_assoc();
+		
+		
+        $number_day = compute_dayoff($row['dueto'], $row1['day_submit']);
+		if($number_day > 0)
+		{
+			return false;
+		}
+		return true;
+    }
+
+    //add reject table
+	function add_reject($idnv, $idtask, $attach, $desc) {
+        $sql = "INSERT INTO reject (idnv, idtask, attach, note) VALUES (?,?,?,?)";
+        $conn = open_database();
+		
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ssss', $idnv, $idtask, $attach, $desc);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+
+    //get status submission 
+    function get_status_submission($id){
+        $sql = "SELECT * FROM submission where idsm=?";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        $result = $stm->get_result();
+		
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        
+        return array('code' => 0, 'message'=>'thành công','data'=>$data);
+    }
+
+    //count task for employee 
+    function count_task_employee($idnv){
+        $sql = "SELECT count(*) FROM task where idnv=? and status IN('New', 'Waiting', 'In progress', 'Rejected') ";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $idnv);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        $result = $stm->get_result();
+		$row = $result->fetch_assoc();
+        /*$data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }*/
+        
+        return $row;
+    }
+
+    //display task rejected
+    
+    //get status submission 
+    function get_task_rejected($id){
+        $sql = "SELECT * FROM reject where idtask=? ORDER BY id DESC";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        $result = $stm->get_result();
+		
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        
+        return array('code' => 0, 'message'=>'thành công','data'=>$data);
+    }
+
+    //get task of employee
+    function get_view_task($id){
+        $sql = "SELECT * FROM task where idtask=?";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        $result = $stm->get_result();
+		
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        
+        return array('code' => 0, 'message'=>'thành công','data'=>$data);
+    }
+
+
 ?>

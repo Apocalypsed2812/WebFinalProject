@@ -162,6 +162,12 @@ button:hover {
 	width: 100%;
 }
 
+.second-item-m button{
+	margin-bottom: 5px;
+	margin-top: 5px;
+	width: 100%;
+}
+
 .main-text{
 	background-color: #737884d7;
 	color: white;

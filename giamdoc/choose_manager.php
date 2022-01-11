@@ -1,5 +1,6 @@
 <?php
 	require_once('../db.php');
+	session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,24 +31,31 @@
 			$result4 = reset_role_account($departmentChoose);
 			$result5 = get_tentk_by_id($idChooseManager);
 			$data = $result5['data'];
-			$result6 = update_role_account($data[0]['tentk']);
+			$result6 = update_role_account($data[0]['username']);
 			
             if ($result['code'] == 0 && $result1['code'] == 0 && $result2['code'] == 0 && $result3['code'] == 0 && $result4['code'] == 0 && $result6['code'] == 0){
                 // thành công
 				//die('Choose Manager Successful');
+				$_SESSION['choose_manager_success'] = 'thành công';
                 header('location: giamdoc.php');
                 exit();
             }
 			else if ($result['code'] == 2)
 			{
-				die('Người này đã là trưởng phòng hiện tại, không thể chọn! Hãy chọn người khác');
+				//die('Người này đã là trưởng phòng hiện tại, không thể chọn! Hãy chọn người khác');
 				//showFailedDialog('Failed Not Choose');
 				//$error = $result['message'];
+				$_SESSION['choose_manager_error'] = 'có lỗi';
+				header('location: giamdoc.php');
+                exit();
 			}
 			else {
                 //$error = $result['message'];
-				die('Choose Manager Failed');
+				//die('Choose Manager Failed');
 				//showFailedDialog("Một người không thể làm trưởng 2 phòng ban");
+				$_SESSION['choose_manager_failed'] = 'thất bại';
+				header('location: giamdoc.php');
+                exit();
             }          
 		}
 	?>

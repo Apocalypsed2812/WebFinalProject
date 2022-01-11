@@ -176,7 +176,10 @@
                             <a class="nav-link" href="../giamdoc/request.php">Reset Password</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../taikhoan/register.php">Create Account</a>
+                            <a class="nav-link" href="../about.html">About Us</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" href="../contact.html">Contact Us</a>
                         </li>
 						<li class="nav-item" style = "cursor: pointer;">
 							<div class="dropdown">
@@ -616,8 +619,22 @@
 	{
 		echo "<script>showSuccessToast('Register successfully')</script>";
 		unset($_SESSION['register_success']);
+	}
+	else if(isset($_SESSION['choose_manager_success']))
+	{
+		echo "<script>showSuccessToast('Choose manager successfully')</script>";
+		unset($_SESSION['choose_manager_success']);
 	}	
-	
+	else if(isset($_SESSION['choose_manager_error']))
+	{
+		echo "<script>showErrorToast('Please choose other')</script>";
+		unset($_SESSION['choose_manager_error']);
+	}
+	else if(isset($_SESSION['choose_manager_failed']))
+	{
+		echo "<script>showErrorToast('An occured error, please try again')</script>";
+		unset($_SESSION['choose_manager_failed']);
+	}
 ?>
 </body>
 </html>

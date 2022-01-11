@@ -30,14 +30,23 @@
     $position = '';
 	$department = '';
 
-    if (isset($_POST['name']) && isset($_POST['tentk']) && isset($_POST['position']) 
-	&& isset($_POST['department']) && isset($_POST['idnv']))
+    if (isset($_POST['name']) && isset($_POST['user']) && isset($_POST['position']) 
+	&& isset($_POST['department']) && isset($_POST['idnv']) 
+	&& isset($_POST['id_department']) && isset($_POST['email']) && isset($_POST['phone']) 
+	&& isset($_POST['indentity']) && isset($_POST['gender'])
+	&& isset($_POST['role']))
     {
 		$id = $_POST['idnv'];
         $name = $_POST['name'];
-        $tentk = $_POST['tentk'];
+        $user = $_POST['user'];
 		$position = $_POST['position'];
 		$department = $_POST['department'];
+		$id_department = $_POST['id_department'];
+		$email = $_POST['email'];
+		$phone = $_POST['phone'];
+		$indentity = $_POST['indentity'];
+		$gender = $_POST['gender'];
+		$role = $_POST['role'];
 	
 		if (empty($id)) {
             //$error = 'Hãy nhập mã nhân viên';
@@ -47,7 +56,7 @@
             //$error = 'Hãy nhập tên nhân viên';
 			$_SESSION['addemployee_error'] = 'thất bại';
         }
-		else if (empty($tentk)) {
+		else if (empty($user)) {
             //$error = 'Hãy nhập tên tài khoản của nhân viên';
 			$_SESSION['addemployee_error'] = 'thất bại';
         }
@@ -60,14 +69,18 @@
 			$_SESSION['addemployee_error'] = 'thất bại';
         }
         else {
-            $result = add_employee($id, $name, $tentk, $position, $department);
+			$image = $_FILES['image']['name'];  
+            $result = add_employee($id, $name, $user, $position, $department, $id_department, $email, $phone, $indentity, $gender, $image, $role);
             if ($result['code'] == 0){
                 // thành công
 				//die('ADD DEPARTMENT SUCCESS');
                 //header('Location: giamdoc1.php');
                 //exit();
 				$_SESSION['addemployee_success'] = 'thành công';
-            } else {
+            } 
+			else if ($result['code'] == 4){
+				$_SESSION['error_choose_department'] = 'lỗi chọn phòng ban';
+            }else {
                 //$error = $result['message'];
 				$_SESSION['addemployee_failed'] = 'thất bại';
             }          
@@ -105,12 +118,18 @@
 	$department2 = '';
 	
     if (isset($_POST['namenv2']) && isset($_POST['idnv2']) && isset($_POST['tentk2']) 
-	&& isset($_POST['position2']) && isset($_POST['updateEmployee']))
+	&& isset($_POST['position2']) && isset($_POST['updateEmployee'])
+	&& isset($_POST['email2']) && isset($_POST['phone2'])
+	&& isset($_POST['indentity2']) && isset($_POST['gender2']))
     {
 		$id2 = $_POST['idnv2'];
         $name2 = $_POST['namenv2'];
         $tentk2 = $_POST['tentk2'];
 		$position2 = $_POST['position2'];
+		$email2  = $_POST['email2'];
+		$phone2  = $_POST['phone2'];
+		$indentity2  = $_POST['indentity2'];
+		$gender2  = $_POST['gender2'];
 		$id = $_POST['updateEmployee'];
 
 		if (empty($id2)) {
@@ -126,7 +145,7 @@
             $error = 'Hãy nhập chức vụ của nhân viên';
         }
         else {
-            $result = update_employee($id2, $name2, $tentk2, $position2, $id);
+            $result = update_employee($id2, $name2, $tentk2, $position2, $email2, $phone2, $indentity2, $gender2, $id);
             if ($result['code'] == 0){
                 // thành công
 				//die('ADD DEPARTMENT SUCCESS');
@@ -162,7 +181,10 @@
                             <a class="nav-link" href="../giamdoc/request.php">Reset Password</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../taikhoan/register.php">Create Account</a>
+                            <a class="nav-link" href="../about.html">About Us</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" href="../contact.html">Contact Us</a>
                         </li>
 						<li class="nav-item" style = "cursor: pointer;">
 							<div class="dropdown">
@@ -277,20 +299,24 @@
 					foreach ($data as $item){
 						$idnv = $item['idnv'];
 						$name = $item['name'];
-						$tentk = $item['username'];
+						$username = $item['username'];
 						$position = $item['position'];
 						$email =  $item['email'];
-						$department = $item['department'];    
+						$department = $item['department']; 
+						$id_department = $item['id_department']; 
+						$phone = $item['phone']; 
+						$indentity = $item['indentity'];
+						$gender = $item['gender'];
 				?>
 						<tr class="item">
 							<td>
-								<a href="#" class="btn viewEmployee" style="border-radius: 70%; background-color: #D8D8D8" data-toggle="modal" data-target="#info-modal" data-id="<?=$idnv?>" data-name="<?=$name?>" data-tentk="<?=$tentk?>" data-position="<?=$position?>" data-department="<?=$department?>">
+								<a href="#" class="btn viewEmployee" style="border-radius: 70%; background-color: #D8D8D8" data-toggle="modal" data-target="#info-modal" data-id="<?=$idnv?>" data-name="<?=$name?>" data-tentk="<?=$username?>" data-position="<?=$position?>" data-department="<?=$department?>" data-iddepartment="<?=$id_department?>" data-email="<?=$email?>" data-phone="<?=$phone?>" data-indentity="<?=$indentity?>" data-gender="<?=$gender?>">
 									<span><i class="fas fa-eye"></i></span> 
 								</a>
 								<a href="#" class="btn deleteEmployee" style="border-radius: 70%; background-color: #D8D8D8" data-toggle="modal" data-target="#delete-modal" data-id="<?=$idnv?>" data-name="<?=$name?>" data-tentk="<?=$tentk?>" data-position="<?=$position?>" data-department="<?=$department?>">
 									<span><i class="fas fa-trash-alt"></i></span> 
 								</a>
-								<a href="#" class="btn editEmployee" style="border-radius: 70%; background-color: #D8D8D8" data-toggle="modal" data-target="#update-modal" data-id="<?=$idnv?>" data-name="<?=$name?>" data-tentk="<?=$tentk?>" data-position="<?=$position?>" data-department="<?=$department?>">
+								<a href="#" class="btn editEmployee" style="border-radius: 70%; background-color: #D8D8D8" data-toggle="modal" data-target="#update-modal" data-id="<?=$idnv?>" data-name="<?=$name?>" data-tentk="<?=$username?>" data-position="<?=$position?>" data-department="<?=$department?>" data-iddepartment="<?=$id_department?>" data-email="<?=$email?>" data-phone="<?=$phone?>" data-indentity="<?=$indentity?>" data-gender="<?=$gender?>">
 									<span><i class="fas fa-pen"></i></span> 
 								</a>
 							</td>
@@ -326,8 +352,8 @@
 						<input readonly value="" name="name" required class="form-control" type="text" placeholder="Name" id="namenv">
 					</div>
 					<div class="form-group">
-						<label for="tentk">TenTK</label>
-						<input readonly value="" name="tentk" required class="form-control" type="text" placeholder="Tentk" id="tentk">
+						<label for="username">TenTK</label>
+						<input readonly value="" name="username" required class="form-control" type="text" placeholder="Username" id="username">
 					</div>
 					<div class="form-group">
 						<label for="position">Position</label>
@@ -336,6 +362,26 @@
 					<div class="form-group">
 						<label for="department">Department</label>
 						<input readonly value="" name="department" required class="form-control" type="text" placeholder="Department" id="department">
+					</div>
+					<div class="form-group">
+						<label for="id_department">ID Of Department</label>
+						<input readonly value="" name="id_department" required class="form-control" type="text" placeholder="Id department" id="id_department">
+					</div>
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input readonly value="" name="email" required class="form-control" type="text" placeholder="Email" id="email">
+					</div>
+					<div class="form-group">
+						<label for="phone">Phone</label>
+						<input readonly value="" name="phone" required class="form-control" type="text" placeholder="Phone" id="phone">
+					</div>
+					<div class="form-group">
+						<label for="indentity">Indentity</label>
+						<input readonly value="" name="indentity" required class="form-control" type="text" placeholder="Indentity" id="indentity">
+					</div>
+					<div class="form-group">
+						<label for="gender">Gender</label>
+						<input readonly value="" name="gender" required class="form-control" type="text" placeholder="Gender" id="gender">
 					</div>
 				</div>
 				
@@ -350,7 +396,7 @@
 <div id="add-modal" class="modal fade" role="dialog"> 
 	<div class="modal-dialog">
 		<!-- Modal content-->
-		<form action="" method="POST">
+		<form action="" method="POST" enctype="multipart/form-data">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h3 class="modal-title">Add Employee</h3>
@@ -366,12 +412,15 @@
 						<input value="" name="name" required class="form-control" type="text" placeholder="Name" id="namenv1">
 					</div>
 					<div class="form-group">
-						<label for="tentk">TenTk</label>
-						<input value="" name="tentk" required class="form-control" type="text" placeholder="Tentk" id="tentk1">
+						<label for="user">Username</label>
+						<input value="" name="user" required class="form-control" type="text" placeholder="Username" id="user1">
 					</div>
 					<div class="form-group">
 						<label for="position">Position</label>
-						<input value="" name="position" required class="form-control" type="text" placeholder="Position" id="position1">
+						<select name="position" required class="form-control" id="position">
+							<option value="male">Manager</option>
+							<option value="female">Employee</option>
+						</select>
 					</div>
 					<div class="form-group">
 						<label for="department">Department</label>
@@ -388,6 +437,69 @@
 							?>
 						</select>
 					</div>
+
+					<div class="form-group">
+						<label for="id_department">ID Of Department</label>
+						<select name="id_department" required class="form-control" id="id_department1">
+							<?php
+								$result = get_id_department();
+								$data = $result['data'];
+								foreach ($data as $item){
+									$iddepartment = $item['id'];
+							?>
+									<option value="<?=$iddepartment?>"><?=$iddepartment?></option>
+							<?php
+								}
+							?>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input value="" name="email" required class="form-control" type="text" placeholder="Email" id="email1">
+					</div>
+
+					<div class="form-group">
+						<label for="phone">Phone</label>
+						<input value="" name="phone" required class="form-control" type="text" placeholder="Phone" id="phone1">
+					</div>
+
+					<div class="form-group">
+						<label for="indentity">Indentity</label>
+						<input value="" name="indentity" required class="form-control" type="text" placeholder="Indentity" id="indentity1">
+					</div>
+
+					<div class="form-group">
+						<label for="gender">Gender</label>
+						<select name="gender" required class="form-control" id="gender1">
+							<option value="male">Male</option>
+							<option value="female">Female</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+                        <div class="custom-file">
+                            <input name="image" type="file" class="custom-file-input" id="customFile" accept="image/gif, image/jpeg, image/png, image/bmp">
+                            <label class="custom-file-label" for="customFile">Ảnh đại diện</label>
+                        </div>
+                    </div>
+
+					<div class="form-group">
+						<label for="role">Role</label>
+						<select name="role" required class="form-control" id="role1">
+							<?php
+								$result = get_role();
+								$data = $result['data'];
+								foreach ($data as $item){
+									$namerole = $item['name'];
+							?>
+									<option value="<?=$namerole?>"><?=$namerole?></option>
+							<?php
+								}
+							?>
+						</select>
+					</div>
+
 				</div>
 				
 				<div class="form-group">
@@ -430,7 +542,7 @@
 	</div>
 </div>
 
-<!--Update department modal-->	 	
+<!--Update employee modal-->	 	
 <div id="update-modal" class="modal fade" role="dialog"> 
 	<div class="modal-dialog">
 		<!-- Modal content-->
@@ -460,6 +572,29 @@
 					<div class="form-group">
 						<label for="department2">Department</label>
 						<input readonly value="" name="department2" required class="form-control" type="text" placeholder="Position" id="department2">
+					</div>
+					<div class="form-group">
+						<label for="id_department2">ID Of Department</label>
+						<input readonly value="" name="id_department2" required class="form-control" type="text" placeholder="Position" id="id_department2">
+					</div>
+					<div class="form-group">
+						<label for="email2">Email</label>
+						<input value="" name="email2" required class="form-control" type="text" placeholder="Email" id="email2">
+					</div>
+
+					<div class="form-group">
+						<label for="phone2">Phone</label>
+						<input value="" name="phone2" required class="form-control" type="text" placeholder="Phone" id="phone2">
+					</div>
+
+					<div class="form-group">
+						<label for="indentity2">Indentity</label>
+						<input value="" name="indentity2" required class="form-control" type="text" placeholder="Indentity" id="indentity2">
+					</div>
+
+					<div class="form-group">
+						<label for="gender2">Gender</label>
+						<input value="" name="gender2" required class="form-control" type="text" placeholder="Indentity" id="gender2">
 					</div>
 				</div>
 				
@@ -526,6 +661,12 @@
 		echo "<script>showErrorToast('An occured error, please try again')</script>";
 		unset($_SESSION['delete_failed']);
 	}	
+	else if(isset($_SESSION['error_choose_department']))
+	{
+		echo "<script>showErrorToast('Department choose not exist')</script>";
+		unset($_SESSION['error_choose_department']);
+	}	
+	
 ?>
 </body>
 </html>

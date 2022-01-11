@@ -103,7 +103,7 @@
 					<td></td>
 				</tr>
 				<?php
-					$result = get_dayoff();
+					$result = get_dayoff_manager();
 					$data = $result['data'];
 					foreach ($data as $item){
 						$id = $item['id'];

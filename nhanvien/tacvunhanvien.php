@@ -16,6 +16,8 @@
 		$image = $item['image'];
 	}
 	$tasks = get_all_tasks_employee($idnv)['data'];
+	$count = count_task_employee($idnv);
+	$count_task = $count['count(*)'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -173,6 +175,92 @@
 
     </style>
 </head>
+<?php
+	if(isset($_POST['id'])){
+		$id = $_POST['id'];
+		$result = update_task_inprogress($id);
+		if ($result['code'] == 0){
+			// thành công
+			//die('ADD DEPARTMENT SUCCESS');
+			//header('Location: giamdoc.php');
+			//exit();
+			$_SESSION['success'] = 'thành công';
+			header('Location: tacvunhanvien.php');
+			exit();
+		} 
+		else {
+			//$error = $result['message'];
+			$_SESSION['failed'] = 'thất bại';
+		}          
+	}
+?>
+<?php
+	if(isset($_POST['content']) && isset($_POST['submit_task'])){
+		$content = $_POST['content'];
+		$attach = $_FILES['attach']['name'];
+		$idTask = $_POST['submit_task'];
+		$deadlineTask = $_POST['deadline_task'];
+		$today = date("Y-m-d");
+		if(empty($content))
+		{
+			$error = 'Vui lòng nhập nội dung';
+		}
+		else if(empty($attach))
+		{
+			$error = 'Vui lòng chọn file đính kèm';
+		}
+		else{
+			$result = update_task_waiting($idTask);
+			$numberDay = compute_dayoff($deadlineTask, $today);
+			if($numberDay > 0){
+				$result1 = add_submission($idnv, $idTask, $attach, $content, $deadlineTask, 'late');
+			}
+			else{
+				$result1 = add_submission($idnv, $idTask, $attach, $content, $deadlineTask, 'normal');
+			} 
+			if ($result['code'] == 0 && $result1['code'] == 0){
+				if ($_FILES['attach']['name'] != NULL) {
+					// Kiểm tra file có vượt quá 20MB không
+					if ($_FILES['attach']['size'] > 20 * 1048576) {
+						echo "<script> alert('File đăng tải không phải là file ảnh!'); window.location='tacvunhanvien.php'; </script>";
+					} else {
+						// Kiểm tra có file là file (*.exe, *.msi, *.sh) không được phép upload không.
+						if (
+							$_FILES["attach"]["type"] != "file/exe" || $_FILES["attach"]["type"] != "file/msi" || 
+							$_FILES["attach"]["type"] != "file/sh"
+						) {
+							// Kiểm tra file up lên có phải là ảnh không            
+							// Nếu là ảnh tiến hành code upload
+							$path = "../minhchung/"; // file sẽ lưu vào thư mục upload
+							$tmp_name = $_FILES['attach']['tmp_name'];
+							$name = $_FILES['attach']['name'];
+							// Upload ảnh vào thư mục file
+							if (move_uploaded_file($tmp_name, $path . $name)) {
+								echo "<script> alert('Upload thành công!'); window.location='tacvunhanvien.php'; </script>";
+							} else {
+								echo "<script> alert('Upload không thành công!'); window.location='tacvunhanvien.php'; </script>";
+							}
+						} else {
+							echo "<script> alert('File không được phép upload!'); window.location='tacvunhanvien.php'; </script>";
+						}
+					}
+				} 
+				else 
+				{
+					echo "<script> alert('File không được để trống!'); window.location='tacvunhanvien.php'; </script>";
+				}
+				$_SESSION['submit_success'] = 'thành công';
+				//header('Location: tacvunhanvien.php');
+				//exit();
+			}
+			else {
+				//$error = $result['message'];
+				$_SESSION['submit_failed'] = 'thất bại';
+			}  
+		}       
+	}
+?>
+	
 <body>
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
         <!-- Brand -->
@@ -236,7 +324,7 @@
 							</td>
 							<td class="text-right">
 								<a href="">
-									<span class="badge badge-pill badge-secondary">42</span>
+									<span class="badge badge-pill badge-secondary"><?=$count_task?></span>
 								</a>
 							</td>
 						</tr>
@@ -280,6 +368,7 @@
 				<table class="table table-striped mt-3 mx-3" style="border-collapse: collapse; margin: auto">
 					<tbody>
 						<tr class="header">
+							<td>ID Task</td>
 							<td>Task name</td>
 							<td>Assignee</td>
 							<td>Status</td>
@@ -288,21 +377,40 @@
 						</tr>
 						<?php 
 							foreach($tasks as $task) {
+								$id = $task['idtask'];
 								$name = $task['name'];
+								$description = $task['description'];
 								$assignee = search_employee($task['idnv'])['data'][0]['name'];
 								$status = $task['status'];
-								$due_to = $task['due to'];
+								$deadline = $task['dueto'];
+								$evaluation = $task['evaluate'];
+								//viewTaskEmployee
 						?>
-							<tr class="item" data-toggle="modal" data-target="#view-task">
+							<tr class="item " data-toggle="modal" data-target="#view-task">
+								<td><?=$id?></td>
 								<td><?=$name?></td>
 								<td><?=$assignee?></td>
 								<td><?=$status?></td>
-								<td><?=$due_to?></td>
-								<td><a href="#" data-toggle="modal" data-target="#submit-task">submit</a></td>
+								<td><?=$deadline?></td>
+								<td>
+									<button class = "submit btn btn-success" href="#" data-toggle="modal" data-target="#submit-task" data-id="<?=$id?>" data-status="<?=$status?>" data-deadline="<?=$deadline?>" id="button-submit">submit</button>
+									<button class = "btn btn-danger" href="#" id="button-reject" onclick="viewTaskOfEmployee(this)">ViewReject</button>
+								</td>
 							</tr>
 						<?php 
 							}
 						?>
+
+						<tr style="background-color: white" colspan="8">
+							<td>
+								<?php
+								if (!empty($error)) {
+									echo "<div class='alert alert-danger' id='error-dayoff'>$error</div>";
+								}
+								?>
+							</td>
+						</tr>
+						
 					</tbody>
 				</table>
 			</div>
@@ -321,8 +429,8 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="description">Nhập nội dung</label>
-						<input value="" name="description" class="form-control" type="text" id="description"></input>
+						<label for="content">Nhập nội dung</label>
+						<input value="" name="content" class="form-control" type="text" id="content"></input>
 					</div>
 
 					<div class="form-group">
@@ -334,9 +442,10 @@
 				</div>
 
 				<div class="modal-footer">
-					<input type = hidden name="upfile" id="upfile">
+					<input type = hidden name="submit_task" id="submit_task">
+					<input type = hidden name="deadline_task" id="deadline_task">
 					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-info">Submit</button>
+					<button type="submit" class="btn btn-info" id="button-submit">Submit</button>
 				</div>
 			</div>
 		</form>
@@ -354,31 +463,73 @@
 				</div>
 
 				<div class="modal-body">
-					<div class="form-group">
+					<div class="form-group" >
 						<label for="id">ID task</label>
-						<input value="" name="id" required class="form-control" type="text" placeholder="" id="id">
+						<input value="" name="id" required class="form-control" type="text" placeholder="" id="id-task1">
 					</div>
 					<div class="form-group">
 						<label for="task-name">Task name</label>
-						<input value="" name="task-name" required class="form-control" type="text" placeholder="" id="task-name">
+						<input value="" name="task-name" required class="form-control" type="text" placeholder="" id="task-name1">
 					</div>
 					<div class="form-group">
 						<label for="status">Status</label>
-						<input value="" name="status" required class="form-control" type="text" placeholder="" id="status">
+						<input value="" name="status" required class="form-control" type="text" placeholder="" id="status1">
 					</div>
 					<div class="form-group">
 						<label for="description">Description</label>
-						<input value="" name="description" required class="form-control" type="text" placeholder="" id="description">
+						<input value="" name="description" required class="form-control" type="text" placeholder="" id="description1">
 					</div>
 					<div class="form-group">
 						<label for="assignee">Assignee</label>
-						<input value="" name="assignee" required class="form-control" type="text" placeholder="" id="assignee">
+						<input value="" name="assignee" required class="form-control" type="text" placeholder="" id="assignee1">
 					</div>
 					<div class="form-group">
 						<label for="due-to">Due to</label>
-						<input value="" name="due-to" required class="form-control" type="text" placeholder="" id="due-to">
+						<input value="" name="due-to" required class="form-control" type="text" placeholder="" id="due-to1">
+					</div>
+					<div class="form-group">
+						<label id = "labelevaluate" for="evaluation">Evaluation</label>
+						<input value="" name="evaluation" class="form-control" type="text" placeholder="" id="evaluation">
+					</div>
+					<div id="tbody-view">
 					</div>
 				</div>
+
+				<div class="modal-footer">
+					<input type = hidden name="upfile" id="upfile">
+					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-info" id="button-start">Start</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!--View reject task-->
+<div id="rejected-task" class="modal fade" role="dialog"> 
+	<div class="modal-dialog">
+		<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title">View Task Reject</h3>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<table cellpadding="10" cellspacing="10" border="0" style="border-collapse: collapse; margin: auto" class="table table-striped">
+					<thead>
+						<tr>
+							<td>ID task</td>
+							<td>Note</td>				
+							<td>Attach File</td>
+						</tr>
+					</thead>
+					
+					<tbody id="tbody">
+						
+					</tbody>
+					
+				</table>     
+				
 
 				<div class="modal-footer">
 					<input type = hidden name="upfile" id="upfile">
@@ -386,9 +537,10 @@
 					<button type="submit" class="btn btn-info">Start</button>
 				</div>
 			</div>
-		</form>
 	</div>
 </div>
+
+<script src="../main.js"></script>
 <script>
     // Add the following code if you want the name of the file appear on select
     $(".custom-file-input").on("change", function() {
@@ -396,5 +548,37 @@
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
 </script>
+<?php
+	//show toast message
+	if(isset($_SESSION['success']))
+	{
+		echo "<script>showSuccessToast('Get task success')</script>";
+		unset($_SESSION['success']);
+	}
+
+	else if(isset($_SESSION['error']))
+	{
+		echo "<script>showErrorToast('Have error happen')</script>";
+		unset($_SESSION['error']);
+	}
+	
+	else if(isset($_SESSION['failed']))
+	{
+		echo "<script>showErrorToast('Get task failed')</script>";
+		unset($_SESSION['failed']);
+	}
+
+	else if(isset($_SESSION['submit_success']))
+	{
+		echo "<script>showSuccessToast('Submit task success')</script>";
+		unset($_SESSION['submit_success']);
+	}
+	
+	else if(isset($_SESSION['submit_failed']))
+	{
+		echo "<script>showErrorToast('Submit task failed')</script>";
+		unset($_SESSION['submit_failed']);
+	}
+?>
 </body>
 </html>

@@ -416,7 +416,7 @@
 		<form action="" method="POST" enctype="multipart/form-data">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h3 class="modal-title">Add DayOff</h3>
+					<h3 class="modal-title">Add DayOff Employee</h3>
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
 				<div class="modal-body">

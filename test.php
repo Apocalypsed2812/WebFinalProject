@@ -1,6 +1,6 @@
 <?php
 	require_once('db.php');
 	
-	$result = get_role_by_username('anhtien');
-	print_r($result);
+	$result = send_email('phamhuynhanhtien123@gmail.com');
+	var_dump($result);
 ?>

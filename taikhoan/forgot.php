@@ -35,10 +35,12 @@
         }
         else {
             // reset password
-			if($user == 'giamdoc' and $email == 'admin@gmail.com')
+			if($user == 'giamdoc' and $email == 'phamhuynhanhtien123@gmail.com')
 			{
-				header('Location: reset_password_admin.php');
-				exit();
+				//header('Location: reset_password_admin.php');
+				//exit();
+                send_email($email);
+                die('Please check your email to reset password');
 			}
 			else{
 				$result = forgot_password($email, $user);
