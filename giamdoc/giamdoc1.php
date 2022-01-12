@@ -25,7 +25,7 @@
 	//check add employee
 	$error = '';
 	$id = '';
-    $name = '';
+    //$name = '';
     $tentk = '';
     $position = '';
 	$department = '';
@@ -71,6 +71,7 @@
         else {
 			$image = $_FILES['image']['name'];  
             $result = add_employee($id, $name, $user, $position, $department, $id_department, $email, $phone, $indentity, $gender, $image, $role);
+			//$add_dayoff = add_dayoff($name, $user);
             if ($result['code'] == 0){
                 // thành công
 				//die('ADD DEPARTMENT SUCCESS');

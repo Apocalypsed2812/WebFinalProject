@@ -143,6 +143,17 @@
         echo "<script>showSuccessToast('Reset password admin successfully')</script>";
         setcookie('reset_admin_success', "", time() - 3600 *24);
 	}
+
+    if(isset($_SESSION['change_employee_success']))
+	{
+        echo "<script>showSuccessToast('Change password employee successfully')</script>";
+        unset($_SESSION['change_employee_success']);
+	}
+    else if(isset($_SESSION['change_employee_failed']))
+	{
+        echo "<script>showSuccessToast('Change password employee failed')</script>";
+        unset($_SESSION['change_employee_failed']);
+	}
     
 ?>
 </body>

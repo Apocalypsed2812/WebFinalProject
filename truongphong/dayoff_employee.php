@@ -118,7 +118,7 @@
 							<td><?=$reason?></td>
 							<td><a href="../minhchung/<?=$attach?>"><?=$attach?></a></td>
 							<td>
-								<a href="" class="btn btn-primary dayoff" data-toggle="modal" data-target="#dayoff-modal" data-numberoff="<?=$numoff?>" data-reason="<?=$reason?>" data-attach="<?=$attach?>" data-tentk="<?=$tentk?>">
+								<a href="" class="btn btn-primary" data-toggle="modal" data-target="#dayoff-modal" onclick = "viewDayoff(this)">
 									Detail
 								</a>
 							</td>
@@ -147,22 +147,11 @@
 						<h4 class="modal-title">Detail Request Day Off</h4>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
-					<div class="modal-body">
-						<div class="form-group">
-							<label for="numdayoff">Number dayoff</label>
-							<input readonly value="" name="numdayoff" required class="form-control" type="text" placeholder="Numdayoff" id="numdayoff">
-						</div>
-						<div class="form-group">
-							<label for="reason">Reason</label>
-							<input readonly value="" name="reason" required class="form-control" type="text" placeholder="reason" id="reason">
-						</div>
-						<div class="form-group">
-							<label for="attach">Attach File</label>
-							<input value="" name="attach" required class="form-control" type="text" placeholder="Attach" id="attach">
-						</div>
+					<div class="modal-body" id="body-dayoff">
+						
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+						<button type="button" class="btn btn-dark" data-dismiss="modal">close</button>
 					</div>
 				</div>
 			</form>

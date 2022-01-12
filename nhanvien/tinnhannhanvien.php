@@ -5,7 +5,12 @@
         header('Location: ../taikhoan/login.php');
         exit();
     }	
-	$tentk = $_SESSION['user'];
+	$user = $_SESSION['user'];
+	$result = get_employee_by_tentk($user);
+	$data = $result['data'];
+	foreach ($data as $item){
+        $role = $item['role'];
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -183,7 +188,7 @@
         }
         else {
 			$attach = $_FILES['attach']['name'];
-            $result = add_dayoff_employee($numday, $reason, $attach, $tentk);
+            $result = add_dayoff_employee($numday, $reason, $attach, $tentk, $role);
             if ($result['code'] == 0){
 				$update_dayoff_employee_ngaydasudung = update_dayoff_employee_ngaydasudung($numday, $tentk);
 				$update_dayoff_employee_ngayconlai = update_dayoff_employee_ngayconlai($numday, $tentk);

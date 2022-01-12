@@ -49,8 +49,10 @@
 			$result = change_password_employee($tentk, $pass);
 			if ($result['code'] == 0) {
 				// thành công
+				$_SESSION['change_employee_success'] = 'thành công';
 				header('Location: ../taikhoan/login.php');
 			} else {
+				$_SESSION['change_employee_failed'] = 'thất bại';
 				$post_error = $result['message'];
 			}
 		}

@@ -30,77 +30,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="../style.css">
     <title>Trang Trưởng Phòng</title>
-	<?php
-	//check add dayoff
-	$error = '';
-	$numday = '';
-    $reason = '';
-    $attach = '';
-    
-    if (isset($_POST['numday']) && isset($_POST['reason']))
-    {
-		$numday = $_POST['numday'];
-        $reason = $_POST['reason'];
 
-        if (empty($numday)) {
-            $error = 'Hãy nhập số phòng ban';
-        }
-		else if (empty($reason)) {
-            $error = 'Hãy nhập lí do';
-        }
-        else {
-			$attach = $_FILES['attach']['name'];
-            $result = add_dayoff_employee($numday, $reason, $attach, $user);
-            if ($result['code'] == 0){
-				$update_dayoff_employee_ngaydasudung = update_dayoff_employee_ngaydasudung($numday, $user);
-				$update_dayoff_employee_ngayconlai = update_dayoff_employee_ngayconlai($numday, $user);
-				if ($_FILES['attach']['name'] != NULL) {
-					// Kiểm tra file có vượt quá 20MB không
-					if ($_FILES['attach']['size'] > 20 * 1048576) {
-						echo "<script> alert('File đăng tải không phải là file ảnh!'); window.location='truongphong.php'; </script>";
-					} else {
-						// Kiểm tra có file là file (*.exe, *.msi, *.sh) không được phép upload không.
-						if (
-							$_FILES["attach"]["type"] != "file/exe" || $_FILES["attach"]["type"] != "file/msi" || 
-							$_FILES["attach"]["type"] != "file/sh"
-						) {
-							// Kiểm tra file up lên có phải là ảnh không            
-							// Nếu là ảnh tiến hành code upload
-							$path = "../minhchung/"; // file sẽ lưu vào thư mục upload
-							$tmp_name = $_FILES['attach']['tmp_name'];
-							$name = $_FILES['attach']['name'];
-							// Upload ảnh vào thư mục file
-							if (move_uploaded_file($tmp_name, $path . $name)) {
-								echo "<script> alert('Upload thành công!'); window.location='truongphong.php'; </script>";
-							} else {
-								echo "<script> alert('Upload không thành công!'); window.location='truongphong.php'; </script>";
-							}
-						} else {
-							echo "<script> alert('File không được phép upload!'); window.location='truongphong.php'; </script>";
-						}
-					}
-				} 
-				else 
-				{
-					echo "<script> alert('File không được để trống!'); window.location='truongphong.php'; </script>";
-				}
-				header('Location: truongphong.php');
-				exit();
-            } 
-			else if($result['code'] == 2){
-				//die('Không thể thêm yêu cầu');
-				$error = 'Yêu cầu đang được duyệt, không thể thêm yêu cầu';
-			}
-			else if($result['code'] == 3){
-				//die('Không thể thêm yêu cầu');
-				$error = 'Phải đợi 7 ngày sau mới được tạo yêu cầu mới';
-			}
-			else {
-                $error = $result['message'];
-            }          
-        }
-    }
-?> 
 <?php
 	//reject task
 	if(isset($_POST['reject']))
@@ -110,10 +40,16 @@
 		$attach = $_FILES['attach']['name'];
 		$note = $_POST['note'];
 		$deadline_add = $_POST['deadline'];
+		$idsm = $_POST['reject_idsm'];
+		$today = date("Y-m-d");
 		$result = update_task_rejected($id);
-		$result1 = add_reject($idnv, $id, $attach, $note);
+		//$result1 = add_reject($idnv, $id, $attach, $note);
 		$result2 = update_deadline_reject($deadline_add, $id);
+		$result3 = add_note_attach($note, $attach, $id);
+		$result4 = update_token_rc($idsm);
 		if ($result['code'] == 0){
+			$countReject = count_task_submit_reject($id)['count(*)'];
+			$result5 = add_task_history($idnv, $id, 'Rejected', $today, $countReject+1);
 			if ($_FILES['attach']['name'] != NULL) {
 				// Kiểm tra file có vượt quá 20MB không
 				if ($_FILES['attach']['size'] > 20 * 1048576) {
@@ -144,9 +80,10 @@
 			{
 				echo "<script> alert('File không được để trống!'); window.location='truongphong1.php'; </script>";
 			}
+			$_SESSION['reject_success'] = 'thành công';
 		}
 		else{
-
+			$_SESSION['reject_failed'] = 'thất bại';
 		}
 	}
 ?> 
@@ -157,21 +94,27 @@
 	{
 		$idtasksm = $_POST['idtask'];
 		$idsm1 = $_POST['idsm'];
+		$idnv_complete = $_POST['idnv'];
 		$evaluate = $_POST['evaluate'];
+		$today = date("Y-m-d");
 		$result = update_task_completed($idtasksm);
 		$result1 = update_token_rc($idsm1);
 		$result2 = add_evaluate($evaluate, $idtasksm);
+		$result3 = add_task_history($idnv_complete, $idtasksm, 'Completed', $today, 0);
 		if ($result['code'] == 0 && $result1['code'] == 0){
+			$_SESSION['complete_success'] = 'thành công';
 			header('Location: truongphong1.php');
 			exit();
 		}
 		else{
-
+			$_SESSION['complete_failed'] = 'thất bại';
 		}
 	}
 ?> 
 </head>
 <body>
+	<div id="toast">
+    </div>
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
         <!-- Brand -->
                 <a class="navbar-brand" href="#">Our Company</a>
@@ -252,13 +195,14 @@
 					<td>ID Submit</td>
 					<td>ID Task</td>
 					<td>Task name</td>
-					<td>Attach</td>
+					<td>Employee</td>
 					<td>Actions</td>
 				</tr>
 				<?php 
 					foreach($submission as $submit) {
 						$name_task = get_task($submit['idtask'])['data'][0]['name'];
 						$assignee = search_employee($submit['idnv'])['data'][0]['name'];
+						$idnv = $submit['idnv'];
 						$attach = $submit['attach'];
 						$idtask = $submit['idtask'];
 						$idsm = $submit['idsm'];
@@ -268,9 +212,9 @@
 						<td><?=$idsm?></td>
 						<td><?=$idtask?></td>
 						<td><?=$name_task?></td>
-						<td><a href="../minhchung/<?=$attach?>"><?=$attach?></a></td>
+						<td><?=$idnv?></td>
 						<td>
-							<button class = "btn btn-danger" id="button-reject" href="#" data-toggle="modal" data-target="#reject-task" data-id="<?=$id?>" data-status="<?=$status?>">Reject</button>
+							<button class = "btn btn-danger reject" id="button-reject" href="#" data-toggle="modal" data-target="#reject-task" data-id="<?=$idtask?>" data-status="<?=$status?>" data-idsm="<?=$idsm?>" data-idnv="<?=$idnv?>">Reject</button>
 							<button class = "btn btn-success complete" id="button-complete" href="#"  data-toggle="modal" data-target="#complete-task"  onclick="completeStatus(this)">Complete</button>
 						</td>
 					</tr>
@@ -294,11 +238,11 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="id">ID task</label>
-						<input value="" name="id" required class="form-control" type="text" placeholder="" id="id">
+						<input readonly value="" name="id" required class="form-control" type="text" placeholder="" id="id">
 					</div>
 					<div class="form-group">
 						<label for="idnv">ID employee</label>
-						<input value="" name="idnv" required class="form-control" type="text" placeholder="" id="idnv">
+						<input readonly value="" name="idnv" required class="form-control" type="text" placeholder="" id="idnv">
 					</div>
 					<div class="form-group">
 						<p>Attach File</p>
@@ -319,6 +263,7 @@
 
 				<div class="modal-footer">
 					<input type = hidden name="reject" id="reject">
+					<input type = hidden name="reject_idsm" id="reject_idsm">
 					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
 					<button type="submit" class="btn btn-danger">Reject</button>
 				</div>
@@ -345,6 +290,10 @@
 					<div class="form-group">
 						<label for="idsm">ID Submit</label>
 						<input value="" name="idsm" required class="form-control" type="text" placeholder="" id="idsm">
+					</div>
+					<div class="form-group">
+						<label for="idnv">ID Employee</label>
+						<input value="" name="idnv" required class="form-control" type="text" placeholder="" id="idnv1">
 					</div>
 					<div class="form-group" id="tbody-details">
 						
@@ -414,12 +363,32 @@
 		<p class="footer-text">Copyright @ Your Website</p>
 	</footer>
 <script src="../main.js"></script>
-<script>
-    // Add the following code if you want the name of the file appear on select
-    $(".custom-file-input").on("change", function() {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
-</script>
+
+<?php
+	//show toast message
+	if(isset($_SESSION['reject_success']))
+	{
+		echo "<script>showSuccessToast('Reject task success')</script>";
+		unset($_SESSION['success']);
+	}
+	
+	else if(isset($_SESSION['reject_failed']))
+	{
+		echo "<script>showErrorToast('Reject task failed')</script>";
+		unset($_SESSION['failed']);
+	}
+
+	else if(isset($_SESSION['complete_success']))
+	{
+		echo "<script>showSuccessToast('Complete task success')</script>";
+		unset($_SESSION['submit_success']);
+	}
+	
+	else if(isset($_SESSION['complete_failed']))
+	{
+		echo "<script>showErrorToast('Complete task failed')</script>";
+		unset($_SESSION['submit_failed']);
+	}
+?>
 </body>
 </html>

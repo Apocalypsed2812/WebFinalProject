@@ -746,7 +746,7 @@
             return array('code' => 3, 'message' => 'Username đã tồn tại'); // return array(code, message)
         }
 
-        if (!is_id_name_department_exists($id, $user)){
+        if (!is_id_name_department_exists($id_department, $department)){
             return array('code' => 4, 'message' => 'Không tồn tại phòng ban với id và name được chọn'); // return array(code, message)
         }
 
@@ -755,6 +755,18 @@
 		
         $stm = $conn->prepare($sql);
         $stm->bind_param('sssssssssssss', $id, $name, $user, $position, $department, $id_department, $email, $phone, $indentity, $gender, $image, $hash, $role);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+
+        $sql = "INSERT INTO dayoff_employee (name, tentk, tongso, ngaydasudung, ngayconlai) VALUES (?,?,12,0,12)";
+		/*if(is_username_exists($user))
+		{
+			return array('code' => 2, 'message' => 'Account đã tồn tại'); 
+		}*/
+		
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ss', $name, $user);
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }
@@ -951,6 +963,26 @@
         }
         return array('code' => 0, 'message'=>'thành công');
     }
+
+    function add_dayoff($name, $tentk) {
+        $sql = "INSERT INTO dayoff_employee (name, tentk, tongso, ngaydasudung, ngayconlai) VALUES (?,?,12,0,12)";
+        $conn = open_database();
+		
+		if(is_username_exists($tentk))
+		{
+			return array('code' => 2, 'message' => 'Account đã tồn tại'); 
+		}
+		
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ss', $name, $tentk);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+
+
+
 	
 	//check request dayoff exists
 	function is_dayoff_exists($tentk){
@@ -1047,7 +1079,7 @@
 	
 	//add image avatar for employee
 	function change_image_employee($image, $tentk) {
-        $sql = "UPDATE employee SET image = ? WHERE tentk = ?";
+        $sql = "UPDATE employee SET image = ? WHERE username = ?";
         $conn = open_database();
         $stm = $conn->prepare($sql);
         $stm->bind_param('ss', $image, $tentk);
@@ -1314,7 +1346,7 @@
     //add submission
 	function add_submission($idnv, $idtask, $attach, $desc, $deadline, $status) {
         $day = date("Y-m-d");
-        $sql = "INSERT INTO submission (idnv, idtask, attach, description, day_submit, deadline, turnin) VALUES (?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO submission (idnv, idtask, attach, description, day_submit, deadline, turnin, token) VALUES (?,?,?,?,?,?,?,1)";
         $conn = open_database();
 		
         $stm = $conn->prepare($sql);
@@ -1332,6 +1364,20 @@
 		
         $stm = $conn->prepare($sql);
         $stm->bind_param('ss', $deadline, $id);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+
+    //add not and attach file for reject
+	function add_note_attach($note, $attach, $idtask) {
+        $day = date("Y-m-d");
+        $sql = "UPDATE task SET note = ?, attach = ? WHERE idtask = ?";
+        $conn = open_database();
+		
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('sss', $note, $attach, $idtask);
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }
@@ -1372,16 +1418,94 @@
     }
 
     //add reject table
-	function add_reject($idnv, $idtask, $attach, $desc) {
-        $sql = "INSERT INTO reject (idnv, idtask, attach, note) VALUES (?,?,?,?)";
+	function add_task_history($idnv, $idtask, $status, $day, $count) {
+        $sql = "INSERT INTO reject (idnv, idtask, status, day, count) VALUES (?,?,?,?,?)";
         $conn = open_database();
 		
         $stm = $conn->prepare($sql);
-        $stm->bind_param('ssss', $idnv, $idtask, $attach, $desc);
+        $stm->bind_param('ssssi', $idnv, $idtask, $status, $day, $count);
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }
         return array('code' => 0, 'message'=>'thành công');
+    }
+
+    function count_task_submit($idtask){
+        $sql = "SELECT count(*) FROM reject where idtask=? and status = 'Submit'";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $idtask);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        $result = $stm->get_result();
+		$row = $result->fetch_assoc();
+        /*$data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }*/
+        
+        return $row;
+    }
+
+    function count_task_submit_reject($idtask){
+        $sql = "SELECT count(*) FROM reject where idtask=? and status = 'Rejected'";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $idtask);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        $result = $stm->get_result();
+		$row = $result->fetch_assoc();
+        /*$data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }*/
+        
+        return $row;
+    }
+
+    
+    //get history task
+    function get_history_task($id){
+        $sql = "SELECT * FROM reject where idnv=?";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        $result = $stm->get_result();
+		
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        
+        return array('code' => 0, 'message'=>'thành công','data'=>$data);
+    }
+
+    function get_history_task_completed($idtask, $idnv){
+        $sql = "SELECT * FROM reject where idtask = ?, idnv=? and status = 'Completed'";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ss', $idtask, $idnv);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        $result = $stm->get_result();
+		
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        
+        return array('code' => 0, 'message'=>'thành công','data'=>$data);
     }
 
     //get status submission 
@@ -1466,5 +1590,24 @@
         return array('code' => 0, 'message'=>'thành công','data'=>$data);
     }
 
+    //get dayoff by id
+    function get_dayoff_by_id($id){
+        $sql = "SELECT * FROM dayoff where id=?";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        $result = $stm->get_result();
+		
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        
+        return array('code' => 0, 'message'=>'thành công','data'=>$data);
+    }
 
 ?>

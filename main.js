@@ -251,6 +251,22 @@ viewTask.forEach(item => {
 	}
 })
 
+//view task reject
+let idReject = document.getElementById('id');
+let idnvReject = document.getElementById('idnv');
+let reject_idsm = document.getElementById('reject_idsm');
+let rejectTask = document.querySelectorAll('.reject');
+rejectTask.forEach(item => {
+	item.onclick = () => {
+		let idReject1 = item.getAttribute('data-id');
+		let idnvReject1 = item.getAttribute('data-idnv');
+		let reject_idsm1 = item.getAttribute('data-idsm');
+		idReject.value = idReject1;
+		idnvReject.value = idnvReject1;
+		reject_idsm.value = reject_idsm1;
+	}
+})
+
 //view task employee
 let idTaske = document.getElementById('id-task1');
 let nameTaske = document.getElementById('task-name1');
@@ -428,22 +444,25 @@ function showErrorToast(input){
 //get id for submit task by employee
 let submit_task = document.getElementById('submit_task');
 let deadline_task = document.getElementById('deadline_task');
+let idnvSubmit = document.getElementById('id_nv_task');
 let submitEmployee = document.querySelectorAll('.submit');
 submitEmployee.forEach(item => {
 	item.onclick = () => {
 		let idSubmit = item.getAttribute('data-id');
 		let statusWaiting = item.getAttribute('data-status');
 		let deadlineSubmit1 = item.getAttribute('data-deadline');
+		let idnvSubmit1 = item.getAttribute('data-idnv');
 		submit_task.value = idSubmit;
 		deadline_task.value = deadlineSubmit1;
+		idnvSubmit.value = idnvSubmit1;
 		//console.log(deadline_task.value);
 		if(statusWaiting == 'Waiting' || statusWaiting == 'New' || statusWaiting == 'Completed')
 		{
-			document.getElementById("button-submit").disabled = true;
+			document.getElementById("button-submit").style.display = 'none';
 		}
 		else 
 		{
-			document.getElementById("button-submit").disabled = false;
+			document.getElementById("button-submit").style.display = 'block';
 		}
 	}
 })
@@ -472,9 +491,12 @@ function completeStatus(aTag){
 
 	let idsm = tds[0].innerHTML
 	let idtask = tds[1].innerHTML
+	let idnv = tds[3].innerHTML
 
 	$('#idtask').val(idtask)
 	$('#idsm').val(idsm)
+	$('#idnv1').val(idnv)
+
 
 	$.post("http://localhost:8080/truongphong/get_status_id.php", {
 		id: idsm,
@@ -547,6 +569,10 @@ function viewTaskOfEmployee(aTag){
 		let tableBody = ``
 		data.data.forEach(element => {
 			if(element.status == 'Rejected'){
+				document.getElementById("button-reject").disabled = false;
+				document.getElementById("button-start").style.display = 'none';
+				document.getElementById("button-submit").style.display = 'Block';
+				//document.getElementById("button-submit").innerHTML = 'Resubmit';
 				tableBody += `
 				<div class="form-group">
 					<label for="id">ID task</label>
@@ -574,7 +600,7 @@ function viewTaskOfEmployee(aTag){
 				</div>
 				<div class="form-group">
 					<label for="filereject">File Reject</label>
-					<a name="filereject"  id="filereject" href="`+element.attach+`">`+element.attach+`</a>
+					<a name="filereject"  id="filereject" href="../minhchung/`+element.attach+`">`+element.attach+`</a>
 				</div>
 				<div class="form-group">
 					<label id = "note1" for="note">Note</label>
@@ -583,6 +609,8 @@ function viewTaskOfEmployee(aTag){
 				`	
 			}
 			else if(element.status == 'Completed'){
+				document.getElementById("button-start").style.display = 'none';
+				document.getElementById("button-submit").style.display = 'none';
 				tableBody += `
 				<div class="form-group">
 					<label for="id">ID task</label>
@@ -611,6 +639,94 @@ function viewTaskOfEmployee(aTag){
 				<div class="form-group">
 					<label id = "labelevaluate" for="evaluation">Evaluation</label>
 					<p class="form-control">`+element.evaluate+`</p>
+				</div>	`	
+			}
+			else if(element.status == 'In progress'){
+				document.getElementById("button-start").style.display = 'none';
+				tableBody += `
+				<div class="form-group">
+					<label for="id">ID task</label>
+					<p class="form-control">`+element.idtask+`</p>
+				</div>
+				<div class="form-group">
+					<label for="task-name">Task name</label>
+					<p class="form-control">`+element.name+`</p>
+				</div>
+				<div class="form-group">
+					<label for="status">Status</label>
+					<p class="form-control">`+element.status+`</p>
+				</div>
+				<div class="form-group">
+					<label for="description">Description</label>
+					<p class="form-control">`+element.description+`</p>
+				</div>
+				<div class="form-group">
+					<label for="assignee">ID Employee</label>
+					<p class="form-control">`+element.idnv+`</p>
+				</div>
+				<div class="form-group">
+					<label for="due-to">Due to</label>
+					<p class="form-control">`+element.dueto+`</p>
+				</div>
+				`	
+			}
+			else if(element.status == 'Waiting'){
+				document.getElementById("button-start").style.display = 'none';
+				document.getElementById("button-submit").style.display = 'none';
+				tableBody += `
+				<div class="form-group">
+					<label for="id">ID task</label>
+					<p class="form-control">`+element.idtask+`</p>
+				</div>
+				<div class="form-group">
+					<label for="task-name">Task name</label>
+					<p class="form-control">`+element.name+`</p>
+				</div>
+				<div class="form-group">
+					<label for="status">Status</label>
+					<p class="form-control">`+element.status+`</p>
+				</div>
+				<div class="form-group">
+					<label for="description">Description</label>
+					<p class="form-control">`+element.description+`</p>
+				</div>
+				<div class="form-group">
+					<label for="assignee">ID Employee</label>
+					<p class="form-control">`+element.idnv+`</p>
+				</div>
+				<div class="form-group">
+					<label for="due-to">Due to</label>
+					<p class="form-control">`+element.dueto+`</p>
+				</div>
+				`	
+			}
+			else{
+				document.getElementById("button-start").style.display = 'block';
+				document.getElementById("button-submit").style.display = 'none';
+				tableBody += `
+				<div class="form-group">
+					<label for="id">ID task</label>
+					<input value="`+element.idtask+`" name="id" type="text" class="form-control" id="id">
+				</div>
+				<div class="form-group">
+					<label for="task-name">Task name</label>
+					<p class="form-control">`+element.name+`</p>
+				</div>
+				<div class="form-group">
+					<label for="status">Status</label>
+					<p class="form-control">`+element.status+`</p>
+				</div>
+				<div class="form-group">
+					<label for="description">Description</label>
+					<p class="form-control">`+element.description+`</p>
+				</div>
+				<div class="form-group">
+					<label for="assignee">ID Employee</label>
+					<p class="form-control">`+element.idnv+`</p>
+				</div>
+				<div class="form-group">
+					<label for="due-to">Due to</label>
+					<p class="form-control">`+element.dueto+`</p>
 				</div>
 				`	
 			}
@@ -619,3 +735,53 @@ function viewTaskOfEmployee(aTag){
 	},"json");
 }
 
+
+
+//view task employee
+function viewDayoff(aTag){
+	let td = aTag.parentElement
+	let tr = td.parentElement
+	let tds = tr.getElementsByTagName("td")
+
+	let idtask = tds[0].innerHTML
+	console.log(idtask)
+	$.post("http://localhost:8080/giamdoc/get_dayoff_by_id.php", {
+		id: idtask,
+	}, function(data,status){
+		console.log(data)
+		let tableBody = ``
+		data.data.forEach(element => {
+		
+				tableBody += `
+				<div class="form-group">
+					<label for="numdayoff">Number dayoff</label>
+					<p readonly class="form-control">` +element.numberoff+`</p>
+				</div>
+				<div class="form-group">
+					<label for="reason">Reason</label>
+					<p readonly class="form-control">` +element.reason+`</p>
+				</div>
+				<div class="form-group">
+					<label>Attach File</label>
+					<a href="../minhchung/`+element.attach+`">`+element.attach+`</a>
+				</div>
+				<div class="form-group">
+					<label for="user">Username</label>
+					<p readonly class="form-control">` +element.tentk+`</p>
+				</div>
+				<div class="form-group">
+					<label for="day_request">Day Request</label>
+					<p readonly class="form-control">` +element.day_request+`</p>
+				</div>
+				`
+			
+			
+		})
+		$('#body-dayoff').html(tableBody);
+	},"json");
+}
+
+$(".custom-file-input").on("change", function() {
+	var fileName = $(this).val().split("\\").pop();
+	$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
