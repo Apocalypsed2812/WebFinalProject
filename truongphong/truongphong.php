@@ -265,12 +265,76 @@
 				<div class="modal-footer">
 					<input type = hidden name="upfile" id="upfile">
 					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" onclick="editTask()">Edit</button>
 					<button type="submit" class="btn btn-danger" id="button-cancel">Cancel</button>
 				</div>
 			</div>
 		</form>
 	</div>
 </div>	 
+
+<!--update task-->		
+<div id="update-task" class="modal fade" role="dialog"> 
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<form action="" method="POST" enctype="multipart/form-data">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title">Update task</h3>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="id-task-u">ID task</label>
+						<input readonly value="" name="id-task" required class="form-control" type="text" placeholder="" id="id-task-u">
+					</div>
+					<div class="form-group">
+						<label readonly for="task-name-u">Task name</label>
+						<input readonly value="" name="task-name" required class="form-control" type="text" placeholder="" id="task-name-u">
+					</div>
+					<div class="form-group">
+						<label for="status-u">Status</label>
+						<input readonly value="" name="status" required class="form-control" type="text" placeholder="" id="status-u">
+					</div>
+					<div class="form-group">
+						<label for="assignee-u">Assignee</label>
+						<input readonly value="" name="assignee" required class="form-control" type="text" placeholder="" id="assignee-u">
+					</div>
+					<div class="form-group">
+						<label for="idnv-u">Assignee ID</label>
+						<select name="idnv" required class="form-control" id="idnv-u">
+							<?php
+								$result = get_employee_by_id_task($id_department);
+								$data = $result['data'];
+								foreach ($data as $item){
+									$idemployee = $item['idnv'];
+							?>
+									<option value="<?=$idemployee?>"><?=$idemployee?></option>
+							<?php
+								}
+							?>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="description-u">Description</label>
+						<input value="" name="description" required class="form-control" type="text" placeholder="" id="description-u">
+					</div>
+					<div class="form-group">
+						<label for="due-to-u">Due to</label>
+						<input value="" name="due-to" required class="form-control" type="date" placeholder="" id="due-to-u">
+					</div>
+					
+				</div>
+
+				<div class="modal-footer">
+					<input type = hidden name="upfile" id="upfile">
+					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+					<button id="update-button" type="button" class="btn btn-primary" id="button-cancel">Update</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
 
 <!--Add task-->	 
 <div id="add-task" class="modal fade" role="dialog"> 

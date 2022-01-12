@@ -785,3 +785,40 @@ $(".custom-file-input").on("change", function() {
 	var fileName = $(this).val().split("\\").pop();
 	$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 });
+
+$("#idnv-u").change(()=>{
+	$.post("search_employee_by_id.php",{
+		id: $("#idnv-u").val()
+	}, function(data) {
+		$("#assignee-u").val(data.data[0].name)
+	})
+})
+
+function editTask() {
+	if ($("#status").val()==="New" || $("#status").val()==="new"){
+		$("#idnv-u").attr({readonly:false})
+	} else {
+		$("#idnv-u").attr({readonly:true})
+	}
+
+	$("#id-task-u").val($("#id-task").val())
+	$("#task-name-u").val($("#task-name").val())
+	$("#status-u").val($("#status").val())
+	$("#description-u").val($("#description").val())
+	$("#assignee-u").val($("#assignee").val())
+	$("#due-to-u").val($("#due-to").val())
+	
+	$("#update-task").modal('show');
+}
+
+$("#update-button").click(()=>{
+	$.post("update_task.php",{
+		id_task: $("#id-task-u").val(),
+		id_employee: $("#idnv-u").val(),
+		description: $("#description-u").val(),
+		deadline: $("#due-to-u").val()
+	}, function(data) {
+		showSuccessToast('Update task successfully');
+		window.location.reload();
+	})
+})

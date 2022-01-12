@@ -1610,4 +1610,28 @@
         return array('code' => 0, 'message'=>'thành công','data'=>$data);
     }
 
+    // update NEW TASK of manager
+    function update_task_new($id_task, $id_employee, $description, $deadline){
+        $conn = open_database();
+        $sql = "UPDATE task SET description=?, idnv=?, dueto=? WHERE idtask=?";
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('ssss',$description, $id_employee, $deadline, $id_task);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+    // update task of manager
+    function update_task($id_task, $description, $deadline){
+        $conn = open_database();
+        $sql = "UPDATE task SET description=?, dueto=? WHERE idtask=?";
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('sss',$description,$deadline,$id_task);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        return array('code' => 0, 'message'=>'thành công');
+    }
+
+
 ?>

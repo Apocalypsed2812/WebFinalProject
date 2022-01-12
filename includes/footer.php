@@ -1,0 +1,1 @@
+<p class="footer-text">Copyright @ Your Website 2017</p>
