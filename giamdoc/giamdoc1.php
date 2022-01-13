@@ -346,14 +346,14 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="idnv">ID</label>
-						<input readonly value="" name="idnv" required class="form-control" type="text" placeholder="Idnv" id="idnv">
+						<input readonly value="" name="idnv" required class="form-control" type="text" placeholder="ID employee" id="idnv">
 					</div>
 					<div class="form-group">
 						<label for="name">Name</label>
 						<input readonly value="" name="name" required class="form-control" type="text" placeholder="Name" id="namenv">
 					</div>
 					<div class="form-group">
-						<label for="username">TenTK</label>
+						<label for="username">Username</label>
 						<input readonly value="" name="username" required class="form-control" type="text" placeholder="Username" id="username">
 					</div>
 					<div class="form-group">
@@ -406,7 +406,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="idnv">ID</label>
-						<input value="" name="idnv" required class="form-control" type="text" placeholder="Idnv" id="idnv1">
+						<input value="" name="idnv" required class="form-control" type="text" placeholder="ID employee" id="idnv1">
 					</div>
 					<div class="form-group">
 						<label for="name">Name</label>
@@ -481,7 +481,7 @@
 					<div class="form-group">
                         <div class="custom-file">
                             <input name="image" type="file" class="custom-file-input" id="customFile" accept="image/gif, image/jpeg, image/png, image/bmp">
-                            <label class="custom-file-label" for="customFile">Ảnh đại diện</label>
+                            <label class="custom-file-label" for="customFile">Profile picture</label>
                         </div>
                     </div>
 
@@ -531,12 +531,12 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
 				<div class="modal-body">
-					<p>Bạn có chắc rằng muốn xóa nhân viên <strong id ="name_delete_employee"></strong> ?</p>
+					<p>Are you sure you want to delete employee <strong id ="name_delete_employee"></strong> ?</p>
 				</div>
 				<div class="modal-footer">
 					<input type="hidden" name="delete" id="id_delete">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-danger">Xóa</button>
+					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-danger">Delete</button>
 				</div>
 			</div>
 		</form>
@@ -563,7 +563,7 @@
 						<input value="" name="namenv2" required class="form-control" type="text" placeholder="Name" id="namenv2">
 					</div>
 					<div class="form-group">
-						<label for="tentk2">TenTk</label>
+						<label for="tentk2">Username</label>
 						<input value="" name="tentk2" required class="form-control" type="text" placeholder="Tentk" id="tentk2">
 					</div>
 					<div class="form-group">

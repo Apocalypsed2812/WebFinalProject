@@ -550,12 +550,12 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
 				<div class="modal-body">
-					<p>Bạn có chắc rằng muốn xóa phòng <strong id ="name_delete"></strong> ?</p>
+					<p>Are you sure you want to delete the department <strong id ="name_delete"></strong> ?</p>
 				</div>
 				<div class="modal-footer">
 					<input type="hidden" name="delete" id="id_delete_department">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-danger">Xóa</button>
+					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-danger">Delete</button>
 				</div>
 			</div>
 		</form>

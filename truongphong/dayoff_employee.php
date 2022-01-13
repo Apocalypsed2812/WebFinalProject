@@ -18,7 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="../style.css">
-    <title>Trang Giám Đốc</title>
+    <title>Trang Trưởng Phòng</title>
 </head>
 <?php
 	if(isset($_POST['approved']))
@@ -124,10 +124,10 @@
 							</td>
 							<td>
 								<a href="" class="btn btn-success dayoffa" data-toggle="modal" data-target="#approved-modal" data-numberoff="<?=$numoff?>" data-reason="<?=$reason?>" data-attach="<?=$attach?>" data-tentk="<?=$tentk?>">
-									Yes
+									Agree
 								</a>
 								<a href="" class="btn btn-danger dayoffr" data-toggle="modal" data-target="#refused-modal" data-numberoff="<?=$numoff?>" data-reason="<?=$reason?>" data-attach="<?=$attach?>" data-tentk="<?=$tentk?>">
-									No
+									Disagree
 								</a>
 							</td>
 						</tr>
@@ -151,7 +151,7 @@
 						
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-dark" data-dismiss="modal">close</button>
+						<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
 					</div>
 				</div>
 			</form>
@@ -168,12 +168,12 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
 				<div class="modal-body">
-					<p>Đồng ý cho nhân viên nghỉ phép ?</p>
+					<p>Do you <b>agree</b> with employees leaving?</p>
 				</div>
 				<div class="modal-footer">
 					<input type="hidden" name="approved" id="id_approved">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
-					<button type="submit" class="btn btn-danger">Đồng ý</button>
+					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-success">OK</button>
 				</div>
 			</div>
 		</form>
@@ -191,12 +191,12 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
 				<div class="modal-body">
-					<p>Không đồng ý cho nhân viên nghỉ phép ?</p>
+					<p>Do you <b>disagree</b> with employees leaving?</p>
 				</div>
 				<div class="modal-footer">
 					<input type="hidden" name="refused" id="id_refused">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
-					<button type="submit" class="btn btn-danger">Đồng ý</button>
+					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-danger">OK</button>
 				</div>
 			</div>
 		</form>

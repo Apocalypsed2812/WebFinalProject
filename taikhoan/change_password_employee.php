@@ -11,14 +11,17 @@
 <html lang="en">
 <head>
     <title>Reset user password</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="../style.css">
 </head>
-<body>
+<body style = " font-family: 'Poppins', sans-serif; font-size: 16px;">
 <?php
 
     $post_error = '';
@@ -59,35 +62,32 @@
 	}
     
 ?>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <h3 class="text-center text-secondary mt-5 mb-3">Change Password</h3>
-			<form novalidate method="post" action="" class="border rounded w-100 mb-5 mx-auto px-3 pt-3 bg-light">
-				<div class="form-group">
-					<label for="oldpass">Old Password</label>
-					<input value="" name="oldpass" id="oldpass" type="password" class="form-control" placeholder="Old Password">
-				</div>
-				<div class="form-group">
-					<label for="pass">New Password</label>
-					<input  value="<?= $pass?>" name="pass" required class="form-control" type="password" placeholder="New Password" id="pass">
-					<div class="invalid-feedback">Password is not valid.</div>
-				</div>
-				<div class="form-group">
-					<label for="pass2">Confirm New Password</label>
-					<input value="<?= $pass_confirm?>" name="pass-confirm" required class="form-control" type="password" placeholder="Confirm New Password" id="pass2">
-					<div class="invalid-feedback">Password is not valid.</div>
-				</div>
-				<div class="form-group">
-					<?php
-						if (!empty($post_error)) {
-							echo "<div class='alert alert-danger'>$post_error</div>";
-						}
-					?>
-					<button class="btn btn-success px-5">Change password</button>
-				</div>
-			</form>
-        </div>
+<div class="change-password">
+    <div class="change-password-form">		
+		<form novalidate method="post" action="">
+			<h2><strong>Change Password</strong></h2>
+			<div class="form-group form-group1">				
+				<input value="" name="oldpass" id="oldpass" type="password" placeholder=" ">
+				<label for="oldpass">Old Password</label>
+			</div>
+			<div class="form-group form-group1">				
+				<input  value="<?= $pass?>" name="pass" required  type="password" placeholder=" " id="pass">
+				<label for="pass">New Password</label>
+				
+			</div>
+			<div class="form-group form-group1">				
+				<input value="<?= $pass_confirm?>" name="pass-confirm" required type="password" placeholder=" " id="pass2">
+				<label for="pass2">Confirm New Password</label>				
+			</div>
+			<div class="form-group form-group1">
+				<?php
+					if (!empty($post_error)) {
+						echo "<div class='alert alert-danger'>$post_error</div>";
+					}
+				?>
+				<button>Change password</button>
+			</div>
+		</form>
     </div>
 </div>
 

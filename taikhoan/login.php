@@ -103,7 +103,7 @@
     <div class="login">
         <div class="login-form">
             <form action="" method="post" id="loginForm">
-                <h1>Login</h1>
+                <h1><strong>Login</strong></h1>
                 <div class="form-group form-group1">
                     <input type="text" placeholder=" " name="user" id="username" value="<?=$user?>">
                     <label for="username">Username</label>

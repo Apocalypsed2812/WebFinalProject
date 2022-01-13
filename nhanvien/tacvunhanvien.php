@@ -399,7 +399,7 @@
 								<td><?=$deadline?></td>
 								<td>
 									<button class = "btn btn-danger" href="#" data-toggle="modal" data-target="#view-task" id="button-reject" onclick="viewTaskOfEmployee(this)">View</button>
-									<button class = "submit btn btn-success" href="#" data-toggle="modal" data-target="#submit-task" data-id="<?=$id?>" data-status="<?=$status?>" data-deadline="<?=$deadline?>" data-idnv="<?=$idnv?>">submit</button>	
+									<button class = "submit btn btn-success" href="#" data-toggle="modal" data-target="#submit-task" data-id="<?=$id?>" data-status="<?=$status?>" data-deadline="<?=$deadline?>" data-idnv="<?=$idnv?>">Submit</button>	
 								</td>
 							</tr>
 						<?php 
@@ -446,7 +446,7 @@
 					<div class="form-group">
 						<div class="custom-file">
 							<input value="" name="attach" type="file" class="custom-file-input" id="customFile">
-							<label class="custom-file-label" for="customFile">choose file</label>
+							<label class="custom-file-label" for="customFile">Choose file</label>
 						</div>
 					</div>
 				</div>

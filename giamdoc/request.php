@@ -115,16 +115,16 @@
 			<form action="" method="post">
 				<div class="modal-content">
 					<div class="modal-header">
-						<hp class="modal-title">Reset Account</hp>
+						<h4 class="modal-title">Reset Account</h4>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
 					<div class="modal-body">
-						<p>Bạn có chắc rằng muốn reset <strong>this account</strong> ?</p>
+						<p>Are you sure you want to reset <strong>this account</strong> ?</p>
 					</div>
 					<div class="modal-footer">
 						<input type="hidden" name="id_reset" id="id_reset">
 						<input type="hidden" name="name_reset" id="name_reset">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
 						<button type="submit" onclick="resetLocation()" class="btn btn-danger">Reset</button>
 					</div>
 				</div>
