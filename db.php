@@ -672,7 +672,33 @@
         }
         return array('code' =>0, 'message' =>'thành công');
     }
-	
+
+    //update all employee dayoff
+    function update_set_dayoff($id_department){
+        $sql = "UPDATE dayoff_employee SET tongso = 12, ngayconlai = (12 - ngaydasudung) WHERE id_department = ?";
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id_department);
+        if (!$stm->execute()){
+            return array('code' =>1, 'message' =>'không thể thực thi câu lệnh sql');
+        }
+        return array('code' =>0, 'message' =>'thành công');
+    }
+
+    //update dayoff manager
+    function update_dayoff_manager($username){
+        $sql = "UPDATE dayoff_employee SET tongso = 15, ngayconlai = (15 - ngaydasudung) WHERE tentk = ?";
+        $conn = open_database();
+
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $username);
+        if (!$stm->execute()){
+            return array('code' =>1, 'message' =>'không thể thực thi câu lệnh sql');
+        }
+        return array('code' =>0, 'message' =>'thành công');
+    }
+
 	//update manager in manager table
     function update_name_manager($name, $department){
         $sql = "UPDATE manager SET name = ? WHERE department = ?";
@@ -868,11 +894,16 @@
     }
 
     //display dayoff of employee
-	function get_dayoff_employee(){
+	function get_dayoff_employee($id_department){
         $conn = open_database();
-		$sql = "SELECT * FROM dayoff WHERE token = 1 and role = 'employee'";
+		$sql = "SELECT * FROM dayoff WHERE token = 1 and role = 'employee' and id_department = ?";
 		
-        $result = $conn->query($sql);
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $id_department);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); // return array(code, message)
+        }
+		$result = $stm->get_result();
 
         $data = array();
         while (($row = $result->fetch_assoc())){
@@ -941,9 +972,9 @@
     }
 	
 	//add dayoff employee
-	function add_dayoff_employee($numoff, $reason, $attach, $tentk, $role) {
+	function add_dayoff_employee($numoff, $reason, $attach, $tentk, $role, $id_department) {
 		$day_request = date("Y/m/d");
-        $sql = "INSERT INTO dayoff (numberoff, reason, attach, status, tentk, day_request, token, role) VALUES (?,?,?,'waiting',?,?, 0,?)";
+        $sql = "INSERT INTO dayoff (numberoff, reason, attach, status, tentk, day_request, token, role, id_department) VALUES (?,?,?,'waiting',?,?, 1,?,?)";
         $conn = open_database();
 		
 		if(is_dayoff_exists($tentk))
@@ -957,7 +988,7 @@
 		}
 		
         $stm = $conn->prepare($sql);
-        $stm->bind_param('isssss', $numoff, $reason, $attach, $tentk, $day_request, $role);
+        $stm->bind_param('issssss', $numoff, $reason, $attach, $tentk, $day_request, $role, $id_department);
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }
@@ -1208,6 +1239,26 @@
         $conn = open_database();
         $stm = $conn->prepare($sql);
         $stm->bind_param('s', $idnv);
+        if (!$stm->execute()){
+            return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
+        }
+        $result = $stm->get_result();
+		
+        $data = array();
+        while($row = $result->fetch_assoc())
+		{
+            $data[] = $row;
+        }
+        
+        return array('code' => 0, 'message'=>'thành công','data'=>$data);
+    }
+
+    //get all submission (employee)
+    function get_submission_idsm($idsm){
+        $sql = "SELECT * FROM submission where idsm=?";
+        $conn = open_database();
+        $stm = $conn->prepare($sql);
+        $stm->bind_param('s', $idsm);
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }

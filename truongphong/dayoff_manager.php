@@ -196,7 +196,7 @@
 						
 						<tr>
 							<td colspan="8">
-								<a href="xemyeucau.php" class="btn btn-primary">Xem yêu cầu nghỉ phép</a>
+								<a href="xemyeucautp.php" class="btn btn-primary">Xem yêu cầu nghỉ phép</a>
 							</td>
 						
 						</tr>

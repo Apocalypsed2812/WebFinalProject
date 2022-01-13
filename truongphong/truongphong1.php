@@ -192,6 +192,7 @@
 		<div style="overflow-x:auto;">
 			<table cellpadding="10" cellspacing="10" border="0" style=" margin: auto">
 				<tr class="header">
+					<td></td>
 					<td>ID Submit</td>
 					<td>ID Task</td>
 					<td>Task name</td>
@@ -208,7 +209,12 @@
 						$idsm = $submit['idsm'];
 						$status = $submit['turnin'];
 				?>
-					<tr class="item" data-toggle="modal" data-target="#view-task">
+					<tr class="item">
+						<td>
+							<a href="#" class="btn" style="border-radius: 70%; background-color: #D8D8D8" data-toggle="modal" data-target="#view-submission" onclick="viewMission(this)">
+								<span><i class="fas fa-eye"></i></span> 
+							</a>
+						</td>
 						<td><?=$idsm?></td>
 						<td><?=$idtask?></td>
 						<td><?=$name_task?></td>
@@ -224,6 +230,29 @@
 			</table>
 		</div>
      </div> 
+
+<div id="view-submission" class="modal fade" role="dialog"> 
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<form action="" method="POST" enctype="multipart/form-data">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title">View Submission</h3>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body" id="body-submission">
+					
+					
+				</div>
+
+				<div class="modal-footer">
+					<input type = hidden name="upfile" id="upfile">
+					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>	 
 	 
 <!--Reject task-->		
 <div id="reject-task" class="modal fade" role="dialog"> 

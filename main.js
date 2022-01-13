@@ -489,9 +489,9 @@ function completeStatus(aTag){
 	let tr = td.parentElement
 	let tds = tr.getElementsByTagName("td")
 
-	let idsm = tds[0].innerHTML
-	let idtask = tds[1].innerHTML
-	let idnv = tds[3].innerHTML
+	let idsm = tds[1].innerHTML
+	let idtask = tds[2].innerHTML
+	let idnv = tds[4].innerHTML
 
 	$('#idtask').val(idtask)
 	$('#idsm').val(idsm)
@@ -822,3 +822,48 @@ $("#update-button").click(()=>{
 		window.location.reload();
 	})
 })
+
+//view submission
+function viewMission(aTag){
+	let td = aTag.parentElement
+	let tr = td.parentElement
+	let tds = tr.getElementsByTagName("td")
+
+	let idsm = tds[1].innerHTML
+	console.log(idsm);
+	$.post("http://localhost:8080/truongphong/get_submission.php", {
+		id: idsm,
+	}, function(data,status){
+		console.log(data);
+		let tableBody = ``
+		data.data.forEach(element => {
+			tableBody += `
+			<div class="form-group">
+				<label for="id-task">ID task</label>
+				<input readonly value="`+element.idtask+`" name="id-task" required class="form-control" type="text" placeholder="" id="id-task">
+			</div>
+			<div class="form-group">
+				<label for="task-name">ID Employee</label>
+				<input readonly value="`+element.idnv+`" name="task-name" required class="form-control" type="text" placeholder="" id="task-name">
+			</div>
+			<div class="form-group">
+				<label>Attach File</label>
+				<a class="form-control" href="../minhchung/`+element.attach+`">`+element.attach+`</a>
+			</div>
+			<div class="form-group">
+				<label for="description">Description</label>
+				<input readonly value="`+element.description+`" name="description" required class="form-control" type="text" placeholder="" id="description">
+			</div>
+			<div class="form-group">
+				<label for="day_sm">Day Submit</label>
+				<input readonly value="`+element.day_submit+`" name="day_sm" required class="form-control" type="text" placeholder="" id="day_sm">
+			</div>
+			<div class="form-group">
+				<label for="turnin">Turn In</label>
+				<input readonly value="`+element.turnin+`" name="turnin" required class="form-control" type="text" placeholder="" id="turnin">
+			</div>
+			`
+		})
+		$('#body-submission').html(tableBody);
+	},"json");
+}

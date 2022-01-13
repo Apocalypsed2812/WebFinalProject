@@ -5,6 +5,16 @@
         exit();
     }
 	require_once('../db.php');
+	$tentk = $_SESSION['user'];
+	
+	$result = get_employee_by_tentk($tentk);
+	$data = $result['data'];
+	foreach ($data as $item){
+		$idnv = $item['idnv'];
+		$name = $item['name'];
+		$id_department = $item['id_department'];
+		//$image = $item['image'];
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -103,7 +113,7 @@
 					<td></td>
 				</tr>
 				<?php
-					$result = get_dayoff_employee();
+					$result = get_dayoff_employee($id_department);
 					$data = $result['data'];
 					foreach ($data as $item){
 						$id = $item['id'];
