@@ -239,7 +239,22 @@ button:hover {
 	margin-top: 10px;
 	font-size: 20px;
 }
-/* =================== */
+/* Trang cài đặt nhân viên========================================= */
+.caidatnhanvien table{
+	min-width: 100%;
+	background-color: white;
+	color: black;
+	text-align: left;
+}
+
+.caidatnhanvien td p{
+	margin-bottom: 0;
+}
+
+.caidatnhanvien td img{
+	max-height: none;
+}
+/* ============================================ */
 .first-item{
 	border: solid 1px black;
 	height: 150px;

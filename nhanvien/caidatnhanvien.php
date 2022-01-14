@@ -25,150 +25,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <title>Trang Hồ Sơ Nhân Viên</title>
-    <style>
-		
-		*{
-			box-sizing: border-box;
-		}
+    <link rel="stylesheet" href="../style.css">    
+	<title>Trang Hồ Sơ Nhân Viên</title>
 
-        .footer-text{
-            background-color: rgba(0, 0, 0, 0.808);
-            color: white;
-            text-align: center;
-            padding: 30px;
-            margin-top: 15px;
-        }
-		
-		.second-item{
-            background-color: #bebebe;
-            height: 50px;
-        }
-		
-		.second-item p{
-			color: black;
-			font-weight: bold;
-			margin-left: 10px;
-			margin-top: 10px;
-			font-size: 20px;
-        }
-		
-		.card-body button{
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-		
-		.card-body{
-			display: flex;
-			justify-content: right;	
-		}
-		
-		.card-left{
-			height: 650px;
-			background-color: white;
-		}
-		
-		.leftc{
-			background-color: white;
-			padding: 0;
-		}
-		
-		.top-card{
-			height: 200px;
-		}
-		
-		.content-card{
-			height: 50px;
-			background-color: white;
-			margin-top: 10px;
-		}
-		
-		.search-bar{
-			margin-top: 10px;
-			display: flex;
-			justify-content: center;
-		}
-		
-		.form-outline{
-			max-width: 80%;
-			min-width: 80%;
-		}
-		
-		.nav-item{
-			margin-left: 20px;
-		}
-		
-		.card-info{
-			display: flex;
-			justify-content: center;
-			background-color: white;
-		}
-		
-		.card-block{
-			margin-left: 0px;
-		}
-		
-		.content-body{
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-		
-		.content-body p{
-			margin-bottom: 0;
-		}
-		
-		.image-body{
-			display: flex;
-			justify-content: center;
-		}
-		
-		
-		.content-body img{
-			max-width: 100%;
-			max-height: 100%;
-		}
-		
-		.content-top{
-			display: flex;
-			justify-content: left;
-			align-items: left;
-			font-size: 30px;
-		}
-		
-		.content-top p{
-			margin-bottom: 0;
-		}
-		
-		.image-top{
-			display: flex;
-			justify-content: center;
-			height: 300px;
-		}
-		
-		.cv-top{
-			display: flex;
-			justify-content: left;
-			color:rgba(143, 142, 142, 0.959)
-		}
-		
-		table{
-			min-width: 100%;
-			background-color: white;
-			color: black;
-		}
-		
-		.card-task{
-			display: flex;
-			justify-content: center;
-			margin-top: 50px;
-		}
-		
-		td p{
-			margin-bottom: 0;
-		}
-    </style>
 <?php
 	$result = get_employee_by_tentk($tentk);
 	$data = $result['data'];
@@ -235,7 +94,7 @@
 		</div>
     </nav>
 
-		<div class="row">
+		<div class="row caidatnhanvien">
 			<div class="col-lg-4 col-md-12 left mt-3">
 				<table cellpadding="10" cellspacing="10" class="table table-borderless" style="margin: auto;">
 					<tbody>
