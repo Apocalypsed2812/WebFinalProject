@@ -74,7 +74,7 @@
 		$image = $item['image'];
 	}
 ?>
-		<div class="row">
+		<div class="row hosonhanvien">
 			<div class="col-lg-4 col-md-12 left mt-3">
 				<table cellpadding="10" cellspacing="10" class="table table-borderless" style="margin: auto;">
 					<tbody>
@@ -91,7 +91,7 @@
 								</div>
 							</td>
 						</tr>
-			
+				
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
 							<td colspan="3">
 								<a href="tacvunhanvien.php">Task</a>

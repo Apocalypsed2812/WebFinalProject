@@ -162,13 +162,12 @@
             
 			<div class="col-lg-5 mt-3">
 				<form action="" method="POST">
-					<table cellpadding="10" cellspacing="10" border="0" class="table-borderless">
-						<div>Public Profile</div> 
+					<table cellpadding="10" cellspacing="10" border="0" class="table-borderless">						
 						<tbody>
 							<tr>
 								<td>
 									<div class="form-group">
-										<label for="name">Họ tên</label>
+										<label for="name">Fullname</label>
 										<input id="name" type="text" name="name" class="form-control">
 									</div>
 								</td>
@@ -176,7 +175,7 @@
 							<tr>
 								<td>
 									<div class="form-group">
-										<label for="name">Ngày sinh</label>
+										<label for="name">Birthday</label>
 										<input id="birth" type="date" name="birth" class="form-control">
 									</div>
 								</td>
@@ -184,7 +183,7 @@
 							<tr>
 								<td>
 									<div class="form-group">
-										<label for="address">Địa chỉ</label>
+										<label for="address">Address</label>
 										<input id="address" type="text" name="address" class="form-control">
 									</div>
 								</td>
@@ -198,13 +197,13 @@
 								</td>
 							</tr>
 							<tr>
-								<td><button type="submit" href="update.php" class="btn btn-primary">Cập nhật thông tin</button></td>
+								<td><button type="submit" href="update.php" class="btn btn-primary">Update profile</button></td>
 							</tr>
 							<tr>
 								<td><hr size="1"></td>
 							</tr>
 							<tr>
-								<td><a href="../taikhoan/change_password_employee.php" class="btn btn-primary">Đổi mật khẩu</a></td>
+								<td><a href="../taikhoan/change_password_employee.php" class="btn btn-primary">Change Password</a></td>
 							</tr>
 							<tr>
 								<?php
@@ -219,18 +218,15 @@
 			</div>
             <div class="col-lg-3 mt-3">
 				<table cellpadding="10" cellspacing="10" border="0" class="table table-borderless" >
-					<tbody>
-						<tr>
-							<td><a href="hosonhanvien.php" class="btn btn-primary">Đến trang hồ sơ</a></td>
-						</tr>
+					<tbody>						
                         <tr>
-							<td>Ảnh đại diện</td>
+							<td><b>Avatar</b></td>
 						</tr>
 						<tr>
 							<td><img src="../images/<?=$image?>" style="width:100%"></td>
 						</tr>
                         <tr>
-							<td><a href="" class="btn btn-primary" data-toggle="modal" data-target="#add-avatar">sửa ảnh</a></td>
+							<td><a href="" class="btn btn-primary" data-toggle="modal" data-target="#add-avatar">Change avatar</a></td>
 						</tr>
 					</tbody>
 				</table>
@@ -252,7 +248,7 @@
 					<div class="form-group">
 						<div class="custom-file">
 							<input value=""name="image" type="file" class="custom-file-input" id="customFile" accept="image/gif, image/jpeg, image/png, image/bmp">
-							<label class="custom-file-label" for="customFile">Ảnh đại diện</label>
+							<label class="custom-file-label" for="customFile">Avatar</label>
 						</div>
 					</div>
 				</div>

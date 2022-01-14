@@ -23,150 +23,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <title>Trang Hồ Sơ Nhân Viên</title>
-    <style>
-		
-		*{
-			box-sizing: border-box;
-		}
-
-        .footer-text{
-            background-color: rgba(0, 0, 0, 0.808);
-            color: white;
-            text-align: center;
-            padding: 30px;
-            margin-top: 15px;
-        }
-		
-		.second-item{
-            background-color: #bebebe;
-            height: 50px;
-        }
-		
-		.second-item p{
-			color: black;
-			font-weight: bold;
-			margin-left: 10px;
-			margin-top: 10px;
-			font-size: 20px;
-        }
-		
-		.card-body button{
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-		
-		.card-body{
-			display: flex;
-			justify-content: right;	
-		}
-		
-		.card-left{
-			height: 650px;
-			background-color: white;
-		}
-		
-		.leftc{
-			background-color: white;
-			padding: 0;
-		}
-		
-		.top-card{
-			height: 200px;
-		}
-		
-		.content-card{
-			height: 50px;
-			background-color: white;
-			margin-top: 10px;
-		}
-		
-		.search-bar{
-			margin-top: 10px;
-			display: flex;
-			justify-content: center;
-		}
-		
-		.form-outline{
-			max-width: 80%;
-			min-width: 80%;
-		}
-		
-		.nav-item{
-			margin-left: 20px;
-		}
-		
-		.card-info{
-			display: flex;
-			justify-content: center;
-			background-color: white;
-		}
-		
-		.card-block{
-			margin-left: 0px;
-		}
-		
-		.content-body{
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-		
-		.content-body p{
-			margin-bottom: 0;
-		}
-		
-		.image-body{
-			display: flex;
-			justify-content: center;
-		}
-		
-		
-		.content-body img{
-			max-width: 100%;
-			max-height: 100%;
-		}
-		
-		.content-top{
-			display: flex;
-			justify-content: left;
-			align-items: left;
-			font-size: 30px;
-		}
-		
-		.content-top p{
-			margin-bottom: 0;
-		}
-		
-		.image-top{
-			display: flex;
-			justify-content: center;
-			height: 300px;
-		}
-		
-		.cv-top{
-			display: flex;
-			justify-content: left;
-			color:rgba(143, 142, 142, 0.959)
-		}
-		
-		table{
-			background-color: white;
-			color: black;
-		}
-		
-		.card-task{
-			display: flex;
-			justify-content: center;
-			margin-top: 50px;
-		}
-		
-		td p{
-			margin-bottom: 0;
-		}
-
-    </style>
+    <link rel="stylesheet" href="../style.css">    
+	<title>Trang Hồ Sơ Nhân Viên</title>
 </head>
 <?php
 	//check add dayoff
@@ -287,7 +145,7 @@
 		</div>
     </nav>
 
-		<div class="row">
+		<div class="row tinnhannhanvien">
 			<div class="col-lg-4 col-md-12 left mt-3">
 				<table cellpadding="10" cellspacing="10" class="table table-borderless" style="margin: auto;">
 					<tbody>
@@ -359,44 +217,37 @@
 		$ngayconlai = $item['ngayconlai'];
 	}
 ?>
-			<div class="col-lg-8 card-info">
+			<div class="col-lg-8 card-info tinnhannhanvien">
 				<table class="table table-striped mt-3 mx-3" style="border-collapse: collapse; margin: auto">
-					<tbody>
+					<tbody>						
 						<tr>
-							<td colspan="8">
-								<a href="" class="btn btn-primary" data-toggle="modal" data-target="#add-dayoff">Yêu cầu nghỉ phép</a>
-							</td>
-						
-						</tr>
-						<tr>
-							<td><i class="fa fa-user-circle-o" style="font-size:48px"></i></td>
+							<td><i class="fa fa-calendar-check-o" style="font-size:40px"></i></td>
 							<td colspan="4">Tổng số ngày nghỉ phép</td>
-							<td><?=$tongso?></td>
-							<td><i class="fa fa-mail-reply" style="font-size:18px"></i></td>
-							<td><i class="fa fa-trash-o" style="font-size:18px"></i></td>
+							<td><?=$tongso?></td>							
 						</tr>
 						
 						<tr>
-							<td><i class="fa fa-user-circle-o" style="font-size:48px"></i></td>
+							<td><i class="fa fa-minus-square" style="font-size:40px"></i></td>
 							<td colspan="4">Số ngày đã sử dụng</td>
-							<td><?=$ngaydasudung?></td>
-							<td><i class="fa fa-mail-reply" style="font-size:18px"></i></td>
-							<td><i class="fa fa-trash-o" style="font-size:18px"></i></td>
+							<td><?=$ngaydasudung?></td>							
 						</tr>
 						
 						<tr>
-							<td><i class="fa fa-user-circle-o" style="font-size:48px"></i></td>
+							<td><i class="fa fa-plus-square" style="font-size:40px"></i></td>
 							<td colspan="4">Số ngày còn lại trong năm</td>
-							<td><?=$ngayconlai?></td>
-							<td><i class="fa fa-mail-reply" style="font-size:18px"></i></td>
-							<td><i class="fa fa-trash-o" style="font-size:18px"></i></td>
+							<td><?=$ngayconlai?></td>							
 						</tr>
 						
 						<tr>
-							<td colspan="8">
+							<td></td>
+							<td colspan="2">
 								<a href="xemyeucau.php" class="btn btn-primary">Xem yêu cầu nghỉ phép</a>
-							</td>
-						
+							</td>	
+							<td colspan="2" style="text-align: right">
+								<a href="" class="btn btn-primary" data-toggle="modal" data-target="#add-dayoff">Yêu cầu nghỉ phép</a>
+							</td>	
+							<td></td>
+											
 						</tr>
 						
 						<tr>

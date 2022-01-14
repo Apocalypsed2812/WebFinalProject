@@ -28,7 +28,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="../style.css">
-    <title>Trang Hồ Sơ Nhân Viên</title>
+    <title>Trang yêu cầu nghỉ phép</title>
     
 </head>
 <?php

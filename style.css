@@ -251,10 +251,33 @@ button:hover {
 	margin-bottom: 0;
 }
 
-.caidatnhanvien td img{
+.caidatnhanvien label{
+	font-weight: bold;
+}
+.caidatnhanvien td img,
+.tinnhannhanvien td img,
+.tacvunhanvien td img,
+.hosonhanvien td img{
 	max-height: none;
 }
-/* ============================================ */
+/* Trang tin nhắn nhân viên============================================ */
+.tinnhannhanvien table{
+	background-color: white;
+	color: black;
+	text-align: left;
+}
+.tinnhannhanvien td{
+	vertical-align: middle;
+}
+
+
+.control:hover {
+	background: #d4d7da;
+}
+
+
+
+
 .first-item{
 	border: solid 1px black;
 	height: 150px;
@@ -405,9 +428,7 @@ body{
 	padding: 30px;
 }
 
-body{
-	min-height: 100vh;
-}
+
 
 .block-image{
 	flex: 1;	
