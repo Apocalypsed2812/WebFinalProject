@@ -31,8 +31,8 @@
 		if ($result['code'] == 0 && $result1['code'] == 0) {
 			// thành công
 			$_SESSION['reset_success'] = 'reset account thành công';
-			header('Location: ../giamdoc/request.php');
-			exit();
+			//header('Location: ../giamdoc/request.php');
+			//exit();
 		} else {
 			$error = $result['message'];
 		}

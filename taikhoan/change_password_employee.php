@@ -7,6 +7,45 @@
 	}
 	$tentk = $_SESSION['user'];
 ?>
+<?php
+
+$post_error = '';
+$oldpass = '';
+$pass = '';
+$pass_confirm = '';
+
+if (isset($_POST['oldpass']) && isset($_POST['pass']) && isset($_POST['pass-confirm'])) {
+
+	$oldpass = $_POST['oldpass'];
+	$pass = $_POST['pass'];
+	$pass_confirm = $_POST['pass-confirm'];
+
+	if (empty($oldpass)) {
+		$post_error = 'Vui lòng nhập mật khẩu cũ';
+	}
+	else if (!check_old_pass($oldpass, $tentk)) {
+		$post_error = 'Mật khẩu cũ không đúng, vui lòng nhập lại mật khẩu cũ';
+	}
+	else if (empty($pass)) {
+		$post_error = 'Vui lòng nhập mật khẩu mới';
+	} else if (strlen($pass) < 6) {
+		$post_error = 'Mật khẩu mới phải có ít nhất 6 ký tự';
+	} else if ($pass != $pass_confirm) {
+		$post_error = 'Xác nhận mật khẩu không trùng khớp';
+	} else {
+		// change pass for employee
+		$result = change_password_employee($tentk, $pass);
+		if ($result['code'] == 0) {
+			// thành công
+			$_SESSION['change_employee_success'] = 'thành công';
+			header('Location: ../taikhoan/login.php');
+		} else {
+			$_SESSION['change_employee_failed'] = 'thất bại';
+			$post_error = $result['message'];
+		}
+	}
+}   
+?>
 <DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,46 +61,7 @@
 	<link rel="stylesheet" href="../style.css">
 </head>
 <body style = " font-family: 'Poppins', sans-serif; font-size: 16px;">
-<?php
 
-    $post_error = '';
-    $oldpass = '';
-    $pass = '';
-    $pass_confirm = '';
-    
-	if (isset($_POST['oldpass']) && isset($_POST['pass']) && isset($_POST['pass-confirm'])) {
-
-		$oldpass = $_POST['oldpass'];
-		$pass = $_POST['pass'];
-		$pass_confirm = $_POST['pass-confirm'];
-
-		if (empty($oldpass)) {
-			$post_error = 'Vui lòng nhập mật khẩu cũ';
-		}
-		else if (!check_old_pass($oldpass, $tentk)) {
-			$post_error = 'Mật khẩu cũ không đúng, vui lòng nhập lại mật khẩu cũ';
-		}
-		else if (empty($pass)) {
-			$post_error = 'Vui lòng nhập mật khẩu mới';
-		} else if (strlen($pass) < 6) {
-			$post_error = 'Mật khẩu mới phải có ít nhất 6 ký tự';
-		} else if ($pass != $pass_confirm) {
-			$post_error = 'Xác nhận mật khẩu không trùng khớp';
-		} else {
-			// change pass for employee
-			$result = change_password_employee($tentk, $pass);
-			if ($result['code'] == 0) {
-				// thành công
-				$_SESSION['change_employee_success'] = 'thành công';
-				header('Location: ../taikhoan/login.php');
-			} else {
-				$_SESSION['change_employee_failed'] = 'thất bại';
-				$post_error = $result['message'];
-			}
-		}
-	}
-    
-?>
 <div class="change-password">
     <div class="change-password-form">		
 		<form novalidate method="post" action="">

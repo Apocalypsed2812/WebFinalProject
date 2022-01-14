@@ -222,8 +222,8 @@
 				{
 					echo "<script> alert('File không được để trống!'); window.location='tinnhannhanvien.php'; </script>";
 				}
-				header('Location: tinnhannhanvien.php');
-				exit();
+				//header('Location: tinnhannhanvien.php');
+				//exit();
             } 
 			else if($result['code'] == 2){
 				//die('Không thể thêm yêu cầu');
@@ -241,7 +241,7 @@
 ?>
 <body>
 <?php
-	$result = get_employee_by_tentk($tentk);
+	$result = get_employee_by_tentk($user);
 	$data = $result['data'];
 	foreach ($data as $item){
 		$name = $item['name'];
@@ -351,7 +351,7 @@
 				</table>
 			</div>
 <?php
-	$result1 = get_dayoff_by_tentk($tentk);
+	$result1 = get_dayoff_by_tentk($user);
 	$data1 = $result1['data'];
 	foreach ($data1 as $item){
 		$tongso = $item['tongso'];
@@ -429,7 +429,7 @@
 						<label for="numday">Chọn số ngày nghỉ</label>
 						<select name="numday" required class="form-control" id="numday">
 							<?php
-								$result4 = get_ngayconlai($tentk);
+								$result4 = get_ngayconlai($user);
 								$data4 = $result4['data'];
 								for($i = 1; $i <= $data4[0]['ngayconlai']; $i++)
 								{

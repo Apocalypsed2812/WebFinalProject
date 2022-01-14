@@ -6,6 +6,39 @@
 		exit();
 	}
 ?>
+<?php
+
+$error = '';
+$email = '';
+$user = '';
+
+if(isset($_POST['reset'])){
+	$id = $_POST['reset'];
+}
+if (isset($_POST['user']) && isset($_POST['id_reset'])) 
+{
+	//$email = $_POST['email'];
+	$user = $_POST['user'];
+	$id_reset = $_POST['id_reset'];
+	
+	if (empty($user)) {
+		$error = 'Vui lòng nhập Username';
+	}
+	else {
+		// reset pass
+		$result = reset_password($user);
+		$result1 = update_token($id_reset);
+		if ($result['code'] == 0 && $result1['code'] == 0) {
+			// thành công
+			$_SESSION['reset_success'] = 'reset account thành công';
+			header('Location: ../giamdoc/request.php');
+			exit();
+		} else {
+			$error = $result['message'];
+		}
+	}
+}  
+?>
 <DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,42 +51,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-<?php
 
-    $error = '';
-    $email = '';
-	$user = '';
-	
-	if(isset($_POST['reset'])){
-		$id = $_POST['reset'];
-	}
-	if (isset($_POST['user']) && isset($_POST['id_reset'])) 
-	{
-		//$email = $_POST['email'];
-		$user = $_POST['user'];
-		$id_reset = $_POST['id_reset'];
-		
-		if (empty($user)) {
-			$error = 'Vui lòng nhập Username';
-		}
-		else {
-			// reset pass
-			$result = reset_password($user);
-			$result1 = update_token($id_reset);
-			if ($result['code'] == 0 && $result1['code'] == 0) {
-				// thành công
-				$_SESSION['reset_success'] = 'reset account thành công';
-				header('Location: ../giamdoc/request.php');
-				exit();
-			} else {
-				$error = $result['message'];
-			}
-		}
-	}
-	
-    
-  
-?>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">

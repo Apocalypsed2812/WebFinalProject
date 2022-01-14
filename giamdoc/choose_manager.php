@@ -1,6 +1,54 @@
 <?php
 	require_once('../db.php');
 	session_start();
+	if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
+        header('Location: ../taikhoan/login.php');
+        exit();
+    }
+?>
+<?php
+	$error = '';
+	
+	if(isset($_POST['chooseManager']) && isset($_POST['id_choose']) && isset($_POST['department_choose']) && isset($_POST['idChooseManager']))
+	{
+		$chooseManager = $_POST['chooseManager'];
+		$idChoose = $_POST['id_choose'];
+		$departmentChoose = $_POST['department_choose'];
+		$idChooseManager = $_POST['idChooseManager'];
+		$result = update_manager($chooseManager, $idChoose);
+		$result1 = reset_employee($departmentChoose);
+		$result2 = update_position_employee($idChooseManager);
+		$result3 = update_name_manager($chooseManager, $departmentChoose);
+		$result4 = reset_role_account($departmentChoose);
+		$result5 = get_tentk_by_id($idChooseManager);
+		$data = $result5['data'];
+		$result6 = update_role_account($data[0]['username']);
+		
+		if ($result['code'] == 0 && $result1['code'] == 0 && $result2['code'] == 0 && $result3['code'] == 0 && $result4['code'] == 0 && $result6['code'] == 0){
+			// thành công
+			//die('Choose Manager Successful');
+			$_SESSION['choose_manager_success'] = 'thành công';
+			header('location: giamdoc.php');
+			exit();
+		}
+		else if ($result['code'] == 2)
+		{
+			//die('Người này đã là trưởng phòng hiện tại, không thể chọn! Hãy chọn người khác');
+			//showFailedDialog('Failed Not Choose');
+			//$error = $result['message'];
+			$_SESSION['choose_manager_error'] = 'có lỗi';
+			header('location: giamdoc.php');
+			exit();
+		}
+		else {
+			//$error = $result['message'];
+			//die('Choose Manager Failed');
+			//showFailedDialog("Một người không thể làm trưởng 2 phòng ban");
+			$_SESSION['choose_manager_failed'] = 'thất bại';
+			header('location: giamdoc.php');
+			exit();
+		}          
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,52 +61,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <title>Trang Giám Đốc</title>
-
-	<?php
-		$error = '';
-		
-		if(isset($_POST['chooseManager']) && isset($_POST['id_choose']) && isset($_POST['department_choose']) && isset($_POST['idChooseManager']))
-		{
-			$chooseManager = $_POST['chooseManager'];
-			$idChoose = $_POST['id_choose'];
-			$departmentChoose = $_POST['department_choose'];
-			$idChooseManager = $_POST['idChooseManager'];
-			$result = update_manager($chooseManager, $idChoose);
-			$result1 = reset_employee($departmentChoose);
-			$result2 = update_position_employee($idChooseManager);
-			$result3 = update_name_manager($chooseManager, $departmentChoose);
-			$result4 = reset_role_account($departmentChoose);
-			$result5 = get_tentk_by_id($idChooseManager);
-			$data = $result5['data'];
-			$result6 = update_role_account($data[0]['username']);
-			
-            if ($result['code'] == 0 && $result1['code'] == 0 && $result2['code'] == 0 && $result3['code'] == 0 && $result4['code'] == 0 && $result6['code'] == 0){
-                // thành công
-				//die('Choose Manager Successful');
-				$_SESSION['choose_manager_success'] = 'thành công';
-                header('location: giamdoc.php');
-                exit();
-            }
-			else if ($result['code'] == 2)
-			{
-				//die('Người này đã là trưởng phòng hiện tại, không thể chọn! Hãy chọn người khác');
-				//showFailedDialog('Failed Not Choose');
-				//$error = $result['message'];
-				$_SESSION['choose_manager_error'] = 'có lỗi';
-				header('location: giamdoc.php');
-                exit();
-			}
-			else {
-                //$error = $result['message'];
-				//die('Choose Manager Failed');
-				//showFailedDialog("Một người không thể làm trưởng 2 phòng ban");
-				$_SESSION['choose_manager_failed'] = 'thất bại';
-				header('location: giamdoc.php');
-                exit();
-            }          
-		}
-	?>
+    <title>Trang Chọn Trưởng Phòng</title>
+	
 </head>
 <body>
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
@@ -108,10 +112,10 @@
 					<td>Actions</td>
 				</tr>
 				<?php
-					if(isset($_POST['department']) && isset($_POST['id3']))
+					if(isset($_POST['department_gd']) && isset($_POST['id3_gd']))
 					{
-						$id3 = $_POST['id3'];
-						$name_department = $_POST['department'];
+						$id3 = $_POST['id3_gd'];
+						$name_department = $_POST['department_gd'];
 						$result = get_employee_by_department($name_department, $id3);
 						if($result['code'] == 0)
 						{
@@ -133,10 +137,6 @@
 								</tr>
 						<?php
 							}
-						}
-						else if($result['code'] == 2){
-							echo "<div class='alert alert-danger'>Phòng ban được chọn không hợp lệ</div>";
-							echo "<p>Click <a href='giamdoc.php'>vào đây</a>để quay lại trang giám đốc và chọn lại phòng ban</p>";
 						}
 					}
 				?>
@@ -168,11 +168,6 @@
 			</form>
         </div>
     </div>
-
-<div class="alert alert-danger alert-dismissable" id="error-message" style="display:none">
-	<a id="delete-failed-modal" href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	<strong>Failed!</strong> An unknown eror occured. Please try again later.
-</div>
 
 <link rel="stylesheet" href="../style.css">
 <script src="../main.js"></script>

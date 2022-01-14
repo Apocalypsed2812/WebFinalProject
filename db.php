@@ -441,12 +441,12 @@
     }
 	
 	//add department
-    function add_department($id, $name, $manager, $contact, $phone, $describe) {
-        $sql = "INSERT INTO department (id, name, manager, contact, phone, description) VALUES (?,?,?,?,?,?)";
+    function add_department($id, $name, $contact, $phone, $describe) {
+        $sql = "INSERT INTO department (id, name, contact, phone, description) VALUES (?,?,?,?,?)";
         $conn = open_database();
 		
         $stm = $conn->prepare($sql);
-        $stm->bind_param('ssssss',$id, $name, $manager, $contact, $phone, $describe);
+        $stm->bind_param('sssss',$id, $name, $contact, $phone, $describe);
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }
@@ -466,11 +466,11 @@
     }
 	
 	//update department
-    function update_department($id, $name, $manager, $contact, $phone, $describe, $idold){
-        $sql = "UPDATE department SET id = ?, name = ?, manager = ?, contact = ?, phone = ?, description = ? where id = ?";
+    function update_department($id, $name, $contact, $phone, $describe, $idold){
+        $sql = "UPDATE department SET id = ?, name = ?, contact = ?, phone = ?, description = ? where id = ?";
         $conn = open_database();
         $stm = $conn->prepare($sql);
-        $stm->bind_param('sssssss',$id, $name, $manager, $contact, $phone, $describe, $idold);
+        $stm->bind_param('ssssss',$id, $name,$contact, $phone, $describe, $idold);
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }

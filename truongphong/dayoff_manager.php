@@ -85,8 +85,8 @@
 				{
 					echo "<script> alert('File không được để trống!'); window.location='dayoff_manager.php'; </script>";
 				}
-				header('Location: dayoff_manager.php');
-				exit();
+				//header('Location: dayoff_manager.php');
+				//exit();
             } 
 			else if($result['code'] == 2){
 				//die('Không thể thêm yêu cầu');

@@ -69,7 +69,6 @@ views.forEach(item => {
 let a = document.getElementById('id_department');
 let idEditBox = document.getElementById('id1');
 let nameEditBox = document.getElementById('name1');
-let managerEditBox = document.getElementById('manager1');
 let contactEditBox = document.getElementById('contact1');
 let phoneEditBox = document.getElementById('phone1');
 let describeEditBox = document.getElementById('describe1');
@@ -78,14 +77,12 @@ edits.forEach(item => {
 	item.onclick = () => {
 		let id1 = item.getAttribute('data-id');
 		let name1 = item.getAttribute('data-name');
-		let manager1 = item.getAttribute('data-manager');
 		let contact1 = item.getAttribute('data-contact');
 		let phone1 = item.getAttribute('data-phone');
 		let describe1 = item.getAttribute('data-describe');
 		a.value = id1;
 		idEditBox.value = id1;
 		nameEditBox.value = name1;
-		managerEditBox.value = manager1;
 		contactEditBox.value = contact1;
 		phoneEditBox.value = phone1;
 		describeEditBox.value = describe1;
@@ -867,3 +864,19 @@ function viewMission(aTag){
 		$('#body-submission').html(tableBody);
 	},"json");
 }
+
+$("#id3_gd").change(()=>{
+	$.post("search_department_by_id.php",{
+		id: $("#id3_gd").val()
+	}, function(data) {
+		$("#department_gd").val(data.data[0].name)
+	})
+})
+
+$("#id_department1_dg1").change(()=>{
+	$.post("search_department_by_id.php",{
+		id: $("#id_department1_dg1").val()
+	}, function(data) {
+		$("#department1_gd1").val(data.data[0].name)
+	})
+})

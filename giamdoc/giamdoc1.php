@@ -419,29 +419,17 @@
 					<div class="form-group">
 						<label for="position">Position</label>
 						<select name="position" required class="form-control" id="position">
-							<option value="male">Manager</option>
 							<option value="female">Employee</option>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="department">Department</label>
-						<select name="department" required class="form-control" id="department1">
-							<?php
-								$result = get_name_department();
-								$data = $result['data'];
-								foreach ($data as $item){
-									$namedepartment = $item['name'];
-							?>
-									<option value="<?=$namedepartment?>"><?=$namedepartment?></option>
-							<?php
-								}
-							?>
-						</select>
+						<input readonly value="Nhân Sự" name="department" required class="form-control" id="department1_gd1">
 					</div>
 
 					<div class="form-group">
 						<label for="id_department">ID Of Department</label>
-						<select name="id_department" required class="form-control" id="id_department1">
+						<select name="id_department" required class="form-control" id="id_department1_dg1">
 							<?php
 								$result = get_id_department();
 								$data = $result['data'];
@@ -487,18 +475,7 @@
 
 					<div class="form-group">
 						<label for="role">Role</label>
-						<select name="role" required class="form-control" id="role1">
-							<?php
-								$result = get_role();
-								$data = $result['data'];
-								foreach ($data as $item){
-									$namerole = $item['name'];
-							?>
-									<option value="<?=$namerole?>"><?=$namerole?></option>
-							<?php
-								}
-							?>
-						</select>
+						<input readonly value="user" name="role" required class="form-control" id="role1">
 					</div>
 
 				</div>
@@ -568,7 +545,7 @@
 					</div>
 					<div class="form-group">
 						<label for="position2">Position</label>
-						<input value="" name="position2" required class="form-control" type="text" placeholder="Position" id="position2">
+						<input readonly value="" name="position2" required class="form-control" type="text" placeholder="Position" id="position2">
 					</div>
 					<div class="form-group">
 						<label for="department2">Department</label>

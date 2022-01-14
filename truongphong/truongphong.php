@@ -80,8 +80,8 @@
 					//header('Location: giamdoc.php');
 					//exit();
 					$_SESSION['success'] = 'thành công';
-					header('Location: truongphong.php');
-					exit();
+					//header('Location: truongphong.php');
+					//exit();
 				} 
 				else {
 					//$error = $result['message'];
@@ -104,8 +104,8 @@
 			//header('Location: giamdoc.php');
 			//exit();
 			$_SESSION['canceled-success'] = 'thành công';
-			header('Location: truongphong.php');
-			exit();
+			//header('Location: truongphong.php');
+			//exit();
 		} 
 		else {
 			//$error = $result['message'];

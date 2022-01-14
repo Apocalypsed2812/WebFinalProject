@@ -47,7 +47,7 @@
 	
 	<div class="row block-image">
 		<div class="col-lg-12 first-item-ui">
-			<img src="banner.jpg">
+			<img src="anhnen.jpg">
 		</div>
 	</div>
     

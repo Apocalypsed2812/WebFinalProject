@@ -1,5 +1,6 @@
 <?php
 	session_start();
+	require_once('../db.php');
 	if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
         header('Location: ../taikhoan/login.php');
         exit();
@@ -20,21 +21,18 @@
     <title>Trang Giám Đốc</title>
 <?php
 	//check add department
-	require_once('../db.php');
 	$error = '';
 	$id = '';
     $name = '';
-    $manager = '';
     $contact = '';
 	$phone = '';
 	$describe = '';
 
-    if (isset($_POST['id']) && isset($_POST['name']) && isset($_POST['manager']) && isset($_POST['contact']) 
+    if (isset($_POST['id']) && isset($_POST['name']) && isset($_POST['contact']) 
 	&& isset($_POST['phone']) && isset($_POST['describe']))
     {
 		$id = $_POST['id'];
         $name = $_POST['name'];
-        $manager = $_POST['manager'];
 		$contact = $_POST['contact'];
 		$phone = $_POST['phone'];
         $describe = $_POST['describe'];
@@ -46,10 +44,6 @@
         }
 		else if (empty($name)) {
             //$error = 'Hãy nhập tên phòng ban';
-			$_SESSION['error'] = 'thất bại';
-        }
-		else if (empty($manager)) {
-            //$error = 'Hãy nhập trưởng phòng';
 			$_SESSION['error'] = 'thất bại';
         }
 		else if (empty($contact)) {
@@ -65,7 +59,7 @@
 			$_SESSION['error'] = 'thất bại';
         }
         else {
-            $result = add_department($id, $name, $manager, $contact, $phone, $describe);
+            $result = add_department($id, $name, $contact, $phone, $describe);
             if ($result['code'] == 0){
                 // thành công
 				//die('ADD DEPARTMENT SUCCESS');
@@ -87,17 +81,15 @@
 	$error1 = '';
 	$id1 = '';
     $name1 = '';
-    $manager1 = '';
     $contact1 = '';
 	$phone1 = '';
 	$describe1 = '';
 
-    if (isset($_POST['id1']) && isset($_POST['name1']) && isset($_POST['manager1']) && isset($_POST['contact1']) 
+    if (isset($_POST['id1']) && isset($_POST['name1']) && isset($_POST['contact1']) 
 	&& isset($_POST['phone1']) && isset($_POST['describe1']) && isset($_POST['update']))
     {
 		$id1 = $_POST['id1'];
         $name1 = $_POST['name1'];
-        $manager1 = $_POST['manager1'];
 		$contact1 = $_POST['contact1'];
 		$phone1 = $_POST['phone1'];
         $describe1 = $_POST['describe1'];
@@ -105,9 +97,6 @@
 
 		if (empty($name1)) {
             $error = 'Hãy nhập tên phòng ban';
-        }
-		else if (empty($manager1)) {
-            $error = 'Hãy nhập trưởng phòng';
         }
 		else if (empty($contact1)) {
             $error = 'Hãy nhập liên hệ';
@@ -120,7 +109,7 @@
 			$_SESSION['update_error'] = 'thành công';
         }
         else {
-            $result = update_department($id1, $name1, $manager1, $contact1, $phone1, $describe1, $id);
+            $result = update_department($id1, $name1, $contact1, $phone1, $describe1, $id);
             if ($result['code'] == 0){
                 // thành công
 				//die('ADD DEPARTMENT SUCCESS');
@@ -351,10 +340,6 @@
 						<input value="" name="name" required class="form-control" type="text" placeholder="Name" id="name">
 					</div>
 					<div class="form-group">
-						<label for="manager">Manager</label>
-						<input value="" name="manager" required class="form-control" type="text" placeholder="Manager" id="manager">
-					</div>
-					<div class="form-group">
 						<label for="contact">Contact</label>
 						<input value="" name="contact" required class="form-control" type="text" placeholder="Contact" id="contact">
 					</div>
@@ -395,10 +380,6 @@
 					<div class="form-group">
 						<label for="name1">Name</label>
 						<input value="" name="name1" required class="form-control" type="text" placeholder="Name" id="name1">
-					</div>
-					<div class="form-group">
-						<label for="manager1">Manager</label>
-						<input value="" name="manager1" required class="form-control" type="text" placeholder="Manager" id="manager1">
 					</div>
 					<div class="form-group">
 						<label for="contact1">Contact</label>
@@ -444,8 +425,8 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="id3">Id Of Department</label>
-						<select name="id3" required class="form-control" id="id3">
+						<label for="id3_gd">Id Of Department</label>
+						<select name="id3_gd" required class="form-control" id="id3_gd">
 							<?php
 								$result = get_id_department();
 								$data = $result['data'];
@@ -459,19 +440,8 @@
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="department">Name Of Department</label>
-						<select name="department" required class="form-control" id="department">
-							<?php
-								$result = get_name_department();
-								$data = $result['data'];
-								foreach ($data as $item){
-									$namedepartment = $item['name'];
-							?>
-									<option value="<?=$namedepartment?>"><?=$namedepartment?></option>
-							<?php
-								}
-							?>
-						</select>
+						<label for="department_gd">Name Of Department</label>
+						<input value="Nhân Sự" readonly name="department_gd" required class="form-control" id="department_gd">
 					</div>
 				</div>
 				
@@ -483,19 +453,6 @@
 		</form>
 	</div>
 </div>
-
-<?php
-	/*$kq = view_info();
-	$data1 = $kq['data'];
-	foreach ($data1 as $item1){
-		$id1 = $item1['id'];
-		$name1 = $item1['name'];
-		$manager1 = $item1['manager'];
-		$contact1 = $item1['contact'];  
-		$phone1 = $item1['phone'];  
-		$describe1 = $item1['description']; 
-	}*/
-?>
 
 <!--View department modal-->	 
 <div id="info-modal" class="modal fade" role="dialog"> 
@@ -517,7 +474,7 @@
 					</div>
 					<div class="form-group">
 						<label for="manager">Manager</label>
-						<input readonly value="" name="manager" required class="form-control" type="text" placeholder="Manager" id="manager2">
+						<input readonly value="" name="manager" required class="form-control" type="text" placeholder="" id="manager2">
 					</div>
 					<div class="form-group">
 						<label for="contact">Contact</label>
@@ -539,6 +496,7 @@
 			</div>
 	</div>
 </div>
+
 <!-- Delete Confirm Modal -->
 <div id="delete-modal" class="modal fade" role="dialog">
 	<div class="modal-dialog">

@@ -1,10 +1,10 @@
 <?php
-  /* session_start();
+  session_start();
   if (!isset($_SESSION['wait_admin_reset'])) {
     header('Location: login.php');
     exit();
   }
-  session_destroy(); */
+  //session_destroy();
 ?>
 <!DOCTYPE html>
 <html lang="en">

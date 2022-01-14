@@ -46,8 +46,9 @@
 			$img_name = $_FILES['image']['name'];  
 			$result = change_image_employee($img_name, $tentk);
 			if ($result['code'] == 0){
-				header('location: caidatnhanvien.php');
-				exit();
+				//header('location: caidatnhanvien.php');
+				//exit();
+				$_SESSION['success'] = 'thành công';
 			} else {
 				$error = 'Không thể thêm ảnh, vui lòng thử lại';
 			}
@@ -265,7 +266,14 @@
 	</div>
 </div>
 	 
-<script src="main.js"></script>
-
+<script src="../main.js"></script>
+<?php
+	//show toast message
+	if(isset($_SESSION['success']))
+	{
+		echo "<script>showSuccessToast('Change image successfully')</script>";
+		unset($_SESSION['success']);
+	}
+?>
 </body>
 </html>

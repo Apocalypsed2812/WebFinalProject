@@ -6,6 +6,39 @@
 		exit();
 	}
 ?>
+<?php
+
+$error = '';
+$post_error = '';
+$pass = '';
+$pass_confirm = '';
+$user = $_SESSION['user'];
+
+if (isset($_POST['pass']) && isset($_POST['pass-confirm'])) {
+    $pass = $_POST['pass'];
+    $pass_confirm = $_POST['pass-confirm'];
+
+    if (empty($pass)) {
+        $post_error = 'Vui lòng nhập mật khẩu';
+    } else if (strlen($pass) < 6) {
+        $post_error = 'Mật khẩu phải có ít nhất 6 ký tự';
+    } else if ($pass != $pass_confirm) {
+        $post_error = 'Xác nhận mật khẩu không trùng khớp';
+    } else {
+        // reset pass
+        $result = change_password($user, $pass);
+        if ($result['code'] == 0) {
+            // thành công
+            session_destroy();
+            setcookie('change_password_success', $user, time() + 3600 *24);
+            header('Location: login.php');
+            exit();
+        } else {
+            $post_error = $result['message'];
+        }
+    }
+}  
+?>
 <DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,39 +51,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-<?php
 
-    $error = '';
-    $post_error = '';
-    $pass = '';
-    $pass_confirm = '';
-    $user = $_SESSION['user'];
-	
-	if (isset($_POST['pass']) && isset($_POST['pass-confirm'])) {
-        $pass = $_POST['pass'];
-        $pass_confirm = $_POST['pass-confirm'];
-
-        if (empty($pass)) {
-            $post_error = 'Vui lòng nhập mật khẩu';
-        } else if (strlen($pass) < 6) {
-            $post_error = 'Mật khẩu phải có ít nhất 6 ký tự';
-        } else if ($pass != $pass_confirm) {
-            $post_error = 'Xác nhận mật khẩu không trùng khớp';
-        } else {
-            // reset pass
-            $result = change_password($user, $pass);
-            if ($result['code'] == 0) {
-                // thành công
-                session_destroy();
-                setcookie('change_password_success', $user, time() + 3600 *24);
-                header('Location: login.php');
-                exit();
-            } else {
-                $post_error = $result['message'];
-            }
-        }
-	}  
-?>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">

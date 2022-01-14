@@ -103,8 +103,8 @@
 		$result3 = add_task_history($idnv_complete, $idtasksm, 'Completed', $today, 0);
 		if ($result['code'] == 0 && $result1['code'] == 0){
 			$_SESSION['complete_success'] = 'thành công';
-			header('Location: truongphong1.php');
-			exit();
+			//header('Location: truongphong1.php');
+			//exit();
 		}
 		else{
 			$_SESSION['complete_failed'] = 'thất bại';

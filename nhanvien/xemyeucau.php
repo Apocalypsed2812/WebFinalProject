@@ -96,7 +96,7 @@
 		</div> 
 	</div>
 	
-<link rel="stylesheet" href="style.css">	
-<script src="main.js"></script>
+<link rel="stylesheet" href="../style.css">	
+<script src="../main.js"></script>
 </body>
 </html>
