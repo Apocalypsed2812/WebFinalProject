@@ -140,10 +140,10 @@
 					<a class="nav-link" href="#">Services</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">About Us</a>
+					<a class="nav-link" href="about.html">About Us</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Contact Us</a>
+					<a class="nav-link" href="contact.html">Contact Us</a>
 				</li>
 				<li class="nav-item" style = "cursor: pointer;">
 					<div class="dropdown">
@@ -177,7 +177,7 @@
 							</td>
 						</tr>
 			
-						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px; background-color: #D8D8D8">
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
 							<td colspan="3">
 								<a href="truongphong.php">Manage Task</a>
 							</td>
@@ -202,12 +202,7 @@
 									<span class="badge badge-pill badge-secondary"></span>
 								</a>
 							</td>
-						</tr>
-						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
-							<td colspan="4">
-								<a href="hoatdongnhanvien.php">Action Log</a>
-							</td>
-						</tr>
+						</tr>						
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
 							<td colspan="3">
 								<a href="caidatnhanvien.php">System Settings</a>
@@ -224,7 +219,7 @@
 
 			</div>
         </div>
-			
+		<p class="footer-text">Copyright @ Your Website 2017</p>
 <script src="../main.js"></script>
 <?php
 	//show toast message

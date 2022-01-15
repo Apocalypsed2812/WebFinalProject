@@ -39,16 +39,16 @@
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="../giamdoc/giamdoc1.php">HomePage</a>
+                            <a class="nav-link" href="tacvunhanvien.php">HomePage</a>
                         </li>
-						<li class="nav-item">
-                            <a class="nav-link" href="#" style="color: white;">Services</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">About Us</a>
+						<li class="nav-item active">
+                            <a class="nav-link" href="#">Services</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact Us</a>
+                            <a class="nav-link" href="about.html">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Contact Us</a>
                         </li>
 						<li class="nav-item">
 							<div class="dropdown">

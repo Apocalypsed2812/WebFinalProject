@@ -52,14 +52,17 @@
                 <!-- Navbar links -->
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ml-auto">
-					<li class="nav-item">
+						<li class="nav-item">
                             <a class="nav-link" href="giamdoc1.php">HomePage</a>
                         </li>
-						<li class="nav-item">
-                            <a class="nav-link" href="../giamdoc/request.php" style="color: white;">Reset Password</a>
+						<li class="nav-item active">
+                            <a class="nav-link" href="../giamdoc/request.php">Reset Password</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../taikhoan/register.php">Create Account</a>
+                            <a class="nav-link" href="about.html">About Us</a>
+                        </li>
+						<li class="nav-item">
+                            <a class="nav-link" href="contact.html">Contact Us</a>
                         </li>
 						<li class="nav-item" style = "cursor: pointer;">
 							<div class="dropdown">

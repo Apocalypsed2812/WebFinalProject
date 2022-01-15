@@ -175,17 +175,17 @@
                 <!-- Navbar links -->
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-                            <a class="nav-link" href="#" style="color: white;">HomePage</a>
+						<li class="nav-item active">
+                            <a class="nav-link" href="giamdoc1.php">HomePage</a>
                         </li>
 						<li class="nav-item">
-                            <a class="nav-link" href="../giamdoc/request.php">Reset Password</a>
+                            <a class="nav-link" href="#">Service</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../about.html">About Us</a>
+                            <a class="nav-link" href="about.html">About Us</a>
                         </li>
 						<li class="nav-item">
-                            <a class="nav-link" href="../contact.html">Contact Us</a>
+                            <a class="nav-link" href="contact.html">Contact Us</a>
                         </li>
 						<li class="nav-item" style = "cursor: pointer;">
 							<div class="dropdown">
@@ -221,13 +221,16 @@
 				</div>
             </div>
 			
-			<div class="col-lg-3 col-md-4  second-item">
+			<div class="col-lg-3 col-md-4  second-item-m">
 				<div class="row">
-					<div class="col-lg-12 col-md-12 col-sm-6 col-12">
-						<button onclick="departmentPage()" class="btn" style="color: black; border: black solid 1px">View List Department</button>
+					<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+						<button onclick="departmentPage()" class="btn btn-light border-dark">View List Department</button>
 					</div>
-					<div class="col-lg-12 col-md-12 col-sm-6 col-12">
-						<button onclick="dayOffPage()" class="btn" style="color: black; border: black solid 1px">View List Day Off</button>
+					<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+						<button onclick="dayOffPage()" class="btn btn-light border-dark">View List Day Off</button>
+					</div>
+					<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+						<button onclick="requestPage()" class="btn btn-light border-dark">Reset Password</button>
 					</div>
 				</div>
             </div> 

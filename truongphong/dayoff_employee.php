@@ -76,16 +76,16 @@
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="truongphong.php">HomePage</a>
+                            <a class="nav-link" href="formchung.php">HomePage</a>
                         </li>
-						<li class="nav-item">
-                            <a class="nav-link" href="#" style="color: white;">Services</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">About Us</a>
+						<li class="nav-item active">
+                            <a class="nav-link" href="truongphong.php">Manage Task</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact Us</a>
+                            <a class="nav-link" href="about.html">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Contact Us</a>
                         </li>
 						<li class="nav-item" style = "cursor: pointer;">
 							<div class="dropdown">

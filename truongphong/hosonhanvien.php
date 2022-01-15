@@ -35,16 +35,16 @@
 		<div class="collapse navbar-collapse" id="collapsibleNavbar">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="#" style="color: white;">HomePage</a>
+					<a class="nav-link" href="formchung.php">HomePage</a>
 				</li>
-				<li class="nav-item">
+				<li class="nav-item active">
 					<a class="nav-link" href="#">Services</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">About Us</a>
+					<a class="nav-link" href="about.html">About Us</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Contact Us</a>
+					<a class="nav-link" href="contact.html">Contact Us</a>
 				</li>
 				<li class="nav-item" style = "cursor: pointer;">
 					<div class="dropdown">
@@ -118,11 +118,7 @@
 								</a>
 							</td>
 						</tr>
-						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
-							<td colspan="4">
-								<a href="hoatdongnhanvien.php">Action Log</a>
-							</td>
-						</tr>
+						
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
 							<td colspan="3">
 								<a href="caidatnhanvien.php">System Settings</a>
