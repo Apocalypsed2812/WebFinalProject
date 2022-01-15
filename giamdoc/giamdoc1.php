@@ -422,7 +422,7 @@
 					<div class="form-group">
 						<label for="position">Position</label>
 						<select name="position" required class="form-control" id="position">
-							<option value="female">Employee</option>
+							<option value="Employee">Employee</option>
 						</select>
 					</div>
 					<div class="form-group">

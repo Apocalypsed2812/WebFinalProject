@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 12, 2022 at 04:06 AM
+-- Generation Time: Jan 15, 2022 at 10:45 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -36,17 +36,21 @@ CREATE TABLE `dayoff` (
   `tentk` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `day_request` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `token` int(11) DEFAULT NULL,
-  `role` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+  `role` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `id_department` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `dayoff`
 --
 
-INSERT INTO `dayoff` (`id`, `numberoff`, `reason`, `attach`, `status`, `tentk`, `day_request`, `token`, `role`) VALUES
-(2, 1, 'Gia đình có việc', 'minhchung.docx', 'approved', 'anhthu', '2021/11/23', 1, 'manager'),
-(51, 2, 'Bệnh', 'báo-cáo.pptx', 'approved', 'nguyenhung', '2022/01/02', 1, 'employee'),
-(56, 2, 'Đi chơi', 'download.jpg', 'waiting', 'anhtien', '2022/01/07', 0, 'manager');
+INSERT INTO `dayoff` (`id`, `numberoff`, `reason`, `attach`, `status`, `tentk`, `day_request`, `token`, `role`, `id_department`) VALUES
+(2, 1, 'Gia đình có việc', 'minhchung.docx', 'refused', 'anhthu', '2021/11/23', 1, 'employee', 'PB001'),
+(51, 2, 'Bệnh', 'báo-cáo.pptx', 'refused', 'nguyenhung', '2022/01/02', 1, 'employee', 'PB002'),
+(56, 2, 'Đi chơi', 'download.jpg', 'approved', 'anhtien', '2022/01/07', 1, 'manager', 'PB001'),
+(61, 2, 'Bệnh', 'oppo-f3-plus-1-1-400x460.png', 'waiting', 'anhtien', '2022/01/15', 1, 'manager', 'PB001'),
+(64, 2, 'Đi chơi', 'itachi.png', 'waiting', 'nguyenhung', '2022/01/15', 1, 'employee', 'PB002'),
+(71, 1, 'Đi chơi', '51900444_Phạm Huỳnh Anh Tiến.docx', 'waiting', 'anhthu', '2022/01/15', 1, 'employee', 'PB001');
 
 -- --------------------------------------------------------
 
@@ -60,16 +64,24 @@ CREATE TABLE `dayoff_employee` (
   `tentk` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `tongso` int(11) NOT NULL,
   `ngaydasudung` int(11) NOT NULL,
-  `ngayconlai` int(11) NOT NULL
+  `ngayconlai` int(11) NOT NULL,
+  `id_department` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `dayoff_employee`
 --
 
-INSERT INTO `dayoff_employee` (`id`, `name`, `tentk`, `tongso`, `ngaydasudung`, `ngayconlai`) VALUES
-(1, 'Anh Tiến', 'anhtien', 12, 6, 6),
-(2, 'Nguyễn Hưng', 'nguyenhung', 12, 4, 8);
+INSERT INTO `dayoff_employee` (`id`, `name`, `tentk`, `tongso`, `ngaydasudung`, `ngayconlai`, `id_department`) VALUES
+(1, 'Anh Tiến', 'anhtien', 15, 6, 9, 'PB001'),
+(2, 'Nguyễn Hưng', 'nguyenhung', 12, 6, 6, 'PB002'),
+(10, 'Anh Thư', 'anhthu', 12, 8, 4, 'PB001'),
+(12, 'Phạm Hoàng', 'phamhoang', 12, 0, 12, 'PB002'),
+(13, 'Phạm Toàn', 'phamtoan', 12, 0, 12, 'PB003'),
+(14, 'Trung Hiếu', 'trunghieu', 12, 0, 12, 'PB004'),
+(15, 'Nguyễn Khánh', 'nguyenkhanh', 12, 0, 12, 'PB003'),
+(16, 'Nguyễn Trung', 'nguyentrung', 12, 0, 12, 'PB004'),
+(18, 'Tien pham', 'admin123', 12, 0, 12, 'PB001');
 
 -- --------------------------------------------------------
 
@@ -145,35 +157,14 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`idnv`, `name`, `username`, `position`, `department`, `id_department`, `email`, `phone`, `indentity`, `gender`, `image`, `password`, `role`) VALUES
-('NV001', 'Anh Tiến', 'anhtien', 'Manager', 'Nhân Sự', 'PB001', 'anhtien@gmail.com', '0582564362', '123456', 'Male', 'xiaomi-redmi-4x-400-400x460.png', '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'manager'),
-('NV002', 'Anh Thư', 'anhthu', 'employee', 'Nhân Sự', 'PB001', 'anhthu@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$j7XuXPu2WEqhorPehtupUeifc01XGbgdRmn/eLm7OrJShZJIUaN1.', 'employee'),
+('NV001', 'Anh Tiến', 'anhtien', 'Manager', 'Nhân Sự', 'PB001', 'anhtien@gmail.com', '0582564362', '123456', 'Male', 'nokia-8-1-400x460.png', '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'manager'),
+('NV002', 'Anh Thư', 'anhthu', 'employee', 'Nhân Sự', 'PB001', 'anhthu@gmail.com', NULL, NULL, NULL, 'iphone-6s-128gb-hong-1-400x450.png', '$2y$10$cS5Z0WdJxYa97nQvBBw7nO0C2Xh.S77DAquGghC7FFGdphZZO.ND6', 'employee'),
 ('NV003', 'Nguyễn Hưng', 'nguyenhung', 'employee', 'Kế Toán', 'PB002', 'nguyenhung@gmail.com', '0902378456', '11111222', 'Male', 'samsung-galaxy-j7-plus-1-400x460.png', '$2y$10$cs/WX/W9iykkMblogj7Ic.fFJxAaJqsLsa3T9Fn3iHyifaLqJd8SO', 'employee'),
 ('NV004', 'Phạm Hoàng', 'phamhoang', 'Manager', 'Kế Toán', 'PB002', 'phamhoang@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'manager'),
 ('NV005', 'Trung Hiếu', 'trunghieu', 'employee', 'Tài Chính', 'PB004', 'trunghieu@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'employee'),
-('NV006', 'Nguyễn Trung', 'nguyentrung', 'Manager', 'Tài Chính', 'PB004', 'nguyentrung@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'employee'),
-('NV007', 'Phạm Toàn', 'phamtoan', 'employee', 'Hành Chính', NULL, 'phamtoan@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'employee');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `manager`
---
-
-CREATE TABLE `manager` (
-  `id` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `department` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `manager`
---
-
-INSERT INTO `manager` (`id`, `name`, `department`) VALUES
-('TP001', 'Anh Tiến', 'Nhân Sự'),
-('TP002', 'Trần Tuấn', 'Hành Chính'),
-('TP003', 'Phạm Hoàng', 'Kế Toán'),
-('TP004', 'Nguyễn Trung', 'Tài Chính');
+('NV006', 'Nguyễn Trung', 'nguyentrung', 'Manager', 'Hành CHính', 'PB004', 'nguyentrung@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'employee'),
+('NV007', 'Phạm Toàn', 'phamtoan', 'Manager', 'Tài Chính', 'PB003', 'phamtoan@gmail.com', '0123456789', '0902362561', 'male', 'oppo-a71-400x460.png', '$2y$10$.Xau2M3eIHToVUTOGEgj2unqwvJ.pUwZauh7KN847VTVMh8Q3XOQy', 'manager'),
+('NV008', 'Nguyễn Khánh', 'nguyenkhanh', 'Employee', 'Hành CHính', 'PB003', 'nguyenkhanh@gmail.com', '0982543727', '0923456782', 'male', 'oppo-f3-plus-1-1-400x460.png', '$2y$10$.Xau2M3eIHToVUTOGEgj2unqwvJ.pUwZauh7KN847VTVMh8Q3XOQy', 'employee');
 
 -- --------------------------------------------------------
 
@@ -195,10 +186,25 @@ CREATE TABLE `reject` (
 --
 
 INSERT INTO `reject` (`id`, `idtask`, `idnv`, `status`, `day`, `count`) VALUES
-(13, 'T001', 'NV002', 'submit', '2022-01-12', NULL),
-(14, 'T001', 'NV002', 'Reject', '2022-01012', NULL),
-(15, 'T001', 'NV002', 'submit', '2022-01-12', NULL),
-(16, 'T001', 'NV002', 'complete', '2022-01-12', NULL);
+(45, 'T001', 'NV002', 'Submit', '2022-01-12', 1),
+(46, 'T001', 'NV002', 'Rejected', '2022-01-12', 1),
+(47, 'T001', 'NV002', 'Submit', '2022-01-12', 2),
+(48, 'T001', 'NV002', 'Completed', '2022-01-12', 0),
+(49, 'T003', 'NV002', 'Submit', '2022-01-12', 1),
+(50, 'T003', 'NV002', 'Rejected', '2022-01-12', 1),
+(51, 'T003', 'NV002', 'Submit', '2022-01-12', 2),
+(52, 'T003', 'NV002', 'Completed', '2022-01-12', 0),
+(53, 'T001', 'NV002', 'Submit', '2022-01-13', 3),
+(54, 'T001', 'NV002', 'Rejected', '2022-01-13', 2),
+(55, 'T001', 'NV002', 'Submit', '2022-01-13', 4),
+(56, 'T001', 'NV002', 'Completed', '2022-01-13', 0),
+(57, 'T007', 'NV002', 'Submit', '2022-01-15', 1),
+(58, 'T007', 'NV002', 'Rejected', '2022-01-15', 1),
+(59, 'T007', 'NV002', 'Submit', '2022-01-15', 2),
+(60, 'T007', 'NV002', 'Completed', '2022-01-15', 0),
+(61, 'T006', 'NV002', 'Submit', '2022-01-15', 1),
+(62, 'T006', 'NV002', 'Rejected', '2022-01-15', 1),
+(63, 'T001', 'NV002', 'Rejected', '2022-01-15', 3);
 
 -- --------------------------------------------------------
 
@@ -256,19 +262,18 @@ INSERT INTO `reset_token` (`email`, `token`, `expire_on`) VALUES
 CREATE TABLE `role` (
   `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `username` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `role`
 --
 
-INSERT INTO `role` (`id`, `name`, `description`, `username`) VALUES
-(1, 'admin', 'Quyền admin', NULL),
-(2, 'manager', 'Quyền quản lý', NULL),
-(3, 'employee', 'Quyền nhân viên', NULL),
-(4, 'user', 'Tài khoản mới tạo yêu cầu đổi mật khẩu', NULL);
+INSERT INTO `role` (`id`, `name`, `description`) VALUES
+(1, 'admin', 'Quyền admin'),
+(2, 'manager', 'Quyền quản lý'),
+(3, 'employee', 'Quyền nhân viên'),
+(4, 'user', 'Tài khoản mới tạo yêu cầu đổi mật khẩu');
 
 -- --------------------------------------------------------
 
@@ -295,11 +300,18 @@ CREATE TABLE `submission` (
 INSERT INTO `submission` (`idsm`, `idnv`, `idtask`, `attach`, `description`, `day_submit`, `deadline`, `turnin`, `token`) VALUES
 (1, 'NV003', 'T002', 'haha.png', 'em vua nop file nha sep', '2022-01-07', NULL, 'late', 1),
 (2, 'NV002', 'T004', '220103_gk_dot-8_ta_thi-thang-01-2022_clc_211-(20220103_083010_849).pdf', 'nop task sep oi', '2022-02-06', NULL, 'normal', 1),
-(3, 'NV002', 'T001', 'haha.png', 'em vua nop file nha sep', '2022-01-12', NULL, 'normal', 1),
-(26, 'NV002', 'T004', 'BÁO CÁO CUỐI KÌ.docx', 'task se submit', '2022-01-10', '2022-01-26', 'normal', 0),
-(27, 'NV002', 'T001', 'CV.pdf', 'em nop lai task thi truong', '2022-01-11', '2022-01-06', 'late', 1),
-(28, 'NV002', 'T003', 'BÁO CÁO CUỐI KÌ.docx', 'submit task 3', '2022-01-12', '2022-01-29', 'normal', 1),
-(29, 'NV002', 'T003', 'Copy of CQ211_CK_Ngô Thị Kim Liên (1).xls', 'nop task sep oi 123', '2022-01-12', '2022-02-01', 'normal', 0);
+(3, 'NV002', 'T001', 'haha.png', 'em vua nop file nha sep', '2022-01-12', NULL, 'normal', 0),
+(44, 'NV002', 'T001', 'samsung-galaxy-j3-2017-2-400x460.png', 'nop task sep oi', '2022-01-12', '2022-01-28', 'normal', 0),
+(45, 'NV002', 'T001', 'nokia-8-1-400x460.png', 'nop task sep oi', '2022-01-12', '2022-01-22', 'normal', 0),
+(46, 'NV002', 'T001', 'oppo-a71-400x460.png', 'nop task sep oi', '2022-01-12', '2022-02-05', 'normal', 0),
+(47, 'NV002', 'T001', 'samsung-galaxy-j3-2017-2-400x460.png', 'em nop lai task thi truong', '2022-01-12', '2022-02-05', 'normal', 0),
+(48, 'NV002', 'T003', 'oppo-f3-plus-1-1-400x460.png', 'nop task sep oi', '2022-01-12', '2022-02-01', 'normal', 0),
+(49, 'NV002', 'T003', 'oppo-a71-400x460.png', 'nop task sep oi', '2022-01-12', '2022-02-05', 'normal', 0),
+(50, 'NV002', 'T001', 'iphone-7-plus-128gb-de-400x460.png', 'nop task sep oi', '2022-01-13', '2022-02-05', 'normal', 0),
+(51, 'NV002', 'T001', 'samsung-galaxy-j3-2017-2-400x460.png', 'em nop lai task thi truong', '2022-01-13', '2022-02-04', 'normal', 0),
+(52, 'NV002', 'T007', 'Những-vấn-đề-cần-khắc-phục.txt', 'em nop lai task thi truong', '2022-01-15', '2022-01-15', 'normal', 0),
+(53, 'NV002', 'T007', '[Phieu Danh Gia] DoAnCuoiKi-HK1-2021-2022.docx', 'em nop lai task thi truong', '2022-01-15', '2022-01-29', 'normal', 0),
+(54, 'NV002', 'T006', 'ck.sql', 'em nop lai task thi truong', '2022-01-15', '2022-01-19', 'normal', 0);
 
 -- --------------------------------------------------------
 
@@ -326,11 +338,14 @@ CREATE TABLE `task` (
 --
 
 INSERT INTO `task` (`idtask`, `name`, `status`, `description`, `idnv`, `dueto`, `id_department`, `token`, `evaluate`, `note`, `attach`) VALUES
-('T001', 'Báo cáo thị trường', 'Completed', 'Thu thập thông tin về thị trường tiêu thụ sản phẩm', 'NV002', '2022-01-27', 'PB002', 1, 'Bad', 'sep gui em ne', 'Copy of CQ211_CK_Ngô Thị Kim Liên.xls'),
-('T002', 'Tạo app', 'Canceled', 'Tạo ứng dụng cho di động', 'NV002', '2022-1-12', 'PB001', 0, NULL, NULL, NULL),
-('T003', 'Code Web', 'Completed', 'Code Full One Page Website', 'NV002', '2022-02-01', 'PB001', 1, 'Good', 'Làm lại file excel', 'Copy of CQ211_CK_Ngô Thị Kim Liên.xls'),
-('T004', 'Code se', 'Completed', 'code project software emgineering', 'NV002', '2022-01-11', 'PB001', 1, 'OK', NULL, NULL),
-('T005', 'Tien pham', 'Rejected', 'code project software emgineering', 'NV002', '2022-01-13', 'PB001', 1, NULL, 'làm lại footer', 'SLIDE.ppxt');
+('T001', 'Báo cáo thị trường', 'Rejected', 'Thu thập thông tin về thị trường tiêu thụ sản phẩm', 'NV002', '2022-01-19', 'PB002', 1, 'Good', 'sep gui em ne1235', 'ck.sql'),
+('T002', 'Tạo app', 'Canceled', 'Tạo ứng dụng cho di động 123', 'NV002', '2022-01-27', 'PB001', 0, NULL, NULL, NULL),
+('T003', 'Code Web', 'Completed', 'Code Full One Page Website', 'NV002', '2022-02-05', 'PB001', 1, 'OK', 'sep gui em ne', 'oppo-a71-400x460.png'),
+('T004', 'Code se', 'Canceled', 'code project software emgineering 123', 'NV002', '2022-01-29', 'PB001', 0, 'OK', NULL, NULL),
+('T005', 'Tien pham', 'In progress', 'code project software emgineering', 'NV002', '2022-01-13', 'PB001', 1, NULL, 'làm lại footer', 'SLIDE.ppxt'),
+('T006', 'Tien pham', 'Rejected', 'Code Full One Page Website', 'NV002', '2022-01-19', 'PB001', 1, NULL, 'sep gui em ne', 'Những-vấn-đề-cần-khắc-phục.txt'),
+('T007', 'Anh Tuan', 'Completed', 'Code Full App Mobile', 'NV002', '2022-01-29', 'PB001', 1, 'OK', 'sep gui em ne1235', 'báo-cáo (1).pptx'),
+('T009', 'Tài Chính', 'Canceled', 'Code Full One Page Website', 'NV002', '2022-01-29', 'PB001', 0, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -365,12 +380,6 @@ ALTER TABLE `director`
 --
 ALTER TABLE `employee`
   ADD PRIMARY KEY (`idnv`);
-
---
--- Indexes for table `manager`
---
-ALTER TABLE `manager`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `reject`
@@ -416,13 +425,19 @@ ALTER TABLE `task`
 -- AUTO_INCREMENT for table `dayoff`
 --
 ALTER TABLE `dayoff`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+
+--
+-- AUTO_INCREMENT for table `dayoff_employee`
+--
+ALTER TABLE `dayoff_employee`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `reject`
 --
 ALTER TABLE `reject`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `request_reset`
@@ -434,7 +449,7 @@ ALTER TABLE `request_reset`
 -- AUTO_INCREMENT for table `submission`
 --
 ALTER TABLE `submission`
-  MODIFY `idsm` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `idsm` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

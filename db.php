@@ -771,14 +771,14 @@
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }
 
-        $sql = "INSERT INTO dayoff_employee (name, tentk, tongso, ngaydasudung, ngayconlai) VALUES (?,?,12,0,12)";
+        $sql = "INSERT INTO dayoff_employee (name, tentk, tongso, ngaydasudung, ngayconlai, id_department) VALUES (?,?,12,0,12,?)";
 		/*if(is_username_exists($user))
 		{
 			return array('code' => 2, 'message' => 'Account đã tồn tại'); 
 		}*/
 		
         $stm = $conn->prepare($sql);
-        $stm->bind_param('ss', $name, $user);
+        $stm->bind_param('sss', $name, $user, $id_department);
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }
@@ -1153,7 +1153,7 @@
     function get_employee_by_id_task($id_department){
         $conn = open_database();
 		
-		$sql = "SELECT * FROM employee WHERE id_department = ?";
+		$sql = "SELECT * FROM employee WHERE id_department = ? and role = 'employee'";
         $stm = $conn->prepare($sql);
         $stm->bind_param('s', $id_department);
 		if (!$stm->execute()){
@@ -1204,7 +1204,7 @@
     // get_all_tasks_employee
     function get_all_tasks_employee($idnv){
         $conn = open_database();
-		$sql = "SELECT * FROM task WHERE idnv = ? and token = 1";
+		$sql = "SELECT * FROM task WHERE idnv = ? and token = 1 ORDER BY idtask DESC";
 		$stm = $conn->prepare($sql);
         $stm->bind_param('s', $idnv);
         if (!$stm->execute()){
@@ -1261,12 +1261,15 @@
 
     //create task by manager
 	function add_task($id, $name, $desc, $nv, $due, $id_department) {
-        //$due = $due("Y/m/d");
+        $today = date("Y/m/d");
         $sql = "INSERT INTO task (idtask, name, status, description, idnv, dueto, id_department, token) VALUES (?,?,'New',?,?,?,?,1)";
         $conn = open_database();
 		
         $stm = $conn->prepare($sql);
         $stm->bind_param('ssssss', $id, $name, $desc, $nv, $due, $id_department);
+        if(compute_dayoff($today, $due) < 0){
+            return array('code' => 2, 'message' => 'deadline nhỏ hơn ngày hiện tại'); 
+        }
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }
@@ -1396,11 +1399,15 @@
 	
 	//update deadline for status rejected task
 	function update_deadline_reject($deadline, $id) {
+        $today = date("Y/m/d");
         $sql = "UPDATE task SET dueto = ? WHERE idtask = ?";
         $conn = open_database();
 		
         $stm = $conn->prepare($sql);
         $stm->bind_param('ss', $deadline, $id);
+        if(compute_dayoff($today, $deadline) < 0){
+            return array('code' => 2, 'message' => 'deadline nhỏ hơn ngày hiện tại'); 
+        }
         if (!$stm->execute()){
             return array('code' => 1, 'message' => 'Không thể thực thi câu lệnh sql'); 
         }

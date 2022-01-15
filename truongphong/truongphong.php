@@ -78,6 +78,11 @@
 					//header('Location: truongphong.php');
 					//exit();
 				} 
+				else if ($result['code'] == 2){
+					$_SESSION['deadline_error'] = 'có lỗi';
+					//header('Location: truongphong.php');
+					//exit();
+				} 
 				else {
 					//$error = $result['message'];
 					$_SESSION['failed'] = 'thất bại';
@@ -190,7 +195,7 @@
 		<div style="overflow-x:auto;">
 			<table cellpadding="10" cellspacing="10" border="0" style=" margin: auto">
 				<tr class="header">
-					<td>
+					<td colspan="5">
 						<a href="#" style="color: black" data-toggle="modal" data-target="#add-task">
 							<span><i class="fas fa-plus-circle"></i></span>	
 						</a>
@@ -198,9 +203,11 @@
 					</td>
 					<td>Assignee</td>
 					<td>Status</td>
+					<td></td>
 				</tr>
 				<?php 
 					$tasks = get_all_tasks($id_department)['data'];
+					$color= ['Completed'=>'green','In progress'=>'blue','New'=>'yellow','Rejected'=>'orange','Waiting'=>'brown', 'Canceled'=>'red'];
 					foreach($tasks as $task) {
 						$id = $task['idtask'];
 						$name = $task['name'];
@@ -209,10 +216,15 @@
 						$status = $task['status'];
 						$deadline = $task['dueto'];
 				?>
-					<tr class="item viewTask temp" data-toggle="modal" data-target="#view-task" data-id="<?=$id?>" data-name="<?=$name?>" data-desc="<?=$description?>" data-assignee="<?=$assignee?>" data-status="<?=$status?>" data-deadline="<?=$deadline?>">
-						<td><?=$name?></td>
+					<tr class="item">
+						<td colspan="5"><?=$name?></td>
 						<td><?=$assignee?></td>
-						<td><?=$status?></td>
+						<td><i class='fa fa-circle' style="color:<?=$color[$status]?>"></i> <?=$status?></td>
+						<td>
+							<a href="#" class="btn  viewTask temp" style="border-radius: 70%; background-color: #D8D8D8" data-toggle="modal" data-target="#view-task" data-id="<?=$id?>" data-name="<?=$name?>" data-desc="<?=$description?>" data-assignee="<?=$assignee?>" data-status="<?=$status?>" data-deadline="<?=$deadline?>">
+								<span><i class="fas fa-eye"></i></span> 
+							</a>
+						</td>
 					</tr>
 				<?php 
 					}
@@ -357,7 +369,7 @@
 					</div>
 					<div class="form-group">
 						<label for="idnv">Id Of Employee</label>
-						<select name="idnv" required class="form-control" id="idnv">
+						<select name="idnv" required class="form-control" id="idnv_task">
 							<?php
 								$result = get_employee_by_id_task($id_department);
 								$data = $result['data'];
@@ -369,6 +381,11 @@
 								}
 							?>
 						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="namenv">Name Of Employee</label>
+						<input name="namenv" required class="form-control" id="namenv_task">
 					</div>
 					
 					<div class="form-group">
@@ -470,6 +487,12 @@
 	{
 		echo "<script>showErrorToast('Canceled task failed')</script>";
 		unset($_SESSION['canceled-failed']);
+	}
+
+	else if(isset($_SESSION['deadline_error']))
+	{
+		echo "<script>showErrorToast('Deadline invalid')</script>";
+		unset($_SESSION['deadline_error']);
 	}
 
 ?>

@@ -1,0 +1,20 @@
+﻿Thư:
+    + Sửa các title cho phù hợp lại và sửa thêm các thứ linh ta linh tinh
+    + Sửa đường dẫn các thư mục about, contact
+
+Tiến:
+    Câu hỏi: 
+    - Trang của trưởng phòng:
+        + Khi đã là trưởng phòng thì chức năng khác thôi, còn về các thông tin của nó vẫn quản lý
+        như của nhân viên đúng ko? Nếu đúng thì mình cần bổ sung cái đó, vì khi vô trang trưởng phòng
+        ở thời điểm hiện tại ko xem được thông tin cá nhân
+        => Giải pháp đề xuất: làm y như cái của nhân viên bình thường. Sau đó có nút "Quản lý nhân viên" 
+        chẳng hạn thì chuyển đến trang trưởng phòng hiện tại.
+        Từ đây t sẽ chỉnh lại cái dayoff cho trưởng phòng(hiện tại chưa chỉnh)
+    - Trang giám đốc:
+        + Chức năng thêm nhân viên: hiện tại khi thêm t thấy nó cố định là ở phòng nhân sự, cái 
+        này nó là vậy hay là do mình làm thiếu vì t nghĩ thêm nhân viên thì mình được quyền chọn nó thuộc
+        phòng nào chứ.
+    - Trang nhân viên:
+        + Mục system Setting(tức trang cài đặt nhân viên): sau này dùng làm trang cập nhật thông tin
+        cần đẩy dữ liệu của nhân viên lên (hiện tại chỉ mới đẩy avatar), cần đẩy thêm các thông tin khác

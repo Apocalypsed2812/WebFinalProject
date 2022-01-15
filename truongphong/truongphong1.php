@@ -14,7 +14,6 @@
 		$departmentManager = $item['department'];
 		$id_department = $item['id_department'];
 	}
-	$submission = get_all_submissions()['data'];
 	//print_r(get_task($submission[0]['idtask'])['data'][0]['name']);
 ?>
 <!DOCTYPE html>
@@ -59,16 +58,16 @@
 					$name = $_FILES['attach']['name'];
 					// Upload ảnh vào thư mục file
 					if (move_uploaded_file($tmp_name, $path . $name)) {
-						echo "<script> alert('Upload thành công!'); window.location='truongphong1.php'; </script>";
 						$result = update_task_rejected($id);
 						//$result1 = add_reject($idnv, $id, $attach, $note);
 						$result2 = update_deadline_reject($deadline_add, $id);
 						$result3 = add_note_attach($note, $attach, $id);
 						$result4 = update_token_rc($idsm);
-						if ($result['code'] == 0){
+						if ($result['code'] == 0 && $result2['code'] == 0){
 							$countReject = count_task_submit_reject($id)['count(*)'];
 							$result5 = add_task_history($idnv, $id, 'Rejected', $today, $countReject+1);
 							$_SESSION['reject_success'] = 'thành công';
+							//echo "<script> alert('Upload thành công!'); window.location='truongphong1.php'; </script>";
 						}
 						else{
 							$_SESSION['reject_failed'] = 'thất bại';
@@ -201,6 +200,7 @@
 					<td>Actions</td>
 				</tr>
 				<?php 
+					$submission = get_all_submissions()['data'];
 					foreach($submission as $submit) {
 						$name_task = get_task($submit['idtask'])['data'][0]['name'];
 						$assignee = search_employee($submit['idnv'])['data'][0]['name'];
@@ -315,15 +315,15 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="idtask">ID task</label>
-						<input value="" name="idtask" required class="form-control" type="text" placeholder="" id="idtask">
+						<input readonly value="" name="idtask" required class="form-control" type="text" placeholder="" id="idtask">
 					</div>
 					<div class="form-group">
 						<label for="idsm">ID Submit</label>
-						<input value="" name="idsm" required class="form-control" type="text" placeholder="" id="idsm">
+						<input readonly value="" name="idsm" required class="form-control" type="text" placeholder="" id="idsm">
 					</div>
 					<div class="form-group">
 						<label for="idnv">ID Employee</label>
-						<input value="" name="idnv" required class="form-control" type="text" placeholder="" id="idnv1">
+						<input readonly value="" name="idnv" required class="form-control" type="text" placeholder="" id="idnv1">
 					</div>
 					<div class="form-group" id="tbody-details">
 						
@@ -399,25 +399,25 @@
 	if(isset($_SESSION['reject_success']))
 	{
 		echo "<script>showSuccessToast('Reject task success')</script>";
-		unset($_SESSION['success']);
+		unset($_SESSION['reject_success']);
 	}
 	
 	else if(isset($_SESSION['reject_failed']))
 	{
 		echo "<script>showErrorToast('Reject task failed')</script>";
-		unset($_SESSION['failed']);
+		unset($_SESSION['reject_failed']);
 	}
 
 	else if(isset($_SESSION['complete_success']))
 	{
 		echo "<script>showSuccessToast('Complete task success')</script>";
-		unset($_SESSION['submit_success']);
+		unset($_SESSION['complete_success']);
 	}
 	
 	else if(isset($_SESSION['complete_failed']))
 	{
 		echo "<script>showErrorToast('Complete task failed')</script>";
-		unset($_SESSION['submit_failed']);
+		unset($_SESSION['complete_failed']);
 	}
 ?>
 </body>

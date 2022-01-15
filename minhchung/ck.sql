@@ -2,10 +2,10 @@
 -- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 05, 2022 lúc 02:02 AM
--- Phiên bản máy phục vụ: 10.4.21-MariaDB
--- Phiên bản PHP: 8.0.12
+-- Host: 127.0.0.1
+-- Generation Time: Jan 14, 2022 at 04:56 AM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 8.0.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `ck`
+-- Database: `ck`
 --
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `dayoff`
+-- Table structure for table `dayoff`
 --
 
 CREATE TABLE `dayoff` (
@@ -35,21 +35,25 @@ CREATE TABLE `dayoff` (
   `status` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `tentk` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `day_request` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `token` int(11) DEFAULT NULL
+  `token` int(11) DEFAULT NULL,
+  `role` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `id_department` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `dayoff`
+-- Dumping data for table `dayoff`
 --
 
-INSERT INTO `dayoff` (`id`, `numberoff`, `reason`, `attach`, `status`, `tentk`, `day_request`, `token`) VALUES
-(2, 1, 'Gia đình có việc', 'minhchung.docx', 'approved', 'anhthu', '2021/11/23', 1),
-(51, 2, 'Bệnh', 'báo-cáo.pptx', 'approved', 'nguyenhung', '2022/01/02', 0);
+INSERT INTO `dayoff` (`id`, `numberoff`, `reason`, `attach`, `status`, `tentk`, `day_request`, `token`, `role`, `id_department`) VALUES
+(2, 1, 'Gia đình có việc', 'minhchung.docx', 'refused', 'anhthu', '2021/11/23', 1, 'employee', 'PB001'),
+(51, 2, 'Bệnh', 'báo-cáo.pptx', 'refused', 'nguyenhung', '2022/01/02', 1, 'employee', 'PB002'),
+(56, 2, 'Đi chơi', 'download.jpg', 'approved', 'anhtien', '2022/01/07', 1, 'manager', 'PB001'),
+(60, 2, 'Đi chơi', 'iphone-6s-128gb-hong-1-400x450.png', 'waiting', 'anhthu', '2022/01/13', 1, 'employee', 'PB001');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `dayoff_employee`
+-- Table structure for table `dayoff_employee`
 --
 
 CREATE TABLE `dayoff_employee` (
@@ -58,21 +62,24 @@ CREATE TABLE `dayoff_employee` (
   `tentk` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `tongso` int(11) NOT NULL,
   `ngaydasudung` int(11) NOT NULL,
-  `ngayconlai` int(11) NOT NULL
+  `ngayconlai` int(11) NOT NULL,
+  `id_department` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `dayoff_employee`
+-- Dumping data for table `dayoff_employee`
 --
 
-INSERT INTO `dayoff_employee` (`id`, `name`, `tentk`, `tongso`, `ngaydasudung`, `ngayconlai`) VALUES
-(1, 'Anh Tiến', 'anhtien', 12, 0, 12),
-(2, 'Nguyễn Hưng', 'nguyenhung', 12, 4, 8);
+INSERT INTO `dayoff_employee` (`id`, `name`, `tentk`, `tongso`, `ngaydasudung`, `ngayconlai`, `id_department`) VALUES
+(1, 'Anh Tiến', 'anhtien', 15, 6, 9, 'PB001'),
+(2, 'Nguyễn Hưng', 'nguyenhung', 12, 4, 8, 'PB002'),
+(9, 'Tien pham', 'tienpham', 12, 0, 12, 'PB001'),
+(10, 'Anh Thư', 'anhthu', 12, 9, 3, 'PB001');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `department`
+-- Table structure for table `department`
 --
 
 CREATE TABLE `department` (
@@ -85,7 +92,7 @@ CREATE TABLE `department` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `department`
+-- Dumping data for table `department`
 --
 
 INSERT INTO `department` (`id`, `name`, `manager`, `contact`, `phone`, `description`) VALUES
@@ -97,7 +104,7 @@ INSERT INTO `department` (`id`, `name`, `manager`, `contact`, `phone`, `descript
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `director`
+-- Table structure for table `director`
 --
 
 CREATE TABLE `director` (
@@ -105,20 +112,21 @@ CREATE TABLE `director` (
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `role` varchar(255) DEFAULT NULL,
-  `email` varchar(255) NOT NULL
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Đang đổ dữ liệu cho bảng `director`
+-- Dumping data for table `director`
 --
 
-INSERT INTO `director` (`ID`, `username`, `password`, `role`, `email`) VALUES
-(1, 'giamdoc', '$2y$10$M3rz9K9.qGJ.rugiwWKw.OkUMfOdkzM9hJxw8n1.ejKiJtPaPN6kW', 'admin', 'admin@gmail.com');
+INSERT INTO `director` (`ID`, `username`, `password`, `role`, `email`, `token`) VALUES
+(1, 'giamdoc', '$2y$10$dk165GpTV/NQ0Hf/l1AAi.vQHUxDGJzfp2f9bOGs1DCgRy2gBUP9i', 'admin', 'phamhuynhanhtien123@gmail.com', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `employee`
+-- Table structure for table `employee`
 --
 
 CREATE TABLE `employee` (
@@ -138,22 +146,24 @@ CREATE TABLE `employee` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `employee`
+-- Dumping data for table `employee`
 --
 
 INSERT INTO `employee` (`idnv`, `name`, `username`, `position`, `department`, `id_department`, `email`, `phone`, `indentity`, `gender`, `image`, `password`, `role`) VALUES
 ('NV001', 'Anh Tiến', 'anhtien', 'Manager', 'Nhân Sự', 'PB001', 'anhtien@gmail.com', '0582564362', '123456', 'Male', 'xiaomi-redmi-4x-400-400x460.png', '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'manager'),
-('NV002', 'Anh Thư', 'anhthu', 'employee', 'Nhân Sự', 'PB001', 'anhthu@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$j7XuXPu2WEqhorPehtupUeifc01XGbgdRmn/eLm7OrJShZJIUaN1.', 'employee'),
-('NV003', 'Nguyễn Hưng', 'nguyenhung', 'employee', 'Kế Toán', 'PB002', 'nguyenhung@gmail.com', '0902378456', '11111222', 'Male', 'samsung-galaxy-j7-plus-1-400x460.png', '$2y$10$4DR7snER5iqZir2CyEQlU.Iu776Qfn0lzyXOB2vKo0SPYjsUp/7r6', 'employee'),
-('NV004', 'Phạm Hoàng', 'phamhoang', 'Manager', 'Kế Toán', 'PB002', 'phamhoang@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'employee'),
+('NV002', 'Anh Thư', 'anhthu', 'employee', 'Nhân Sự', 'PB001', 'anhthu@gmail.com', NULL, NULL, NULL, 'itachi.png', '$2y$10$cS5Z0WdJxYa97nQvBBw7nO0C2Xh.S77DAquGghC7FFGdphZZO.ND6', 'employee'),
+('NV003', 'Nguyễn Hưng', 'nguyenhung', 'employee', 'Kế Toán', 'PB002', 'nguyenhung@gmail.com', '0902378456', '11111222', 'Male', 'samsung-galaxy-j7-plus-1-400x460.png', '$2y$10$cs/WX/W9iykkMblogj7Ic.fFJxAaJqsLsa3T9Fn3iHyifaLqJd8SO', 'employee'),
+('NV004', 'Phạm Hoàng', 'phamhoang', 'Manager', 'Kế Toán', 'PB002', 'phamhoang@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'manager'),
 ('NV005', 'Trung Hiếu', 'trunghieu', 'employee', 'Tài Chính', 'PB004', 'trunghieu@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'employee'),
 ('NV006', 'Nguyễn Trung', 'nguyentrung', 'Manager', 'Tài Chính', 'PB004', 'nguyentrung@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'employee'),
-('NV007', 'Phạm Toàn', 'phamtoan', 'employee', 'Hành Chính', NULL, 'phamtoan@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'employee');
+('NV007', 'Phạm Toàn', 'phamtoan', 'employee', 'Hành Chính', NULL, 'phamtoan@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$Mh.mBWlG0nk8ba7Fuh6Q6.FjjHSnIyzVV9Cpk9aBTvQwmm4GV5odu', 'employee'),
+('NV008', 'Anh Tuan', 'anhtuan123', 'female', 'Kế Toán', 'PB002', 'phamhuynhanhtien123678@gmail.com', '12233455777', '1234534345', 'male', 'oppo-a71-400x460.png', '$2y$10$e6oB8XyEBnZlsRtH/jbmqeDkx2IY3.J1mK5xCAO0wpGe8JBA7GRIK', 'user'),
+('NV009', 'Tien pham', 'tienpham', 'employee', 'Nhân Sự', 'PB001', 'ater@gmail.com', '12233455777', 'phamhuynhanhtien12345678@gmail.com', 'female', 'oppo-a71-400x460.png', '$2y$10$bbV6WQGqOUUYCnK5IOn7J.d6j02fW23i4os1snJq5loQ/gvrpr0Pa', 'employee');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `manager`
+-- Table structure for table `manager`
 --
 
 CREATE TABLE `manager` (
@@ -163,7 +173,7 @@ CREATE TABLE `manager` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `manager`
+-- Dumping data for table `manager`
 --
 
 INSERT INTO `manager` (`id`, `name`, `department`) VALUES
@@ -175,7 +185,40 @@ INSERT INTO `manager` (`id`, `name`, `department`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `request_reset`
+-- Table structure for table `reject`
+--
+
+CREATE TABLE `reject` (
+  `id` int(11) NOT NULL,
+  `idtask` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `idnv` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `day` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `count` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `reject`
+--
+
+INSERT INTO `reject` (`id`, `idtask`, `idnv`, `status`, `day`, `count`) VALUES
+(45, 'T001', 'NV002', 'Submit', '2022-01-12', 1),
+(46, 'T001', 'NV002', 'Rejected', '2022-01-12', 1),
+(47, 'T001', 'NV002', 'Submit', '2022-01-12', 2),
+(48, 'T001', 'NV002', 'Completed', '2022-01-12', 0),
+(49, 'T003', 'NV002', 'Submit', '2022-01-12', 1),
+(50, 'T003', 'NV002', 'Rejected', '2022-01-12', 1),
+(51, 'T003', 'NV002', 'Submit', '2022-01-12', 2),
+(52, 'T003', 'NV002', 'Completed', '2022-01-12', 0),
+(53, 'T001', 'NV002', 'Submit', '2022-01-13', 3),
+(54, 'T001', 'NV002', 'Rejected', '2022-01-13', 2),
+(55, 'T001', 'NV002', 'Submit', '2022-01-13', 4),
+(56, 'T001', 'NV002', 'Completed', '2022-01-13', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `request_reset`
 --
 
 CREATE TABLE `request_reset` (
@@ -186,7 +229,7 @@ CREATE TABLE `request_reset` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `request_reset`
+-- Dumping data for table `request_reset`
 --
 
 INSERT INTO `request_reset` (`id`, `username`, `email`, `token`) VALUES
@@ -196,12 +239,33 @@ INSERT INTO `request_reset` (`id`, `username`, `email`, `token`) VALUES
 (8, 'tien', 'phamhuynhanhtien123@gmail.com', 1),
 (26, 'anhthu', 'phamhuynhanhtien1235@gmail.com', 0),
 (30, 'anhthu', 'phamhuynhanhtien1235@gmail.com', 0),
-(31, 'anhthu', 'anhthu@gmail.com', 0);
+(31, 'anhthu', 'anhthu@gmail.com', 0),
+(32, 'nguyenhung', 'nguyenhung@gmail.com', 0);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `role`
+-- Table structure for table `reset_token`
+--
+
+CREATE TABLE `reset_token` (
+  `email` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `expire_on` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `reset_token`
+--
+
+INSERT INTO `reset_token` (`email`, `token`, `expire_on`) VALUES
+('mvmanh@gmail.com', '', 0),
+('mvmanh@it.tdt.edu.vn', '', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `role`
 --
 
 CREATE TABLE `role` (
@@ -212,7 +276,7 @@ CREATE TABLE `role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `role`
+-- Dumping data for table `role`
 --
 
 INSERT INTO `role` (`id`, `name`, `description`, `username`) VALUES
@@ -224,7 +288,7 @@ INSERT INTO `role` (`id`, `name`, `description`, `username`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `submission`
+-- Table structure for table `submission`
 --
 
 CREATE TABLE `submission` (
@@ -232,21 +296,34 @@ CREATE TABLE `submission` (
   `idnv` varchar(55) NOT NULL,
   `idtask` varchar(55) NOT NULL,
   `attach` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL
+  `description` varchar(255) NOT NULL,
+  `day_submit` varchar(255) DEFAULT NULL,
+  `deadline` varchar(255) DEFAULT NULL,
+  `turnin` varchar(255) DEFAULT NULL,
+  `token` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Đang đổ dữ liệu cho bảng `submission`
+-- Dumping data for table `submission`
 --
 
-INSERT INTO `submission` (`idsm`, `idnv`, `idtask`, `attach`, `description`) VALUES
-(1, 'NV001', 'T001', 'haha.png', 'em vua nop file nha sep'),
-(2, 'NV003', 'T002', 'haha.png', 'em vua nop file nha sep');
+INSERT INTO `submission` (`idsm`, `idnv`, `idtask`, `attach`, `description`, `day_submit`, `deadline`, `turnin`, `token`) VALUES
+(1, 'NV003', 'T002', 'haha.png', 'em vua nop file nha sep', '2022-01-07', NULL, 'late', 1),
+(2, 'NV002', 'T004', '220103_gk_dot-8_ta_thi-thang-01-2022_clc_211-(20220103_083010_849).pdf', 'nop task sep oi', '2022-02-06', NULL, 'normal', 1),
+(3, 'NV002', 'T001', 'haha.png', 'em vua nop file nha sep', '2022-01-12', NULL, 'normal', 1),
+(44, 'NV002', 'T001', 'samsung-galaxy-j3-2017-2-400x460.png', 'nop task sep oi', '2022-01-12', '2022-01-28', 'normal', 0),
+(45, 'NV002', 'T001', 'nokia-8-1-400x460.png', 'nop task sep oi', '2022-01-12', '2022-01-22', 'normal', 0),
+(46, 'NV002', 'T001', 'oppo-a71-400x460.png', 'nop task sep oi', '2022-01-12', '2022-02-05', 'normal', 0),
+(47, 'NV002', 'T001', 'samsung-galaxy-j3-2017-2-400x460.png', 'em nop lai task thi truong', '2022-01-12', '2022-02-05', 'normal', 0),
+(48, 'NV002', 'T003', 'oppo-f3-plus-1-1-400x460.png', 'nop task sep oi', '2022-01-12', '2022-02-01', 'normal', 0),
+(49, 'NV002', 'T003', 'oppo-a71-400x460.png', 'nop task sep oi', '2022-01-12', '2022-02-05', 'normal', 0),
+(50, 'NV002', 'T001', 'iphone-7-plus-128gb-de-400x460.png', 'nop task sep oi', '2022-01-13', '2022-02-05', 'normal', 0),
+(51, 'NV002', 'T001', 'samsung-galaxy-j3-2017-2-400x460.png', 'em nop lai task thi truong', '2022-01-13', '2022-02-04', 'normal', 0);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `task`
+-- Table structure for table `task`
 --
 
 CREATE TABLE `task` (
@@ -255,102 +332,134 @@ CREATE TABLE `task` (
   `status` varchar(55) NOT NULL,
   `description` varchar(255) NOT NULL,
   `idnv` varchar(55) NOT NULL,
-  `due to` date NOT NULL
+  `dueto` varchar(255) DEFAULT NULL,
+  `id_department` varchar(255) DEFAULT NULL,
+  `token` int(11) DEFAULT NULL,
+  `evaluate` varchar(255) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  `attach` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Đang đổ dữ liệu cho bảng `task`
+-- Dumping data for table `task`
 --
 
-INSERT INTO `task` (`idtask`, `name`, `status`, `description`, `idnv`, `due to`) VALUES
-('T001', 'Báo cáo thị trường', 'New', 'Thu thập thông tin về thị trường tiêu thụ sản phẩm', 'NV003', '2022-01-12'),
-('T002', 'Tạo app', 'New', 'Tạo ứng dụng cho di động', 'NV001', '2022-01-12');
+INSERT INTO `task` (`idtask`, `name`, `status`, `description`, `idnv`, `dueto`, `id_department`, `token`, `evaluate`, `note`, `attach`) VALUES
+('T001', 'Báo cáo thị trường', 'Completed', 'Thu thập thông tin về thị trường tiêu thụ sản phẩm', 'NV002', '2022-02-04', 'PB002', 1, 'Good', 'sep gui em ne', 'oppo-a71-400x460.png'),
+('T002', 'Tạo app', 'Canceled', 'Tạo ứng dụng cho di động', 'NV002', '2022-1-12', 'PB001', 0, NULL, NULL, NULL),
+('T003', 'Code Web', 'Completed', 'Code Full One Page Website', 'NV002', '2022-02-05', 'PB001', 1, 'OK', 'sep gui em ne', 'oppo-a71-400x460.png'),
+('T004', 'Code se', 'Canceled', 'code project software emgineering 123', 'NV002', '2022-01-29', 'PB001', 0, 'OK', NULL, NULL),
+('T005', 'Tien pham', 'In progress', 'code project software emgineering', 'NV002', '2022-01-13', 'PB001', 1, NULL, 'làm lại footer', 'SLIDE.ppxt');
 
 --
--- Chỉ mục cho các bảng đã đổ
+-- Indexes for dumped tables
 --
 
 --
--- Chỉ mục cho bảng `dayoff`
+-- Indexes for table `dayoff`
 --
 ALTER TABLE `dayoff`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `dayoff_employee`
+-- Indexes for table `dayoff_employee`
 --
 ALTER TABLE `dayoff_employee`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `department`
+-- Indexes for table `department`
 --
 ALTER TABLE `department`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `director`
+-- Indexes for table `director`
 --
 ALTER TABLE `director`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Chỉ mục cho bảng `employee`
+-- Indexes for table `employee`
 --
 ALTER TABLE `employee`
   ADD PRIMARY KEY (`idnv`);
 
 --
--- Chỉ mục cho bảng `manager`
+-- Indexes for table `manager`
 --
 ALTER TABLE `manager`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `request_reset`
+-- Indexes for table `reject`
+--
+ALTER TABLE `reject`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `request_reset`
 --
 ALTER TABLE `request_reset`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `role`
+-- Indexes for table `reset_token`
+--
+ALTER TABLE `reset_token`
+  ADD PRIMARY KEY (`email`);
+
+--
+-- Indexes for table `role`
 --
 ALTER TABLE `role`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `submission`
+-- Indexes for table `submission`
 --
 ALTER TABLE `submission`
   ADD PRIMARY KEY (`idsm`);
 
 --
--- Chỉ mục cho bảng `task`
+-- Indexes for table `task`
 --
 ALTER TABLE `task`
   ADD PRIMARY KEY (`idtask`);
 
 --
--- AUTO_INCREMENT cho các bảng đã đổ
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT cho bảng `dayoff`
+-- AUTO_INCREMENT for table `dayoff`
 --
 ALTER TABLE `dayoff`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
--- AUTO_INCREMENT cho bảng `request_reset`
+-- AUTO_INCREMENT for table `dayoff_employee`
+--
+ALTER TABLE `dayoff_employee`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `reject`
+--
+ALTER TABLE `reject`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+
+--
+-- AUTO_INCREMENT for table `request_reset`
 --
 ALTER TABLE `request_reset`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
--- AUTO_INCREMENT cho bảng `submission`
+-- AUTO_INCREMENT for table `submission`
 --
 ALTER TABLE `submission`
-  MODIFY `idsm` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idsm` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -15,7 +15,6 @@
 		$id_department = $item['id_department'];
 		$image = $item['image'];
 	}
-	$tasks = get_all_tasks_employee($idnv)['data'];
 	$count = count_task_employee($idnv);
 	$count_task = $count['count(*)'];
 ?>
@@ -27,6 +26,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -232,7 +232,9 @@
 							<td>Due Date</td>
 							<td></td>
 						</tr>
-						<?php 
+						<?php
+							$tasks = get_all_tasks_employee($idnv)['data'];
+							$color= ['Completed'=>'green','In progress'=>'blue','New'=>'yellow','Rejected'=>'red','Waiting'=>'brown'];
 							foreach($tasks as $task) {
 								$id = $task['idtask'];
 								$name = $task['name'];
@@ -247,7 +249,7 @@
 							<tr class="item" >
 								<td><?=$id?></td>
 								<td><?=$name?></td>
-								<td><?=$status?></td>
+								<td><i class='fa fa-circle' style="color:<?=$color[$status]?>"></i> <?=$status?></td>
 								<td><?=$deadline?></td>
 								<td>
 									<button class = "btn btn-danger" href="#" data-toggle="modal" data-target="#view-task" id="button-reject" onclick="viewTaskOfEmployee(this)">View</button>
@@ -379,13 +381,13 @@
 	if(isset($_SESSION['start_success']))
 	{
 		echo "<script>showSuccessToast('Get task success')</script>";
-		unset($_SESSION['success']);
+		unset($_SESSION['start_success']);
 	}
 	
 	else if(isset($_SESSION['start_failed']))
 	{
 		echo "<script>showErrorToast('Get task failed')</script>";
-		unset($_SESSION['failed']);
+		unset($_SESSION['start_failed']);
 	}
 
 	else if(isset($_SESSION['submit_success']))

@@ -242,11 +242,11 @@ viewTask.forEach(item => {
 		deadlineTask.value = deadlineTask1;
 		if(statusTask1 == 'New')
 		{
-			document.getElementById("button-cancel").disabled = false;
+			document.getElementById("button-cancel").style.display = 'block';
 		}
 		else 
 		{
-			document.getElementById("button-cancel").disabled = true;
+			document.getElementById("button-cancel").style.display = 'none';
 		}
 	}
 })
@@ -562,6 +562,8 @@ function viewTaskOfEmployee(aTag){
 
 	let idtask = tds[0].innerHTML
 	console.log(idtask)
+	//$('#idtaskemployee').val(idtask)
+
 	$.post("http://localhost:8080/nhanvien/get_task.php", {
 		id: idtask,
 	}, function(data,status){
@@ -576,7 +578,7 @@ function viewTaskOfEmployee(aTag){
 				tableBody += `
 				<div class="form-group">
 					<label for="id">ID task</label>
-					<p class="form-control">`+element.idtask+`</p>
+					<p name ="idtaskemployee" class="form-control">`+element.idtask+`</p>
 				</div>
 				<div class="form-group">
 					<label for="task-name">Task name</label>
@@ -706,7 +708,7 @@ function viewTaskOfEmployee(aTag){
 				tableBody += `
 				<div class="form-group">
 					<label for="id">ID task</label>
-					<input value="`+element.idtask+`" name="id" type="text" class="form-control" id="id">
+					<input readonly value="`+element.idtask+`" name="id" type="text" class="form-control" id="id">
 				</div>
 				<div class="form-group">
 					<label for="task-name">Task name</label>
@@ -881,5 +883,13 @@ $("#id_department1_dg1").change(()=>{
 		id: $("#id_department1_dg1").val()
 	}, function(data) {
 		$("#department1_gd1").val(data.data[0].name)
+	})
+})
+
+$("#idnv_task").click(()=>{
+	$.post("search_employee_by_id.php",{
+		id: $("#idnv_task").val()
+	}, function(data) {
+		$("#namenv_task").val(data.data[0].name)
 	})
 })
