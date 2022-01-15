@@ -19,7 +19,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="../style.css">
-    <title>Trang Hồ Sơ Nhân Viên</title>
+    <title>Trang Hồ Sơ Trưởng Phòng</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
@@ -119,9 +119,19 @@
 							</td>
 						</tr>
 						
-						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
 							<td colspan="3">
-								<a href="caidatnhanvien.php">System Settings</a>
+								<a href="caidatnhanvien.php">Avatar</a>
+							</td>
+							<td class="text-right">
+								<a href="">
+									<span class="badge badge-pill badge-secondary"></span>
+								</a>
+							</td>
+						</tr>
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
+							<td colspan="3">
+								<a href="../taikhoan/change_password_employee.php">Change Password</a>
 							</td>
 							<td class="text-right">
 								<a href="">

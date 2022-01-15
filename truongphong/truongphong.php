@@ -29,7 +29,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="../style.css">
-    <title>Trang Trưởng Phòng</title>
+    <title>Trang Quản Lý Task</title>
 
 	<?php
 		//check add task
@@ -131,16 +131,16 @@
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav ml-auto">
 						<li class="nav-item">
-                            <a class="nav-link" href="#" style="color: white;">HomePage</a>
+                            <a class="nav-link" href="formchung.php">HomePage</a>
                         </li>
-						<li class="nav-item">
-                            <a class="nav-link" href="dayoff_manager.php">DayOff</a>
+						<li class="nav-item active">
+                            <a class="nav-link" href="#">Services</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../about.html">About Us</a>
+                            <a class="nav-link" href="about.html">About Us</a>
                         </li>
 						<li class="nav-item">
-                            <a class="nav-link" href="../contact.html">Contact Us</a>
+                            <a class="nav-link" href="contact.html">Contact Us</a>
                         </li>
 						<li class="nav-item" style = "cursor: pointer;">
 							<div class="dropdown">

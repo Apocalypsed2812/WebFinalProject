@@ -151,7 +151,7 @@
 				<li class="nav-item" style = "cursor: pointer;">
 					<div class="dropdown">
 						<a class="dropdown-toggle nav-link" id="dropdownMenuButton" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" style="color: white;">
-							<span><i class="fa fa-user-o" aria-hidden="true"></i></span>
+							<span><i class="fa fa-user-circle" aria-hidden="true"></i></span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right">
 							<a class="dropdown-item" href="../taikhoan/logout.php">Log out</a>
@@ -207,9 +207,19 @@
 							</td>
 						</tr>
 						
-						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
 							<td colspan="3">
-								<a href="caidatnhanvien.php">System Settings</a>
+								<a href="caidatnhanvien.php">Avatar</a>
+							</td>
+							<td class="text-right">
+								<a href="">
+									<span class="badge badge-pill badge-secondary"></span>
+								</a>
+							</td>
+						</tr>
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
+							<td colspan="3">
+								<a href="../taikhoan/change_password_employee.php">Change Password</a>
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -277,7 +287,9 @@
 						
 					</tbody>
 				</table>
+				
 			</div>
+			
 		</div>
     <p class="footer-text">Copyright @ Your Website 2017</p>
 

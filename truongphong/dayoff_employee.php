@@ -28,7 +28,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="../style.css">
-    <title>Trang Trưởng Phòng</title>
+    <title>Trang Quản Lý Yêu Cầu Nghỉ Phép</title>
 </head>
 <?php
 	if(isset($_POST['approved']))
@@ -79,7 +79,7 @@
                             <a class="nav-link" href="formchung.php">HomePage</a>
                         </li>
 						<li class="nav-item active">
-                            <a class="nav-link" href="truongphong.php">Manage Task</a>
+                            <a class="nav-link" href="#">Services</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="about.html">About Us</a>

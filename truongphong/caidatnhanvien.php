@@ -26,7 +26,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="../style.css">    
-	<title>Trang Hồ Sơ Nhân Viên</title>
+	<title>Trang Ảnh Hồ Sơ Trưởng Phòng</title>
 
 <?php
 	$result = get_employee_by_tentk($tentk);
@@ -162,7 +162,17 @@
 						</tr>						
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px; background-color: #D8D8D8">
 							<td colspan="3">
-								<a href="caidatnhanvien.php">System Settings</a>
+								<a href="caidatnhanvien.php">Avatar</a>
+							</td>
+							<td class="text-right">
+								<a href="">
+									<span class="badge badge-pill badge-secondary"></span>
+								</a>
+							</td>
+						</tr>
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
+							<td colspan="3">
+								<a href="../taikhoan/change_password_employee.php">Change Password</a>
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -176,51 +186,20 @@
 
 			</div>
             
-			<div class="col-lg-5 mt-3">
+			<div class="col-lg-8 mt-3">
 				<form action="" method="POST">
 					<table cellpadding="10" cellspacing="10" border="0" class="table-borderless">						
 						<tbody>
 							<tr>
-								<td>
-									<div class="form-group">
-										<label for="name">Fullname</label>
-										<input id="name" type="text" name="name" class="form-control">
-									</div>
-								</td>
+								<td><h1>Avatar</h1></td>
 							</tr>
 							<tr>
-								<td>
-									<div class="form-group">
-										<label for="name">Birthday</label>
-										<input id="birth" type="date" name="birth" class="form-control">
-									</div>
-								</td>
+								<td><img src="../images/<?=$image?>" style="width:430px; margin-left:auto;margin-right:auto"></td>
 							</tr>
 							<tr>
-								<td>
-									<div class="form-group">
-										<label for="address">Address</label>
-										<input id="address" type="text" name="address" class="form-control">
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="form-group">
-										<label for="email">Email</label>
-										<input id="email" type="text" name="email" class="form-control">
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td><button type="submit" href="update.php" class="btn btn-primary">Update profile</button></td>
-							</tr>
-							<tr>
-								<td><hr size="1"></td>
-							</tr>
-							<tr>
-								<td><a href="../taikhoan/change_password_employee.php" class="btn btn-primary">Change Password</a></td>
-							</tr>
+								<td><a href="" class="btn btn-primary" data-toggle="modal" data-target="#add-avatar">Change avatar</a></td>
+							</tr>							
+							
 							<tr>
 								<?php
 									if (!empty($error)) {
@@ -232,21 +211,7 @@
 					</table>
 				</form>
 			</div>
-            <div class="col-lg-3 mt-3">
-				<table cellpadding="10" cellspacing="10" border="0" class="table table-borderless" >
-					<tbody>						
-                        <tr>
-							<td><b>Avatar</b></td>
-						</tr>
-						<tr>
-							<td><img src="../images/<?=$image?>" style="width:100%"></td>
-						</tr>
-                        <tr>
-							<td><a href="" class="btn btn-primary" data-toggle="modal" data-target="#add-avatar">Change avatar</a></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+            
 		</div>
     <p class="footer-text">Copyright @ Your Website 2017</p>
 	

@@ -203,9 +203,19 @@
 								</a>
 							</td>
 						</tr>						
-						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
 							<td colspan="3">
-								<a href="caidatnhanvien.php">System Settings</a>
+								<a href="caidatnhanvien.php">Avatar</a>
+							</td>
+							<td class="text-right">
+								<a href="">
+									<span class="badge badge-pill badge-secondary"></span>
+								</a>
+							</td>
+						</tr>
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
+							<td colspan="3">
+								<a href="../taikhoan/change_password_employee.php">Change Password</a>
 							</td>
 							<td class="text-right">
 								<a href="">
