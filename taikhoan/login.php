@@ -50,7 +50,7 @@
 			    if($role == 'manager')
 				{
 					$_SESSION['role'] = 'manager';
-					header('Location: ../truongphong/truongphong.php');
+					header('Location: ../truongphong/formchung.php');
 				}
 				else if($role == 'user'){
 					$_SESSION['role'] = 'user';

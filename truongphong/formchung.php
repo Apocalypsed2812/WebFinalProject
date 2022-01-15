@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] != 'employee') {
+	if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] != 'manager') {
         header('Location: ../taikhoan/login.php');
         exit();
     }
@@ -16,8 +16,6 @@
 		$image = $item['image'];
 	}
 	$tasks = get_all_tasks_employee($idnv)['data'];
-	$count = count_task_employee($idnv);
-	$count_task = $count['count(*)'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -174,18 +172,18 @@
 									<p><?=$name?></p>
 								</div>
 								<div class="cv-top">
-									<p>Nhân viên <?=$id_department?></p>
+									<p>Trưởng Phòng <?=$id_department?></p>
 								</div>
 							</td>
 						</tr>
 			
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px; background-color: #D8D8D8">
 							<td colspan="3">
-								<a href="tacvunhanvien.php">Task</a>
+								<a href="truongphong.php">Manage Task</a>
 							</td>
 							<td class="text-right">
 								<a href="">
-									<span class="badge badge-pill badge-secondary"><?=$count_task?></span>
+									<span class="badge badge-pill badge-secondary"></span>
 								</a>
 							</td>
 						</tr>
@@ -225,159 +223,8 @@
 				</table>
 
 			</div>
-			<div class="col-lg-8 card-info">
-				<table class="table table-striped mt-3 mx-3" style="border-collapse: collapse; margin: auto">
-					<tbody>
-						<tr class="header">
-							<td>ID Task</td>
-							<td>Task name</td>
-							<td>Assignee</td>
-							<td>Status</td>
-							<td>Due Date</td>
-							<td></td>
-						</tr>
-						<?php 
-							foreach($tasks as $task) {
-								$id = $task['idtask'];
-								$name = $task['name'];
-								$description = $task['description'];
-								$assignee = search_employee($task['idnv'])['data'][0]['name'];
-								$idnv = $task['idnv'];
-								$status = $task['status'];
-								$deadline = $task['dueto'];
-								$evaluation = $task['evaluate'];
-								//viewTaskEmployee
-						?>
-							<tr class="item" >
-								<td><?=$id?></td>
-								<td><?=$name?></td>
-								<td><?=$assignee?></td>
-								<td><?=$status?></td>
-								<td><?=$deadline?></td>
-								<td>
-									<button class = "btn btn-danger" href="#" data-toggle="modal" data-target="#view-task" id="button-reject" onclick="viewTaskOfEmployee(this)">View</button>
-									<button class = "submit btn btn-success" href="#" data-toggle="modal" data-target="#submit-task" data-id="<?=$id?>" data-status="<?=$status?>" data-deadline="<?=$deadline?>" data-idnv="<?=$idnv?>">Submit</button>	
-								</td>
-							</tr>
-						<?php 
-							}
-						?>
-
-						<tr style="background-color: white" colspan="8">
-							<td>
-								<?php
-								if (!empty($error)) {
-									echo "<div class='alert alert-danger' id='error-dayoff'>$error</div>";
-								}
-								?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<a class="btn btn-primary" href="task_history.php">Xem lịch sử nộp task</a>
-							</td>
-						</tr>
-						
-					</tbody>
-				</table>
-			</div>
-		</div>
-    <p class="footer-text">Copyright @ Your Website 2017</p>
-
-<!--submit-->		
-<div id="submit-task" class="modal fade" role="dialog"> 
-	<div class="modal-dialog">
-		<!-- Modal content-->
-		<form action="" method="POST" enctype="multipart/form-data">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title">Submit</h3>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-				<div class="modal-body">
-					<div class="form-group">
-						<label for="content">Nhập nội dung</label>
-						<input value="" name="content" class="form-control" type="text" id="content">
-					</div>
-
-					<div class="form-group">
-						<div class="custom-file">
-							<input value="" name="attach" type="file" class="custom-file-input" id="customFile">
-							<label class="custom-file-label" for="customFile">Choose file</label>
-						</div>
-					</div>
-				</div>
-
-				<div class="modal-footer">
-					<input type = hidden name="id_nv_task" id="id_nv_task">
-					<input type = hidden name="submit_task" id="submit_task">
-					<input type = hidden name="deadline_task" id="deadline_task">
-					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-info" id="button-submit">Submit</button>
-				</div>
-			</div>
-		</form>
-	</div>
-</div>
-<!--view-->		
-<div id="view-task" class="modal fade" role="dialog"> 
-	<div class="modal-dialog">
-		<!-- Modal content-->
-		<form action="" method="POST" enctype="multipart/form-data">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title">View Task</h3>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-
-				<div class="modal-body" id="tbody-view">
-					
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-info" id="button-start">Start</button>
-				</div>
-			</div>
-		</form>
-	</div>
-</div>
-
-<!--View reject task-->
-<div id="rejected-task" class="modal fade" role="dialog"> 
-	<div class="modal-dialog">
-		<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title">View Task Reject</h3>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-
-				<table cellpadding="10" cellspacing="10" border="0" style="border-collapse: collapse; margin: auto" class="table table-striped">
-					<thead>
-						<tr>
-							<td>ID task</td>
-							<td>Note</td>				
-							<td>Attach File</td>
-						</tr>
-					</thead>
-					
-					<tbody id="tbody">
-						
-					</tbody>
-					
-				</table>     
-				
-
-				<div class="modal-footer">
-					<input type = hidden name="upfile" id="upfile">
-					<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-info">Start</button>
-				</div>
-			</div>
-	</div>
-</div>
-
+        </div>
+			
 <script src="../main.js"></script>
 <?php
 	//show toast message

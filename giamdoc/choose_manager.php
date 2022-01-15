@@ -18,7 +18,6 @@
 		$result = update_manager($chooseManager, $idChoose);
 		$result1 = reset_employee($departmentChoose);
 		$result2 = update_position_employee($idChooseManager);
-		$result3 = update_name_manager($chooseManager, $departmentChoose);
 		$result4 = reset_role_account($departmentChoose);
 		$result5 = get_tentk_by_id($idChooseManager);
 		$data = $result5['data'];
@@ -105,6 +104,9 @@
 		<div style="overflow-x:auto;" class="mt-5">
 			<h3 class="text-center mb-5 text-primary">Choose Manager For Department</h3>
 			<table cellpadding="10" cellspacing="10" border="0" style="border-collapse: collapse; margin: auto" class="table table-striped">
+				<tr>
+					<a href="giamdoc.php" style="font-size: 30px; "><i class="fas fa-arrow-circle-left"></i></a>
+				</tr>
 				<tr class="header">
 					<td>ID</td>
 					<td>Name</td>

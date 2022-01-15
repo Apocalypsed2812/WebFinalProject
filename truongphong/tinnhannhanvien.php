@@ -1,7 +1,7 @@
 <?php
 	require_once('../db.php');
 	session_start();
-	if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] != 'employee') {
+	if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] != 'manager') {
         header('Location: ../taikhoan/login.php');
         exit();
     }	
@@ -10,11 +10,8 @@
 	$data = $result['data'];
 	foreach ($data as $item){
         $role = $item['role'];
-		$idnv = $item['idnv'];
 		$id_department = $item['id_department'];
 	}
-	$count = count_task_employee($idnv);
-	$count_task = $count['count(*)'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -162,18 +159,18 @@
 									<p><?=$name?></p>
 								</div>
 								<div class="cv-top">
-									<p>Nhân viên <?=$id_department?></p>
+									<p>Trưởng Phòng <?=$id_department?></p>
 								</div>
 							</td>
 						</tr>
 			
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
 							<td colspan="3">
-								<a href="tacvunhanvien.php">Task</a>
+								<a href="truongphong.php">Manage Task</a>
 							</td>
 							<td class="text-right">
 								<a href="">
-									<span class="badge badge-pill badge-secondary"><?=$count_task?></span>
+									<span class="badge badge-pill badge-secondary"></span>
 								</a>
 							</td>
 						</tr>
@@ -245,7 +242,7 @@
 						<tr>
 							<td></td>
 							<td colspan="2">
-								<a href="xemyeucau.php" class="btn btn-primary">Xem yêu cầu nghỉ phép</a>
+								<a href="xemyeucautp.php" class="btn btn-primary">Xem yêu cầu nghỉ phép</a>
 							</td>	
 							<td colspan="2" style="text-align: right">
 								<a href="" class="btn btn-primary" data-toggle="modal" data-target="#add-dayoff">Yêu cầu nghỉ phép</a>

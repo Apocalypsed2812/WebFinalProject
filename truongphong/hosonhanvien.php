@@ -1,22 +1,11 @@
 <?php
 	session_start();
-	if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] != 'employee') {
+	if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] != 'manager') {
         header('Location: ../taikhoan/login.php');
         exit();
     }
 	require_once('../db.php');
 	$tentk = $_SESSION['user'];
-	
-	$result = get_employee_by_tentk($tentk);
-	$data = $result['data'];
-	foreach ($data as $item){
-		$idnv = $item['idnv'];
-		$name = $item['name'];
-		$id_department = $item['id_department'];
-		$image = $item['image'];
-	}
-	$count = count_task_employee($idnv);
-	$count_task = $count['count(*)'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -98,18 +87,18 @@
 									<p><?=$name?></p>
 								</div>
 								<div class="cv-top">
-									<p>Nhân viên <?=$id_department?></p>
+									<p>Trưởng Phòng <?=$id_department?></p>
 								</div>
 							</td>
 						</tr>
 				
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
 							<td colspan="3">
-								<a href="tacvunhanvien.php">Task</a>
+								<a href="truongphong.php">Manage Task</a>
 							</td>
 							<td class="text-right">
 								<a href="">
-									<span class="badge badge-pill badge-secondary"><?=$count_task?></span>
+									<span class="badge badge-pill badge-secondary"></span>
 								</a>
 							</td>
 						</tr>

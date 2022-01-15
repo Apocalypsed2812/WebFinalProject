@@ -586,7 +586,7 @@
         } else return true; 
     }
 	
-	//update position manager of department
+	// position manager of department
     function update_manager($name, $id){
 		if (is_manager_exists($name)){
             return array('code' => 2, 'message' => 'People cannot choose'); // return array(code, message)
@@ -698,20 +698,6 @@
         }
         return array('code' =>0, 'message' =>'thành công');
     }
-
-	//update manager in manager table
-    function update_name_manager($name, $department){
-        $sql = "UPDATE manager SET name = ? WHERE department = ?";
-        $conn = open_database();
-
-        $stm = $conn->prepare($sql);
-        $stm->bind_param('ss', $name, $department);
-        if (!$stm->execute()){
-            return array('code' =>1, 'message' =>'không thể thực thi câu lệnh sql');
-        }
-        return array('code' =>0, 'message' =>'thành công');
-    }
-	
 	
 	//display list employee
 	function get_employee(){

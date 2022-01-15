@@ -10,10 +10,13 @@
 	$result = get_employee_by_tentk($tentk);
 	$data = $result['data'];
 	foreach ($data as $item){
+		$idnv = $item['idnv'];
 		$name = $item['name'];
 		$id_department = $item['id_department'];
 		$image = $item['image'];
 	}
+	$count = count_task_employee($idnv);
+	$count_task = $count['count(*)'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -235,7 +238,7 @@
 							</td>
 							<td class="text-right">
 								<a href="">
-									<span class="badge badge-pill badge-secondary">42</span>
+									<span class="badge badge-pill badge-secondary"><?=$count_task?></span>
 								</a>
 							</td>
 						</tr>
@@ -247,11 +250,11 @@
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
 							<td colspan="3">
-								<a href="tinnhannhanvien.php">Message</a>
+								<a href="tinnhannhanvien.php">DayOff</a>
 							</td>
 							<td class="text-right">
 								<a href="">
-									<span class="badge badge-pill badge-secondary">7</span>
+									<span class="badge badge-pill badge-secondary"></span>
 								</a>
 							</td>
 						</tr>
@@ -266,7 +269,7 @@
 							</td>
 							<td class="text-right">
 								<a href="">
-									<span class="badge badge-pill badge-secondary">1</span>
+									<span class="badge badge-pill badge-secondary"></span>
 								</a>
 							</td>
 						</tr>
