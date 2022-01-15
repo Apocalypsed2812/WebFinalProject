@@ -46,14 +46,35 @@
             $error = 'Vui lòng upload ảnh của bạn';
 		}
 		else {
-			$img_name = $_FILES['image']['name'];  
-			$result = change_image_employee($img_name, $tentk);
-			if ($result['code'] == 0){
-				//header('location: caidatnhanvien.php');
-				//exit();
-				$_SESSION['success'] = 'thành công';
-			} else {
-				$error = 'Không thể thêm ảnh, vui lòng thử lại';
+			if ($_FILES['image']['name'] != NULL) {
+				// Kiểm tra file có vượt quá 20MB không
+				if ($_FILES['image']['size'] > 20 * 1048576) {
+					echo "<script> alert('File được chọn có kích thước quá lớn!'); window.location='caidatnhanvien.php'; </script>";
+				} else {
+					// Kiểm tra có file là file (*.exe, *.msi, *.sh) không được phép upload không.
+					$img_name = $_FILES['image']['name'];
+					$fileType = pathinfo($img_name,PATHINFO_EXTENSION);
+					$notAllowtypes = array('exe', 'msi', 'sh');
+					if (!in_array($fileType,$notAllowtypes)) {
+						// Kiểm tra file up lên có phải là ảnh không            
+						echo "<script> alert('Change avatar successfully!'); window.location='caidatnhanvien.php'; </script>";
+						//$img_name = $_FILES['image']['name'];  
+						$result = change_image_employee($img_name, $tentk);
+						if ($result['code'] == 0){
+							//header('location: caidatnhanvien.php');
+							//exit();
+							$_SESSION['success'] = 'thành công';
+						} else {
+							$error = 'Không thể thêm ảnh, vui lòng thử lại';
+						}	
+					} else {
+						echo "<script> alert('File không được phép upload!'); window.location='caidatnhanvien.php'; </script>";
+					}
+				}
+			} 
+			else 
+			{
+				echo "<script> alert('File không được để trống!'); window.location='caidatnhanvien.php'; </script>";
 			}
 		}
 	}

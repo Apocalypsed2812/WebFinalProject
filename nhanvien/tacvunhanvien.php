@@ -69,53 +69,54 @@
 			$error = 'Vui lòng chọn file đính kèm';
 		}
 		else{
-			$result = update_task_waiting($idTask);
-			$numberDay = compute_dayoff($deadlineTask, $today);
-			if($numberDay > 0){
-				$result1 = add_submission($idnv, $idTask, $attach, $content, $deadlineTask, 'late');
-			}
-			else{
-				$result1 = add_submission($idnv, $idTask, $attach, $content, $deadlineTask, 'normal');
-			} 
-			if ($result['code'] == 0 && $result1['code'] == 0){
-				$count_task_submit = count_task_submit($idTask)['count(*)'];
-				$result2 = add_task_history($idnv_submit, $idTask, 'Submit', $today, $count_task_submit + 1);
-				if ($_FILES['attach']['name'] != NULL) {
-					// Kiểm tra file có vượt quá 20MB không
-					if ($_FILES['attach']['size'] > 20 * 1048576) {
-						echo "<script> alert('File đăng tải không phải là file ảnh!'); window.location='tacvunhanvien.php'; </script>";
-					} else {
-						// Kiểm tra có file là file (*.exe, *.msi, *.sh) không được phép upload không.
-						if (
-							$_FILES["attach"]["type"] != "file/exe" || $_FILES["attach"]["type"] != "file/msi" || 
-							$_FILES["attach"]["type"] != "file/sh"
-						) {
-							// Kiểm tra file up lên có phải là ảnh không            
-							// Nếu là ảnh tiến hành code upload
-							$path = "../minhchung/"; // file sẽ lưu vào thư mục upload
-							$tmp_name = $_FILES['attach']['tmp_name'];
-							$name = $_FILES['attach']['name'];
-							// Upload ảnh vào thư mục file
-							if (move_uploaded_file($tmp_name, $path . $name)) {
-								echo "<script> alert('Upload thành công!'); window.location='tacvunhanvien.php'; </script>";
-							} else {
-								echo "<script> alert('Upload không thành công!'); window.location='tacvunhanvien.php'; </script>";
+			if ($_FILES['attach']['name'] != NULL) {
+				// Kiểm tra file có vượt quá 20MB không
+				if ($_FILES['attach']['size'] > 20 * 1048576) {
+					echo "<script> alert('Kích thước file quá lớn!'); window.location='tacvunhanvien.php'; </script>";
+				} else {
+					// Kiểm tra có file là file (*.exe, *.msi, *.sh) không được phép upload không.
+					$name = $_FILES['attach']['name'];
+					$fileType = pathinfo($name,PATHINFO_EXTENSION);
+					$notAllowtypes = array('exe', 'msi', 'sh');
+					if (!in_array($fileType,$notAllowtypes)) {
+						// Kiểm tra file up lên có phải là ảnh không            
+						// Nếu là ảnh tiến hành code upload
+						$path = "../minhchung/"; // file sẽ lưu vào thư mục upload
+						$tmp_name = $_FILES['attach']['tmp_name'];
+						$name = $_FILES['attach']['name'];
+						// Upload ảnh vào thư mục file
+						if (move_uploaded_file($tmp_name, $path . $name)) {
+							echo "<script> alert('Upload thành công!'); window.location='tacvunhanvien.php'; </script>";
+							$result = update_task_waiting($idTask);
+							$numberDay = compute_dayoff($deadlineTask, $today);
+							if($numberDay > 0){
+								$result1 = add_submission($idnv, $idTask, $attach, $content, $deadlineTask, 'late');
 							}
+							else{
+								$result1 = add_submission($idnv, $idTask, $attach, $content, $deadlineTask, 'normal');
+							} 
+							if ($result['code'] == 0 && $result1['code'] == 0){
+								$count_task_submit = count_task_submit($idTask)['count(*)'];
+								$result2 = add_task_history($idnv_submit, $idTask, 'Submit', $today, $count_task_submit + 1);
+								
+								$_SESSION['submit_success'] = 'thành công';
+							}
+							else {
+								//$error = $result['message'];
+								$_SESSION['submit_failed'] = 'thất bại';
+							}  
 						} else {
-							echo "<script> alert('File không được phép upload!'); window.location='tacvunhanvien.php'; </script>";
+							echo "<script> alert('Upload không thành công!'); window.location='tacvunhanvien.php'; </script>";
 						}
+					} else {
+						echo "<script> alert('File không được phép upload!'); window.location='tacvunhanvien.php'; </script>";
 					}
-				} 
-				else 
-				{
-					echo "<script> alert('File không được để trống!'); window.location='tacvunhanvien.php'; </script>";
 				}
-				$_SESSION['submit_success'] = 'thành công';
+			} 
+			else 
+			{
+				echo "<script> alert('File không được để trống!'); window.location='tacvunhanvien.php'; </script>";
 			}
-			else {
-				//$error = $result['message'];
-				$_SESSION['submit_failed'] = 'thất bại';
-			}  
 		}       
 	}
 ?>

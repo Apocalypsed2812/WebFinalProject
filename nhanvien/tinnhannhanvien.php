@@ -49,55 +49,52 @@
             $error = 'Hãy nhập lí do';
         }
         else {
-			$attach = $_FILES['attach']['name'];
-            $result = add_dayoff_employee($numday, $reason, $attach, $user, $role, $id_department);
-            if ($result['code'] == 0){
-				$update_dayoff_employee_ngaydasudung = update_dayoff_employee_ngaydasudung($numday, $user);
-				$update_dayoff_employee_ngayconlai = update_dayoff_employee_ngayconlai($numday, $user);
-				if ($_FILES['attach']['name'] != NULL) {
-					// Kiểm tra file có vượt quá 20MB không
-					if ($_FILES['attach']['size'] > 20 * 1048576) {
-						echo "<script> alert('File đăng tải không phải là file ảnh!'); window.location='tinnhannhanvien.php'; </script>";
-					} else {
-						// Kiểm tra có file là file (*.exe, *.msi, *.sh) không được phép upload không.
-						if (
-							$_FILES["attach"]["type"] != "file/exe" || $_FILES["attach"]["type"] != "file/msi" || 
-							$_FILES["attach"]["type"] != "file/sh"
-						) {
-							// Kiểm tra file up lên có phải là ảnh không            
-							// Nếu là ảnh tiến hành code upload
-							$path = "../minhchung/"; // file sẽ lưu vào thư mục upload
-							$tmp_name = $_FILES['attach']['tmp_name'];
-							$name = $_FILES['attach']['name'];
-							// Upload ảnh vào thư mục file
-							if (move_uploaded_file($tmp_name, $path . $name)) {
-								echo "<script> alert('Upload thành công!'); window.location='tinnhannhanvien.php'; </script>";
-							} else {
-								echo "<script> alert('Upload không thành công!'); window.location='tinnhannhanvien.php'; </script>";
+			if ($_FILES['attach']['name'] != NULL) {
+				// Kiểm tra file có vượt quá 20MB không
+				if ($_FILES['attach']['size'] > 20 * 1048576) {
+					echo "<script> alert('Kích thước file quá lớn!'); window.location='tinnhannhanvien.php'; </script>";
+				} else {
+					// Kiểm tra có file là file (*.exe, *.msi, *.sh) không được phép upload không.
+					$name = $_FILES['attach']['name'];
+					$fileType = pathinfo($name,PATHINFO_EXTENSION);
+					$notAllowtypes = array('exe', 'msi', 'sh');
+					if (!in_array($fileType,$notAllowtypes)) {
+						// Kiểm tra file up lên có phải là ảnh không            
+						// Nếu là ảnh tiến hành code upload
+						$path = "../minhchung/"; // file sẽ lưu vào thư mục upload
+						$tmp_name = $_FILES['attach']['tmp_name'];
+						// Upload ảnh vào thư mục file
+						if (move_uploaded_file($tmp_name, $path . $name)) {
+							echo "<script> alert('Upload thành công!'); window.location='tinnhannhanvien.php'; </script>";
+							$attach = $_FILES['attach']['name'];
+							$result = add_dayoff_employee($numday, $reason, $attach, $user, $role, $id_department);
+							if ($result['code'] == 0){
+								$update_dayoff_employee_ngaydasudung = update_dayoff_employee_ngaydasudung($numday, $user);
+								$update_dayoff_employee_ngayconlai = update_dayoff_employee_ngayconlai($numday, $user);
+							} 
+							else if($result['code'] == 2){
+								//die('Không thể thêm yêu cầu');
+								$error = 'Yêu cầu đang được duyệt, không thể thêm yêu cầu';
 							}
+							else if($result['code'] == 3){
+								//die('Không thể thêm yêu cầu');
+								$error = 'Phải đợi 7 ngày sau mới được tạo yêu cầu mới';
+							}
+							else {
+								$error = $result['message'];
+							}          
 						} else {
-							echo "<script> alert('File không được phép upload!'); window.location='tinnhannhanvien.php'; </script>";
+							echo "<script> alert('Upload không thành công!'); window.location='tinnhannhanvien.php'; </script>";
 						}
+					} else {
+						echo "<script> alert('File không được phép upload!'); window.location='tinnhannhanvien.php'; </script>";
 					}
-				} 
-				else 
-				{
-					echo "<script> alert('File không được để trống!'); window.location='tinnhannhanvien.php'; </script>";
 				}
-				//header('Location: tinnhannhanvien.php');
-				//exit();
-            } 
-			else if($result['code'] == 2){
-				//die('Không thể thêm yêu cầu');
-				$error = 'Yêu cầu đang được duyệt, không thể thêm yêu cầu';
+			} 
+			else 
+			{
+				echo "<script> alert('File không được để trống!'); window.location='tinnhannhanvien.php'; </script>";
 			}
-			else if($result['code'] == 3){
-				//die('Không thể thêm yêu cầu');
-				$error = 'Phải đợi 7 ngày sau mới được tạo yêu cầu mới';
-			}
-			else {
-                $error = $result['message'];
-            }          
         }
     }
 ?>

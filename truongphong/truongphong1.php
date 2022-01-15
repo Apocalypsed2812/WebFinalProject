@@ -42,49 +42,50 @@
 		$deadline_add = $_POST['deadline'];
 		$idsm = $_POST['reject_idsm'];
 		$today = date("Y-m-d");
-		$result = update_task_rejected($id);
-		//$result1 = add_reject($idnv, $id, $attach, $note);
-		$result2 = update_deadline_reject($deadline_add, $id);
-		$result3 = add_note_attach($note, $attach, $id);
-		$result4 = update_token_rc($idsm);
-		if ($result['code'] == 0){
-			$countReject = count_task_submit_reject($id)['count(*)'];
-			$result5 = add_task_history($idnv, $id, 'Rejected', $today, $countReject+1);
-			if ($_FILES['attach']['name'] != NULL) {
-				// Kiểm tra file có vượt quá 20MB không
-				if ($_FILES['attach']['size'] > 20 * 1048576) {
-					echo "<script> alert('File đăng tải không phải là file ảnh!'); window.location='truongphong1.php'; </script>";
-				} else {
-					// Kiểm tra có file là file (*.exe, *.msi, *.sh) không được phép upload không.
-					if (
-						$_FILES["attach"]["type"] != "file/exe" || $_FILES["attach"]["type"] != "file/msi" || 
-						$_FILES["attach"]["type"] != "file/sh"
-					) {
-						// Kiểm tra file up lên có phải là ảnh không            
-						// Nếu là ảnh tiến hành code upload
-						$path = "../minhchung/"; // file sẽ lưu vào thư mục upload
-						$tmp_name = $_FILES['attach']['tmp_name'];
-						$name = $_FILES['attach']['name'];
-						// Upload ảnh vào thư mục file
-						if (move_uploaded_file($tmp_name, $path . $name)) {
-							echo "<script> alert('Upload thành công!'); window.location='truongphong1.php'; </script>";
-						} else {
-							echo "<script> alert('Upload không thành công!'); window.location='truongphong1.php'; </script>";
+		if ($_FILES['attach']['name'] != NULL) {
+			// Kiểm tra file có vượt quá 20MB không
+			if ($_FILES['attach']['size'] > 20 * 1048576) {
+				echo "<script> alert('Kích thước file quá lớn!'); window.location='truongphong1.php'; </script>";
+			} else {
+				// Kiểm tra có file là file (*.exe, *.msi, *.sh) không được phép upload không.
+				$name = $_FILES['attach']['name'];
+				$fileType = pathinfo($name,PATHINFO_EXTENSION);
+				$notAllowtypes = array('exe', 'msi', 'sh');
+				if (!in_array($fileType,$notAllowtypes)) {
+					// Kiểm tra file up lên có phải là ảnh không            
+					// Nếu là ảnh tiến hành code upload
+					$path = "../minhchung/"; // file sẽ lưu vào thư mục upload
+					$tmp_name = $_FILES['attach']['tmp_name'];
+					$name = $_FILES['attach']['name'];
+					// Upload ảnh vào thư mục file
+					if (move_uploaded_file($tmp_name, $path . $name)) {
+						echo "<script> alert('Upload thành công!'); window.location='truongphong1.php'; </script>";
+						$result = update_task_rejected($id);
+						//$result1 = add_reject($idnv, $id, $attach, $note);
+						$result2 = update_deadline_reject($deadline_add, $id);
+						$result3 = add_note_attach($note, $attach, $id);
+						$result4 = update_token_rc($idsm);
+						if ($result['code'] == 0){
+							$countReject = count_task_submit_reject($id)['count(*)'];
+							$result5 = add_task_history($idnv, $id, 'Rejected', $today, $countReject+1);
+							$_SESSION['reject_success'] = 'thành công';
+						}
+						else{
+							$_SESSION['reject_failed'] = 'thất bại';
 						}
 					} else {
-						echo "<script> alert('File không được phép upload!'); window.location='truongphong1.php'; </script>";
+						echo "<script> alert('Upload không thành công!'); window.location='truongphong1.php'; </script>";
 					}
+				} else {
+					echo "<script> alert('File không được phép upload!'); window.location='truongphong1.php'; </script>";
 				}
-			} 
-			else 
-			{
-				echo "<script> alert('File không được để trống!'); window.location='truongphong1.php'; </script>";
 			}
-			$_SESSION['reject_success'] = 'thành công';
+		} 
+		else 
+		{
+			echo "<script> alert('File không được để trống!'); window.location='truongphong1.php'; </script>";
 		}
-		else{
-			$_SESSION['reject_failed'] = 'thất bại';
-		}
+		
 	}
 ?> 
 
