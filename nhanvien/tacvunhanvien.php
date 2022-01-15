@@ -85,8 +85,7 @@
 						$tmp_name = $_FILES['attach']['tmp_name'];
 						$name = $_FILES['attach']['name'];
 						// Upload ảnh vào thư mục file
-						if (move_uploaded_file($tmp_name, $path . $name)) {
-							echo "<script> alert('Upload thành công!'); window.location='tacvunhanvien.php'; </script>";
+						if (move_uploaded_file($tmp_name, $path . $name)) {							
 							$result = update_task_waiting($idTask);
 							$numberDay = compute_dayoff($deadlineTask, $today);
 							if($numberDay > 0){
@@ -181,8 +180,8 @@
 						</tr>
 			
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px; background-color: #D8D8D8">
-							<td colspan="3">
-								<a href="tacvunhanvien.php">Task</a>
+							<td onclick="window.location.href='tacvunhanvien.php'" colspan="3">
+								Task
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -191,14 +190,14 @@
 							</td>
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
-							<td colspan="4">
-								<a href="hosonhanvien.php">Profile</a>
+							<td  onclick="window.location.href='hosonhanvien.php'" colspan="4">
+								Profile
 							</td>
 							
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
-							<td colspan="3">
-								<a href="tinnhannhanvien.php">DayOff</a>
+							<td  onclick="window.location.href='tinnhannhanvien.php'" colspan="3">
+								DayOff
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -207,9 +206,9 @@
 							</td>
 						</tr>
 						
-						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
-							<td colspan="3">
-								<a href="caidatnhanvien.php">Avatar</a>
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px; ">
+							<td onclick="window.location.href='caidatnhanvien.php'" colspan="3">
+								Avatar
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -218,8 +217,8 @@
 							</td>
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
-							<td colspan="3">
-								<a href="../taikhoan/change_password_employee.php">Change Password</a>
+							<td onclick="window.location.href='../taikhoan/change_password_employee.php'" colspan="3">
+								Change Password
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -270,18 +269,9 @@
 							}
 						?>
 
-						<tr style="background-color: white" colspan="8">
-							<td>
-								<?php
-								if (!empty($error)) {
-									echo "<div class='alert alert-danger' id='error-dayoff'>$error</div>";
-								}
-								?>
-							</td>
-						</tr>
 						<tr>
-							<td>
-								<a class="btn btn-primary" href="task_history.php">Xem lịch sử nộp task</a>
+							<td class="text-center"  style="background-color: white" colspan="8">
+								<a class="btn btn-primary " href="task_history.php">Xem lịch sử nộp task</a>
 							</td>
 						</tr>
 						

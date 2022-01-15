@@ -21,6 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -62,7 +63,7 @@
 						$tmp_name = $_FILES['attach']['tmp_name'];
 						// Upload ảnh vào thư mục file
 						if (move_uploaded_file($tmp_name, $path . $name)) {
-							echo "<script> alert('Upload thành công!'); window.location='tinnhannhanvien.php'; </script>";
+							/* echo "<script> alert('Upload thành công!'); window.location='tinnhannhanvien.php'; </script>"; */
 							$attach = $_FILES['attach']['name'];
 							$result = add_dayoff_employee($numday, $reason, $attach, $user, $role, $id_department);
 							if ($result['code'] == 0){
@@ -73,11 +74,12 @@
 							} 
 							else if($result['code'] == 2){
 								//die('Không thể thêm yêu cầu');
-								$error = 'Yêu cầu đang được duyệt, không thể thêm yêu cầu';
+								/* $error = 'Yêu cầu đang được duyệt, không thể thêm yêu cầu'; */
+								$_SESSION['waiting'] = 'thất bại';
 							}
 							else if($result['code'] == 3){
 								//die('Không thể thêm yêu cầu');
-								$error = 'Phải đợi 7 ngày sau mới được tạo yêu cầu mới';
+								$_SESSION['waiting7day'] = 'chờ 7 ngày';								
 							}
 							else {
 								$error = $result['message'];
@@ -98,6 +100,7 @@
     }
 ?>
 <body>
+	<div id="toast"></div>
 <?php
 	$result = get_employee_by_tentk($user);
 	$data = $result['data'];
@@ -134,7 +137,7 @@
 				<li class="nav-item" style = "cursor: pointer;">
 					<div class="dropdown">
 						<a class="dropdown-toggle nav-link" id="dropdownMenuButton" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" style="color: white;">
-							<span><i class="fa fa-user-o" aria-hidden="true"></i></span>
+							<span><i class="fa fa-user-circle" aria-hidden="true"></i></span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right">
 							<a class="dropdown-item" href="../taikhoan/logout.php">Log out</a>
@@ -164,24 +167,20 @@
 						</tr>
 			
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
-							<td colspan="3">
-								<a href="truongphong.php">Manage Task</a>
+							<td onclick="window.location.href='truongphong.php'" colspan="4">
+								Manage Task
 							</td>
-							<td class="text-right">
-								<a href="">
-									<span class="badge badge-pill badge-secondary"></span>
-								</a>
-							</td>
+							
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
-							<td colspan="4">
-								<a href="hosonhanvien.php">Profile</a>
+							<td  onclick="window.location.href='hosonhanvien.php'" colspan="4">
+								Profile
 							</td>
 							
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px; background-color: #D8D8D8">
-							<td colspan="3">
-								<a href="tinnhannhanvien.php">DayOff</a>
+							<td  onclick="window.location.href='tinnhannhanvien.php'" colspan="3">
+								DayOff
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -190,9 +189,9 @@
 							</td>
 						</tr>
 						
-						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
-							<td colspan="3">
-								<a href="caidatnhanvien.php">Avatar</a>
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
+							<td onclick="window.location.href='caidatnhanvien.php'" colspan="3">
+								Avatar
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -201,8 +200,8 @@
 							</td>
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
-							<td colspan="3">
-								<a href="../taikhoan/change_password_employee.php">Change Password</a>
+							<td onclick="window.location.href='../taikhoan/change_password_employee.php'" colspan="3">
+								Change Password
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -254,18 +253,7 @@
 							</td>	
 							<td></td>
 											
-						</tr>
-						
-						<tr>
-							<td>
-								<?php
-								if (!empty($error)) {
-									echo "<div class='alert alert-danger' id='error-dayoff'>$error</div>";
-								}
-								?>
-							</td>
-						</tr>
-						
+						</tr>		
 					</tbody>
 				</table>
 			</div>
@@ -323,13 +311,17 @@
     <p class="footer-text">Copyright @ Your Website 2017</p>
 
 <!--<link rel="stylesheet" href="style.css">-->
-<script src="main.js"></script>
-<script>
-    // Add the following code if you want the name of the file appear on select
-    $(".custom-file-input").on("change", function() {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
-</script>
+<script src="../main.js"></script>
+<?php 
+	if(isset($_SESSION['waiting'])){
+		echo "<script>showErrorToast('Waiting request')</script>";
+		unset($_SESSION['waiting']);
+	}
+	else if(isset($_SESSION['waiting7day'])){
+		echo "<script>showErrorToast('Waiting after 7 day for new request!')</script>";
+		unset($_SESSION['waiting7day']);
+	}
+
+?>
 </body>
 </html>

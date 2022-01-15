@@ -81,6 +81,7 @@
 				</tr>
 				<?php
 					$result = get_history_task($idnv);
+					$color= ['Completed'=>'green','Rejected'=>'red','Submit'=>'orange'];
 					$data = $result['data'];
 					foreach ($data as $item){
 						$idtask = $item['idtask'];
@@ -92,7 +93,7 @@
 						<tr class="item">
 							<td><?=$idtask?></td>
 							<td><?=$idnv_history?></td>
-							<td><?=$status?></td>
+							<td><i class='fa fa-circle' style="color:<?=$color[$status]?>"></i> <?=$status?></td>
 							<td><?=$day?></td>
 						</tr>
 				<?php

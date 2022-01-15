@@ -274,7 +274,9 @@ button:hover {
 	background: #d4d7da;
 }
 
-
+.control td{
+	color: blue;
+}
 
 
 .first-item{

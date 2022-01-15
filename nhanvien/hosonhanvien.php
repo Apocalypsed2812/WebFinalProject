@@ -104,8 +104,8 @@
 						</tr>
 				
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
-							<td colspan="3">
-								<a href="tacvunhanvien.php">Task</a>
+							<td onclick="window.location.href='tacvunhanvien.php'" colspan="3">
+								Task
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -114,14 +114,14 @@
 							</td>
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px; background-color: #D8D8D8">
-							<td colspan="4">
-								<a href="hosonhanvien.php">Profile</a>
+							<td  onclick="window.location.href='hosonhanvien.php'" colspan="4">
+								Profile
 							</td>
 							
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
-							<td colspan="3">
-								<a href="tinnhannhanvien.php">DayOff</a>
+							<td  onclick="window.location.href='tinnhannhanvien.php'" colspan="3">
+								DayOff
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -130,9 +130,9 @@
 							</td>
 						</tr>
 						
-						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
-							<td colspan="3">
-								<a href="caidatnhanvien.php">Avatar</a>
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
+							<td onclick="window.location.href='caidatnhanvien.php'" colspan="3">
+								Avatar
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -141,8 +141,8 @@
 							</td>
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
-							<td colspan="3">
-								<a href="../taikhoan/change_password_employee.php">Change Password</a>
+							<td onclick="window.location.href='../taikhoan/change_password_employee.php'" colspan="3">
+								Change Password
 							</td>
 							<td class="text-right">
 								<a href="">

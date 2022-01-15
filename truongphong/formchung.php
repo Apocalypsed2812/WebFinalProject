@@ -177,35 +177,32 @@
 							</td>
 						</tr>
 			
-						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
-							<td colspan="3">
-								<a href="truongphong.php">Manage Task</a>
-							</td>
-							<td class="text-right">
-								<a href="">
-									<span class="badge badge-pill badge-secondary"></span>
-								</a>
-							</td>
-						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
-							<td colspan="4">
-								<a href="hosonhanvien.php">Profile</a>
+							<td onclick="window.location.href='truongphong.php'" colspan="4">
+								Manage Task
 							</td>
 							
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
-							<td colspan="3">
-								<a href="tinnhannhanvien.php">DayOff</a>
+							<td  onclick="window.location.href='hosonhanvien.php'" colspan="4">
+								Profile
+							</td>
+							
+						</tr>
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
+							<td  onclick="window.location.href='tinnhannhanvien.php'" colspan="3">
+								DayOff
 							</td>
 							<td class="text-right">
 								<a href="">
 									<span class="badge badge-pill badge-secondary"></span>
 								</a>
 							</td>
-						</tr>						
-						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
-							<td colspan="3">
-								<a href="caidatnhanvien.php">Avatar</a>
+						</tr>
+						
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
+							<td onclick="window.location.href='caidatnhanvien.php'" colspan="3">
+								Avatar
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -214,8 +211,8 @@
 							</td>
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
-							<td colspan="3">
-								<a href="../taikhoan/change_password_employee.php">Change Password</a>
+							<td onclick="window.location.href='../taikhoan/change_password_employee.php'" colspan="3">
+								Change Password
 							</td>
 							<td class="text-right">
 								<a href="">

@@ -1,7 +1,7 @@
 <?php
 	require_once('../db.php');
 	session_start();
-	if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] != 'employee') {
+	if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || ($_SESSION['role'] != 'employee' && $_SESSION['role'] != 'manager')) {
 		header('Location: ../taikhoan/login.php');
 		exit();
 	}

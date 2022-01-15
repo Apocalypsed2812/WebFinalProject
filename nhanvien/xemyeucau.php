@@ -65,8 +65,7 @@
         </nav>
 	<div class="container">
 		<div style="overflow-x:auto;" class="mt-5">
-			<h3 class="text-center mb-5 text-primary">Request DayOff Of Employee</h3>
-			<p>Xin chào<span class="text-danger"> <?=$tentk?></span></p>
+			<h3 class="text-center mb-5 text-primary">Request DayOff Of Employee</h3>			
 			<table cellpadding="10" cellspacing="10" border="0" style="border-collapse: collapse; margin: auto" class="table">
 				<tr class="header">
 					<td>Số ngày nghỉ</td>
@@ -76,6 +75,7 @@
 				</tr>
 				<?php
 					$result = request_dayoff_by_tentk($tentk);
+					$color= ['waiting'=>'orange','refused'=>'red','approved'=>'green'];
 					$data = $result['data'];
 					foreach ($data as $item){
 						$songaynghi = $item['numberoff'];
@@ -87,7 +87,7 @@
 							<td><?=$songaynghi?></td>
 							<td><?=$lido?></td>
 							<td><a href="../minhchung/<?=$dinhkem?>"><?=$dinhkem?></a></td>
-							<td><?=$trangthai?></td>
+							<td><i class='fa fa-circle' style="color:<?=$color[$trangthai]?>"></i> <?=$trangthai?></td>
 						</tr>
 				<?php
 					}

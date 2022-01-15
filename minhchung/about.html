@@ -8,12 +8,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="../style.css">
-    <title>Contact Us</title>
+	<link rel="stylesheet" href="style.css">
+    <title>About Us</title>
 </head>
 <body style="display: flex; flex-direction: column; overflow-x: hidden">
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
         <!-- Brand -->
+           
 		<a class="navbar-brand" href="#">Our Company</a>
 
 		<!-- Toggler/collapsibe Button -->
@@ -25,49 +26,43 @@
 		<div class="collapse navbar-collapse" id="collapsibleNavbar">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="formchung.php" >HomePage</a>
+					<a class="nav-link" href="index.php">HomePage</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Services</a>
+					<a class="nav-link" href="about.html" style="color: white;">About Us</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="about.html">About Us</a>
-				</li>
-				<li class="nav-item active">
 					<a class="nav-link" href="contact.html">Contact Us</a>
 				</li>
-				<li class="nav-item" style = "cursor: pointer;">
-					<div class="dropdown">
-						<a class="dropdown-toggle nav-link" id="dropdownMenuButton" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" style="color: white;">
-							<span><i class="fa fa-user-o" aria-hidden="true"></i></span>
-						</a>
-						<div class="dropdown-menu dropdown-menu-right">
-							<a class="dropdown-item" href="../taikhoan/logout.php">Log out</a>
-						</div>
-					</div>
+				<li class="nav-item">
+					<a class="btn btn-light" href="taikhoan/login.php">Login</a>
 				</li>
 			</ul>
-		</div>
+		</div>      
     </nav>
-	
 	<div class="row block-image">
-		<div class="col-lg-12 mt-5 text-center mt-5">
-			<h3>Thank you for visiting our website</h3>
-			<p class= "mt-5" style="font-size: 30px">You can contact us by phone, email or Messenger</p>
-			<div class= "mt-5">
-				<span style="font-size: 30px"><i class="fa fa-phone-square" aria-hidden="true" style="font-size: 50px"></i> Phone: 0123456789</span>	
-			</div>
-			<div class= "mt-3">
-				<span style="font-size: 30px"><i class="fa fa-envelope" aria-hidden="true" style="font-size: 50px"></i> Email: company@gmail.com</span>	
-			</div>
-			<div class= "mt-3">
-				<span style="font-size: 30px"><i class="fa fa fa-commenting" aria-hidden="true" style="font-size: 50px"></i> Messenger: TTH</span>	
+		<div class="col-lg-6 first-item-ui">
+			<img src="intro.jpg">
+		</div>
+		<div class="col-lg-5 mt-5">
+			<h3 class= "text-center mb-5">Welcome to my company</h3>
+			<ul>
+				<li>Đây là trang web nội bộ của một công ty, mọi chức năng của web đều chỉ dành cho người của công ty</li>
+				<li> Mọi chức năng cảu trang web đều yêu cầu đăng nhập</li>
+				<li>Trang web dành cho 3 đối tượng chính là giám đốc, trưởng phòng và nhân viên</li>
+				<li>Giám đốc hay admin là người có quyền hạn cao nhất</li>
+				<li>Trưởng phòng sẽ có quyền tạo task và nhân viên sẽ nhận task</li>
+			</ul>
+			<div class="mt-5 text-center mb-3">
+				<span><i class="fa fa-id-card-o" aria-hidden="true" style="font-size: 50px"></i></span>
+				<span><i class="fa fa-users" aria-hidden="true"  style="font-size: 50px"></i></span>
+				<span><i class="fa fa-laptop" aria-hidden="true" style="font-size: 50px"></i></span>
 			</div>
 		</div>
 	</div>
-    
+   
 	<footer>
-		<p class="footer-text">Copyright</p>
+		<p class="footer-text-ui">Copyright</p>
 	</footer>
 </body>
 </html>

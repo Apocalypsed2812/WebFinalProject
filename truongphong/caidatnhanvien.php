@@ -22,6 +22,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -40,7 +41,7 @@
 	
 	if(isset($_POST['update_avatar'])){
 		if ($_FILES['image']['error'] != UPLOAD_ERR_OK) {
-            $error = 'Vui lòng upload ảnh của bạn';
+            $_SESSION['notNull'] = 'không được để trống';
 		}
 		else {
 			if ($_FILES['image']['name'] != NULL) {
@@ -51,33 +52,42 @@
 					// Kiểm tra có file là file (*.exe, *.msi, *.sh) không được phép upload không.
 					$img_name = $_FILES['image']['name'];
 					$fileType = pathinfo($img_name,PATHINFO_EXTENSION);
-					$notAllowtypes = array('exe', 'msi', 'sh');
-					if (!in_array($fileType,$notAllowtypes)) {
-						// Kiểm tra file up lên có phải là ảnh không            
-						echo "<script> alert('Change avatar successfully!'); window.location='caidatnhanvien.php'; </script>";
-						//$img_name = $_FILES['image']['name'];  
-						$result = change_image_employee($img_name, $tentk);
-						if ($result['code'] == 0){
-							//header('location: caidatnhanvien.php');
-							//exit();
-							$_SESSION['success'] = 'thành công';
-						} else {
-							$error = 'Không thể thêm ảnh, vui lòng thử lại';
-						}	
+					$Allowtypes = array('jpg', 'png', 'gif');
+					if (in_array($fileType,$Allowtypes)) {
+						$path = "../images/"; // file sẽ lưu vào thư mục upload
+						$tmp_name = $_FILES['image']['tmp_name'];
+						// Upload ảnh vào thư mục file
+						if (move_uploaded_file($tmp_name, $path . $img_name)){
+							// Kiểm tra file up lên có phải là ảnh không            
+							/* echo "<script> alert('Change avatar successfully!'); window.location='caidatnhanvien.php'; </script>"; */
+							//$img_name = $_FILES['image']['name'];  
+							$result = change_image_employee($img_name, $tentk);
+							if ($result['code'] == 0){
+								//header('location: caidatnhanvien.php');
+								//exit();
+								$_SESSION['success'] = 'thành công';
+								echo "<script> alert('Change avatar successfully!'); window.location='caidatnhanvien.php'; </script>";							
+							} else {
+								$_SESSION['unsuccess'] = 'không thành công';
+								$error = 'Không thể thêm ảnh, vui lòng thử lại';
+							}	
+						}
+						
 					} else {
-						echo "<script> alert('File không được phép upload!'); window.location='caidatnhanvien.php'; </script>";
+						$_SESSION['notAlow'] = 'không được phép';
 					}
 				}
 			} 
 			else 
-			{
-				echo "<script> alert('File không được để trống!'); window.location='caidatnhanvien.php'; </script>";
+			{	
+				$_SESSION['notNull'] = 'không được để trống';
 			}
 		}
 	}
 ?>
 </head>
 <body>
+	<div id="toast"></div>
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
         <!-- Brand -->
 		<a class="navbar-brand" href="#">Our Company</a>
@@ -105,7 +115,7 @@
 				<li class="nav-item" style = "cursor: pointer;">
 					<div class="dropdown">
 						<a class="dropdown-toggle nav-link" id="dropdownMenuButton" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" style="color: white;">
-							<span><i class="fa fa-user-o" aria-hidden="true"></i></span>
+							<span><i class="fa fa-user-circle" aria-hidden="true"></i></span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right">
 							<a class="dropdown-item" href="../taikhoan/logout.php">Log out</a>
@@ -135,34 +145,31 @@
 						</tr>
 			
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
-							<td colspan="3">
-								<a href="truongphong.php">Manage Task</a>
-							</td>
-							<td class="text-right">
-								<a href="">
-									<span class="badge badge-pill badge-secondary"></span>
-								</a>
-							</td>
-						</tr>
-						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
-							<td colspan="4">
-								<a href="hosonhanvien.php">Profile</a>
+							<td onclick="window.location.href='truongphong.php'" colspan="4">
+								Manage Task
 							</td>
 							
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px">
-							<td colspan="3">
-								<a href="tinnhannhanvien.php">DayOff</a>
+							<td  onclick="window.location.href='hosonhanvien.php'" colspan="4">
+								Profile
+							</td>
+							
+						</tr>
+						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
+							<td  onclick="window.location.href='tinnhannhanvien.php'" colspan="3">
+								DayOff
 							</td>
 							<td class="text-right">
 								<a href="">
 									<span class="badge badge-pill badge-secondary"></span>
 								</a>
 							</td>
-						</tr>						
+						</tr>
+						
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px; background-color: #D8D8D8">
-							<td colspan="3">
-								<a href="caidatnhanvien.php">Avatar</a>
+							<td onclick="window.location.href='caidatnhanvien.php'" colspan="3">
+								Avatar
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -171,8 +178,8 @@
 							</td>
 						</tr>
 						<tr class="control" style="text-align: left; font-weight: bold; font-size: 15px;">
-							<td colspan="3">
-								<a href="../taikhoan/change_password_employee.php">Change Password</a>
+							<td onclick="window.location.href='../taikhoan/change_password_employee.php'" colspan="3">
+								Change Password
 							</td>
 							<td class="text-right">
 								<a href="">
@@ -198,15 +205,7 @@
 							</tr>
 							<tr>
 								<td><a href="" class="btn btn-primary" data-toggle="modal" data-target="#add-avatar">Change avatar</a></td>
-							</tr>							
-							
-							<tr>
-								<?php
-									if (!empty($error)) {
-										echo "<div class='alert alert-danger'>$error</div>";
-									}
-								?>
-							</tr>
+							</tr>																				
 						</tbody>
 					</table>
 				</form>
@@ -250,6 +249,22 @@
 	{
 		echo "<script>showSuccessToast('Change image successfully')</script>";
 		unset($_SESSION['success']);
+		/* echo "<script>window.location='caidatnhanvien.php'; </script>"; */
+	}
+	else if(isset($_SESSION['unsuccess']))
+	{
+		echo "<script>showErrorToast('Change image failed')</script>";
+		unset($_SESSION['unsuccess']);
+	}
+	else if(isset($_SESSION['notAlow']))
+	{
+		echo "<script>showErrorToast('Type image not alow')</script>";
+		unset($_SESSION['notAlow']);
+	}
+	else if(isset($_SESSION['notNull']))
+	{
+		echo "<script>showErrorToast('File image not null')</script>";
+		unset($_SESSION['notNull']);
 	}
 ?>
 </body>
