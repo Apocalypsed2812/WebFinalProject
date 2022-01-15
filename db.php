@@ -442,7 +442,7 @@
 	
 	//add department
     function add_department($id, $name, $contact, $phone, $describe) {
-        $sql = "INSERT INTO department (id, name, contact, phone, description) VALUES (?,?,?,?,?)";
+        $sql = "INSERT INTO department (id, name, manager, contact, phone, description) VALUES (?,?,'',?,?,?)";
         $conn = open_database();
 		
         $stm = $conn->prepare($sql);

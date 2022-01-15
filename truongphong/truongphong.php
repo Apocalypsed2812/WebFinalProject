@@ -15,7 +15,6 @@
 		$departmentManager = $item['department'];
 		$id_department = $item['id_department'];
 	}
-	$tasks = get_all_tasks($id_department)['data'];
 
 ?>
 <!DOCTYPE html>
@@ -75,10 +74,6 @@
 			else {
 				$result = add_task($id, $name, $desc, $idnv, $deadline, $id_department);
 				if ($result['code'] == 0){
-					// thành công
-					//die('ADD DEPARTMENT SUCCESS');
-					//header('Location: giamdoc.php');
-					//exit();
 					$_SESSION['success'] = 'thành công';
 					//header('Location: truongphong.php');
 					//exit();
@@ -205,6 +200,7 @@
 					<td>Status</td>
 				</tr>
 				<?php 
+					$tasks = get_all_tasks($id_department)['data'];
 					foreach($tasks as $task) {
 						$id = $task['idtask'];
 						$name = $task['name'];
@@ -340,7 +336,7 @@
 <div id="add-task" class="modal fade" role="dialog"> 
 	<div class="modal-dialog">
 		<!-- Modal content-->
-		<form action="" method="POST">
+		<form action="truongphong.php" method="POST">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h3 class="modal-title">Add Task</h3>
@@ -448,7 +444,7 @@
 	//show toast message
 	if(isset($_SESSION['success']))
 	{
-		echo "<script>showSuccessToast('Add department success')</script>";
+		echo "<script>showSuccessToast('Add Task success')</script>";
 		unset($_SESSION['success']);
 	}
 

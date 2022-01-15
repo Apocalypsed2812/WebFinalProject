@@ -231,7 +231,6 @@
 						<tr class="header">
 							<td>ID Task</td>
 							<td>Task name</td>
-							<td>Assignee</td>
 							<td>Status</td>
 							<td>Due Date</td>
 							<td></td>
@@ -251,7 +250,6 @@
 							<tr class="item" >
 								<td><?=$id?></td>
 								<td><?=$name?></td>
-								<td><?=$assignee?></td>
 								<td><?=$status?></td>
 								<td><?=$deadline?></td>
 								<td>
